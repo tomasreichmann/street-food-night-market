@@ -1,0 +1,76 @@
+resources:
+  - id: sea
+    label: Sea
+    prompt: "A clean printable icon for sea resource, shellfish and seafood symbolism, flat bold shape, centered on solid chroma background"
+  - id: greens
+    label: Greens / Grain
+    prompt: "A clean printable icon for greens or grain resource, rice seaweed herbs symbolism, flat bold shape, centered on solid chroma background"
+  - id: fuel
+    label: Fuel / Wood
+    prompt: "A clean printable icon for wood or fuel resource, bamboo skewer or firewood symbolism, flat bold shape, centered on solid chroma background"
+  - id: fungi
+    label: Fungi / Umami
+    prompt: "A clean printable icon for fungi resource, mushroom and umami symbolism, flat bold shape, centered on solid chroma background"
+  - id: meat
+    label: Meat / Protein
+    prompt: "A clean printable icon for meat resource, protein symbolism, flat bold shape, centered on solid chroma background"
+
+dishes:
+  - id: ramen-bowl
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Ramen Bowl
+    tags: [soup, noodles]
+    cost:
+      greens: 1
+      fungi: 1
+      fuel: 1
+    illustrationPrompt: "A delicious bowl of ramen at a lively Asian night market, warm lighting, stylized illustration for a party card game"
+    text: "Simple and filling. Popular with late-night guests."
+
+  - id: seafood-platter
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Seafood Platter
+    tags: [seafood, premium]
+    cost:
+      sea: 2
+      greens: 1
+    illustrationPrompt: "A rich seafood platter from a bustling night market, colorful and festive, stylized illustration for a party card game"
+    text: "A premium dish for pickier visitors."
+
+guests:
+  - id: hungry-student
+    type: guest
+    tier: 1
+    copies: 2
+    size: standard
+    title: Hungry Student
+    wants:
+      mode: any_tag
+      tag: noodles
+      count: 1
+    payout:
+      coins: 4
+    illustrationPrompt: "A cheerful hungry student visiting a night market food stall, playful stylized illustration"
+    text: "Quick meal, quick cash."
+
+  - id: tour-group
+    type: guest
+    tier: 2
+    copies: 1
+    size: standard
+    title: Tour Group
+    wants:
+      mode: up_to_tag
+      tag: seafood
+      count: 3
+    payout:
+      coinsPerServed: 5
+      maxCoins: 15
+    illustrationPrompt: "A lively tourist group exploring a colorful Asian night market, festive stylized illustration"
+    text: "Serve up to 3 seafood dishes. Gain 5 coins for each served."
