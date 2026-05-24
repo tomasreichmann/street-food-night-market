@@ -19,6 +19,7 @@
 ## Data design goals
 
 Each card should be definable in structured content with fields like:
+
 - id
 - type
 - tier

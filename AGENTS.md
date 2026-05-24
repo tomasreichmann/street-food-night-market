@@ -4,7 +4,7 @@
 
 This repo is for designing and generating a printable party game called **Street Food Night Market**.
 
-The game is a light, social, moving-around market game for roughly 15 to 20 players and 30 to 45 minutes. Players gather resources, trade, acquire dishes, serve guests, and earn coins.
+The game is a light, social, moving-around market game for roughly 15 to 20 players and 30 to 45 minutes. Players gather resources, trade, acquire dishes, serve customers, and earn coins.
 
 ## Current design decisions
 
@@ -13,20 +13,20 @@ The game is a light, social, moving-around market game for roughly 15 to 20 play
 - Tone: light, social, party-friendly
 - Players run nondescript food businesses and may name them
 - Trading between players is encouraged and is part of the icebreaker value
-- Guests are limited in a visible row so players race for them
-- Hidden resources and hidden guests are allowed around the party area
+- Customers are limited in a visible row so players race for them
+- Hidden resources and hidden customers are allowed around the party area
 - Social interaction tasks are handled through a bingo-style card
 - No player powers for now
 - Combo scoring is desired
 
 ## Economy decisions
 
-- Coins are the main score and payment reward from guests
+- Coins are the main score and payment reward from customers
 - Resources are physical tokens
-- Dishes are normally spent when serving guests
-- Tier 1 guests should pay roughly resource cost plus a small bonus
-- Tier 2 guests should pay about double the total resource cost of required dishes
-- Tier 3 guests should pay about triple, or grant scalable/endgame bonus value
+- Dishes are normally spent when serving customers
+- Tier 1 customers should pay roughly resource cost plus a small bonus
+- Tier 2 customers should pay about double the total resource cost of required dishes
+- Tier 3 customers should pay about triple, or grant scalable/endgame bonus value
 - Resources should start with equal base value unless later testing proves otherwise
 
 ## Content system decisions
@@ -55,7 +55,7 @@ The game is a light, social, moving-around market game for roughly 15 to 20 play
 
 ## Expected future areas
 
-- declarative schemas for dishes, guests, tasks, resources, and print sizes
+- declarative schemas for dishes, customers, tasks, resources, and print sizes
 - card preview components
 - page composition logic for print sheets
 - illustration/icon prompt management

@@ -1,0 +1,11 @@
+playerCount: 15
+startingResourcesPerPlayer: 2
+resourceSupply:
+  sea: 40
+  greens: 66
+  fuel: 60
+  fungi: 36
+  meat: 26
+bonusTaskCount: 20
+bonusTaskRewardResources: 3
+customerDeckCount: 4

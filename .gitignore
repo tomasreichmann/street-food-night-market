@@ -1,5 +1,9 @@
 node_modules/
 dist/
+coverage/
+.vite/
+.eslintcache
+*.tsbuildinfo
 .env
 .DS_Store
 *.log

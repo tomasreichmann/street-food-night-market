@@ -1,0 +1,514 @@
+resources:
+  - id: sea
+    label: Seafood
+    prompt: 'A clean printable icon for one of the market tokens, abstract and bold, centered on a solid chroma background'
+  - id: greens
+    label: Greens
+    prompt: 'A clean printable icon for another market token, abstract and bold, centered on a solid chroma background'
+  - id: fuel
+    label: Fuel
+    prompt: 'A clean printable icon for another market token, abstract and bold, centered on a solid chroma background'
+  - id: fungi
+    label: Umami
+    prompt: 'A clean printable icon for another market token, abstract and bold, centered on a solid chroma background'
+  - id: meat
+    label: Meat
+    prompt: 'A clean printable icon for another market token, abstract and bold, centered on a solid chroma background'
+
+dishes:
+  - id: ramen-bowl
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Ramen Bowl
+    tags: [soup, noodles]
+    cost:
+      greens: 1
+      fungi: 1
+      fuel: 1
+    text: 'Steam, broth, and a quick line out front.'
+
+  - id: rice-plate
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Rice Plate
+    tags: [rice, vegetarian]
+    cost:
+      greens: 2
+      fuel: 1
+    text: 'Plain, warm, and useful for almost anyone.'
+
+  - id: tea
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Tea
+    tags: [drink]
+    cost:
+      greens: 1
+      fuel: 1
+    text: 'A calming cup between crowded stalls.'
+
+  - id: sweet-bun
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Sweet Bun
+    tags: [sweet, vegetarian]
+    cost:
+      greens: 1
+      fuel: 1
+    text: 'Soft, sweet, and easy to carry.'
+
+  - id: chicken-skewers
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Chicken Skewers
+    tags: [meat]
+    cost:
+      meat: 1
+      fuel: 1
+    text: 'Charred edges, quick hands, smoky air.'
+
+  - id: dumplings
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Dumplings
+    tags: [meat]
+    cost:
+      meat: 1
+      greens: 1
+      fuel: 1
+    text: 'Small bites with serious staying power.'
+
+  - id: sushi-platter
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Sushi Platter
+    tags: [seafood, rice]
+    cost:
+      sea: 2
+      greens: 1
+    text: 'Bright pieces arranged to impress.'
+
+  - id: sashimi
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Sashimi
+    tags: [seafood]
+    cost:
+      sea: 2
+    text: 'Clean cuts that let the sea speak first.'
+
+  - id: oyster-plate
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Oyster Plate
+    tags: [seafood, premium]
+    cost:
+      sea: 3
+      fungi: 1
+      fuel: 1
+    text: 'Briny, bright, and served like a small luxury.'
+
+  - id: curry-bowl
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Curry Bowl
+    tags: [rice, meat]
+    cost:
+      meat: 1
+      greens: 1
+      fungi: 1
+      fuel: 1
+    text: 'Deep flavor for a hungry crowd.'
+
+  - id: seafood-noodles
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Seafood Noodles
+    tags: [seafood, noodles]
+    cost:
+      sea: 1
+      greens: 1
+      fungi: 1
+      fuel: 1
+    text: 'A hot wok keeps the queue moving.'
+
+  - id: deluxe-bao-set
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Deluxe Bao Set
+    tags: [meat, premium]
+    cost:
+      meat: 1
+      greens: 1
+      fungi: 1
+    text: 'A neat stack that feels like a treat.'
+
+  - id: mushroom-hotpot
+    type: dish
+    tier: 2
+    copies: 2
+    size: standard
+    title: Mushroom Hotpot
+    tags: [soup, vegetarian]
+    cost:
+      fungi: 2
+      greens: 1
+      fuel: 1
+    text: 'Earthy broth made for lingering.'
+
+  - id: festival-banquet
+    type: dish
+    tier: 3
+    copies: 1
+    size: standard
+    title: Festival Banquet
+    tags: [premium, meat]
+    cost:
+      meat: 2
+      greens: 1
+      fungi: 1
+      fuel: 1
+    text: 'A whole stall packed onto one tray.'
+
+  - id: royal-seafood-feast
+    type: dish
+    tier: 3
+    copies: 1
+    size: standard
+    title: Royal Seafood Feast
+    tags: [seafood, premium]
+    cost:
+      sea: 3
+      greens: 1
+      fuel: 1
+    text: 'Shells, steam, and a little spectacle.'
+
+  - id: dessert-tea-set
+    type: dish
+    tier: 3
+    copies: 1
+    size: standard
+    title: Dessert Tea Set
+    tags: [sweet, drink, premium]
+    cost:
+      greens: 2
+      fungi: 1
+      fuel: 1
+    text: 'A calm finish in the middle of the noise.'
+
+  - id: imperial-tasting-menu
+    type: dish
+    tier: 3
+    copies: 1
+    size: standard
+    title: Imperial Tasting Menu
+    tags: [premium, soup]
+    cost:
+      sea: 1
+      meat: 1
+      greens: 1
+      fungi: 1
+      fuel: 1
+    text: 'Tiny bowls, big reputation.'
+
+customers:
+  - id: hungry-student
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Hungry Student
+    wants:
+      mode: any_tag
+      tag: noodles
+      count: 1
+    payout:
+      coins: 5
+    text: 'Serve any Noodles dish. Gain 5 coins.'
+
+  - id: salaryman
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Salaryman
+    wants:
+      mode: any_tag
+      tag: rice
+      count: 1
+    payout:
+      coins: 5
+    text: 'Serve any Rice dish. Gain 5 coins.'
+
+  - id: street-musician
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Street Musician
+    wants:
+      mode: any_tag
+      tag: drink
+      count: 1
+    payout:
+      coins: 5
+    text: 'Serve any Drink dish. Gain 5 coins.'
+
+  - id: maid-cafe-maid
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Maid Cafe Maid
+    wants:
+      mode: combo_tags
+      tags: [sweet, drink]
+    payout:
+      coins: 8
+    text: 'Serve 1 Sweet and 1 Drink. Gain 8 coins.'
+
+  - id: tourist
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Tourist
+    wants:
+      mode: any_tag
+      tag: seafood
+      count: 1
+    payout:
+      coins: 5
+    text: 'Serve any Seafood dish. Gain 5 coins.'
+
+  - id: monk
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Monk
+    wants:
+      mode: any_tag
+      tag: vegetarian
+      count: 1
+    payout:
+      coins: 5
+    text: 'Serve any Vegetarian dish. Gain 5 coins.'
+
+  - id: tea-auntie
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Tea Auntie
+    wants:
+      mode: any_tag
+      tag: drink
+      count: 1
+    payout:
+      coins: 5
+    text: 'Serve any Drink dish. Gain 5 coins.'
+
+  - id: dockworker
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Dockworker
+    wants:
+      mode: any_tag
+      tag: meat
+      count: 1
+    payout:
+      coins: 4
+    text: 'Serve any Meat dish. Gain 4 coins.'
+
+  - id: night-market-kid
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Night Market Kid
+    wants:
+      mode: any_tag
+      tag: sweet
+      count: 1
+    payout:
+      coins: 5
+    text: 'Serve any Sweet dish. Gain 5 coins.'
+
+  - id: soup-regular
+    type: customer
+    tier: 1
+    copies: 2
+    size: standard
+    title: Soup Regular
+    wants:
+      mode: any_tag
+      tag: soup
+      count: 1
+    payout:
+      coins: 6
+    text: 'Serve any Soup dish. Gain 6 coins.'
+
+  - id: sumo-wrestler
+    type: customer
+    tier: 2
+    copies: 1
+    size: standard
+    title: Sumo Wrestler
+    wants:
+      mode: combo_tags
+      tags: [meat, rice]
+    payout:
+      coins: 13
+    text: 'Serve 1 Meat and 1 Rice. Gain 13 coins.'
+
+  - id: food-blogger
+    type: customer
+    tier: 2
+    copies: 1
+    size: standard
+    title: Food Blogger
+    wants:
+      mode: variety_tags
+      count: 3
+    payout:
+      coins: 15
+    text: 'Serve 3 dishes with different types. Gain 15 coins.'
+
+  - id: business-executive
+    type: customer
+    tier: 2
+    copies: 1
+    size: standard
+    title: Business Executive
+    wants:
+      mode: combo_tags
+      tags: [premium, drink]
+    payout:
+      coins: 15
+    text: 'Serve 1 Premium and 1 Drink. Gain 15 coins.'
+
+  - id: temple-caretaker
+    type: customer
+    tier: 2
+    copies: 1
+    size: standard
+    title: Temple Caretaker
+    wants:
+      mode: combo_tags
+      tags: [vegetarian, soup]
+    payout:
+      coins: 14
+    text: 'Serve 1 Vegetarian and 1 Soup. Gain 14 coins.'
+
+  - id: night-shift-nurse
+    type: customer
+    tier: 2
+    copies: 1
+    size: standard
+    title: Night Shift Nurse
+    wants:
+      mode: combo_tags
+      tags: [soup, drink]
+    payout:
+      coins: 15
+    text: 'Serve 1 Soup and 1 Drink. Gain 15 coins.'
+
+  - id: anime-club
+    type: customer
+    tier: 2
+    copies: 1
+    size: standard
+    title: Anime Club
+    wants:
+      mode: up_to_any_tag
+      tags: [sweet, drink]
+      count: 3
+    payout:
+      coinsPerServed: 7
+      maxCoins: 21
+    text: 'Serve up to 3 Sweet or Drink dishes. Gain 7 coins for each served.'
+
+  - id: seafood-lover
+    type: customer
+    tier: 2
+    copies: 1
+    size: standard
+    title: Seafood Lover
+    wants:
+      mode: up_to_tag
+      tag: seafood
+      count: 2
+    payout:
+      coinsPerServed: 7
+      maxCoins: 14
+    endgameBonus: '+1 coin per leftover Sea resource'
+    text: 'Serve up to 2 Seafood dishes. Gain 7 coins for each served. End game: +1 coin per leftover Sea resource.'
+
+  - id: celebrity-chef
+    type: customer
+    tier: 3
+    copies: 1
+    size: standard
+    title: Celebrity Chef
+    wants:
+      mode: combo_tags
+      tags: [premium, soup, meat]
+    payout:
+      coins: 30
+    endgameBonus: '+1 coin per female customer served'
+    text: 'Serve 1 Premium, 1 Soup, and 1 Meat. Gain 30 coins. End game: +1 coin per female customer served.'
+
+  - id: festival-judge
+    type: customer
+    tier: 3
+    copies: 1
+    size: standard
+    title: Festival Judge
+    wants:
+      mode: combo_tags
+      tags: [premium, seafood, sweet, drink]
+    payout:
+      coins: 37
+    endgameBonus: '+1 coin per different customer archetype served'
+    text: 'Serve 1 Premium, 1 Seafood, 1 Sweet, and 1 Drink. Gain 37 coins. End game: +1 coin per different customer archetype served.'
+
+  - id: k-pop-band-female
+    type: customer
+    tier: 3
+    copies: 1
+    size: standard
+    title: K-Pop Band
+    wants:
+      mode: combo_tags
+      tags: [premium, meat, rice]
+    payout:
+      coins: 28
+    endgameBonus: '+1 coin per male customer served'
+    text: 'Serve 1 Premium, 1 Meat, and 1 Rice. Gain 28 coins. End game: +1 coin per male customer served.'
