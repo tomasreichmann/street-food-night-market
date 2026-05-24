@@ -113,7 +113,8 @@ img {
 }
 
 .app-shell {
-  width: min(1200px, calc(100vw - 2rem));
+  width: calc(100vw - 2rem);
+  max-width: none;
   margin: 0 auto;
   padding: 2rem 0 3rem;
 }
@@ -542,7 +543,7 @@ img {
 
 .simulation-score-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 0.75rem;
 }
 
@@ -578,6 +579,35 @@ img {
   margin: 0;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.simulation-score-details {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(48, 48, 46, 0.1);
+}
+
+.simulation-score-details p {
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.simulation-score-details p:first-child {
+  margin-top: 0;
+}
+
+.simulation-score-bonus-list {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.simulation-score-bonus-list li::marker {
+  color: var(--color-red-500);
 }
 
 .economy-badge {
@@ -673,7 +703,7 @@ img {
 
 @media (max-width: 640px) {
   .app-shell {
-    width: min(100vw - 1rem, 1200px);
+    width: calc(100vw - 1rem);
     padding-top: 0.5rem;
     padding-bottom: 1.25rem;
   }

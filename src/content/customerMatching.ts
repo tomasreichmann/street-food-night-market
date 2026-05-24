@@ -88,8 +88,12 @@ function enumerateUpToTagCombinations(
   dishes: DishCard[],
   tags: string[],
   count: number,
+  minCount = 1,
 ) {
-  return Array.from({ length: count }, (_, index) => index + 1).flatMap(
+  return Array.from(
+    { length: Math.max(0, count - minCount + 1) },
+    (_, index) => index + minCount,
+  ).flatMap(
     (combinationSize) =>
       enumerateTagCombinations(dishes, tags, combinationSize),
   );
@@ -210,6 +214,7 @@ export function enumerateCustomerDishCombinations(
       dishes,
       [customer.wants.tag],
       customer.wants.count,
+      customer.wants.minCount ?? 1,
     );
   }
 
@@ -218,6 +223,7 @@ export function enumerateCustomerDishCombinations(
       dishes,
       customer.wants.tags,
       customer.wants.count,
+      customer.wants.minCount ?? 1,
     );
   }
 

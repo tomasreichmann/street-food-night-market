@@ -22,10 +22,18 @@ function getCustomerPayoutDisplay(customer: CustomerCard) {
   }
 
   const count = 'count' in customer.wants ? customer.wants.count : 1;
+  const minCount =
+    'minCount' in customer.wants && customer.wants.minCount
+      ? customer.wants.minCount
+      : 1;
+  const rangeLabel = minCount > 1 ? `${minCount}-${count}x` : `1-${count}`;
 
   return {
-    lines: [`1-${count}`, `x${customer.payout.maxCoins}`],
-    ariaLabel: `1 to ${count} dishes, ${customer.payout.maxCoins} coins maximum`,
+    lines: [rangeLabel, `x${customer.payout.maxCoins}`],
+    ariaLabel:
+      minCount > 1
+        ? `${minCount} to ${count} dishes, ${customer.payout.maxCoins} coins maximum`
+        : `1 to ${count} dishes, ${customer.payout.maxCoins} coins maximum`,
   };
 }
 

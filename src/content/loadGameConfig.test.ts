@@ -9,15 +9,15 @@ describe('loadGameConfig', () => {
 
     expect(config).toEqual({
       playerCount: 15,
-      startingResourcesPerPlayer: 2,
+      startingResourcesPerPlayer: 3,
       resourceSupply: {
-        sea: 40,
-        greens: 66,
-        fuel: 60,
-        fungi: 36,
-        meat: 26,
+        sea: 30,
+        greens: 30,
+        fuel: 30,
+        fungi: 30,
+        meat: 30,
       },
-      bonusTaskCount: 20,
+      bonusTaskCount: 9,
       bonusTaskRewardResources: 3,
       customerDeckCount: 4,
     });

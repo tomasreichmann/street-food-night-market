@@ -19,7 +19,7 @@ dishes:
   - id: ramen-bowl
     type: dish
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Ramen Bowl
     tags: [soup, noodles]
@@ -32,7 +32,7 @@ dishes:
   - id: rice-plate
     type: dish
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Rice Plate
     tags: [rice, vegetarian]
@@ -44,7 +44,7 @@ dishes:
   - id: tea
     type: dish
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Tea
     tags: [drink]
@@ -56,7 +56,7 @@ dishes:
   - id: sweet-bun
     type: dish
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Sweet Bun
     tags: [sweet, vegetarian]
@@ -68,7 +68,7 @@ dishes:
   - id: chicken-skewers
     type: dish
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Chicken Skewers
     tags: [meat]
@@ -80,7 +80,7 @@ dishes:
   - id: dumplings
     type: dish
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Dumplings
     tags: [meat]
@@ -236,24 +236,10 @@ dishes:
     text: 'Tiny bowls, big reputation.'
 
 customers:
-  - id: hungry-student
-    type: customer
-    tier: 1
-    copies: 2
-    size: standard
-    title: Hungry Student
-    wants:
-      mode: any_tag
-      tag: noodles
-      count: 1
-    payout:
-      coins: 5
-    text: 'Serve any Noodles dish. Gain 5 coins.'
-
   - id: salaryman
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Salaryman
     wants:
@@ -267,7 +253,7 @@ customers:
   - id: street-musician
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Street Musician
     wants:
@@ -281,7 +267,7 @@ customers:
   - id: maid-cafe-maid
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Maid Cafe Maid
     wants:
@@ -294,7 +280,7 @@ customers:
   - id: tourist
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Tourist
     wants:
@@ -308,7 +294,7 @@ customers:
   - id: monk
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Monk
     wants:
@@ -321,22 +307,21 @@ customers:
 
   - id: tea-auntie
     type: customer
-    tier: 1
-    copies: 2
+    tier: 2
+    copies: 4
     size: standard
-    title: Tea Auntie
+    title: Auntie
     wants:
-      mode: any_tag
-      tag: drink
-      count: 1
+      mode: combo_tags
+      tags: [meat, noodles]
     payout:
-      coins: 5
-    text: 'Serve any Drink dish. Gain 5 coins.'
+      coins: 14
+    text: 'Serve 1 Meat and 1 Noodles. Gain 14 coins.'
 
   - id: dockworker
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Dockworker
     wants:
@@ -350,7 +335,7 @@ customers:
   - id: night-market-kid
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Night Market Kid
     wants:
@@ -364,7 +349,7 @@ customers:
   - id: soup-regular
     type: customer
     tier: 1
-    copies: 2
+    copies: 3
     size: standard
     title: Soup Regular
     wants:
@@ -378,20 +363,23 @@ customers:
   - id: sumo-wrestler
     type: customer
     tier: 2
-    copies: 1
+    copies: 2
     size: standard
     title: Sumo Wrestler
     wants:
-      mode: combo_tags
+      mode: up_to_any_tag
       tags: [meat, rice]
+      minCount: 2
+      count: 5
     payout:
-      coins: 13
-    text: 'Serve 1 Meat and 1 Rice. Gain 13 coins.'
+      coinsPerServed: 12
+      maxCoins: 60
+    text: 'Serve 2-5 Meat or Rice dishes. Gain 12 coins for each served.'
 
   - id: food-blogger
     type: customer
     tier: 2
-    copies: 1
+    copies: 2
     size: standard
     title: Food Blogger
     wants:
@@ -403,21 +391,21 @@ customers:
 
   - id: business-executive
     type: customer
-    tier: 2
+    tier: 3
     copies: 1
     size: standard
     title: Business Executive
     wants:
       mode: combo_tags
-      tags: [premium, drink]
+      tags: [premium, noodles, vegetarian]
     payout:
-      coins: 15
-    text: 'Serve 1 Premium and 1 Drink. Gain 15 coins.'
+      coins: 32
+    text: 'Serve 1 Premium, 1 Noodles, and 1 Vegetarian. Gain 32 coins.'
 
   - id: temple-caretaker
     type: customer
     tier: 2
-    copies: 1
+    copies: 2
     size: standard
     title: Temple Caretaker
     wants:
@@ -430,7 +418,7 @@ customers:
   - id: night-shift-nurse
     type: customer
     tier: 2
-    copies: 1
+    copies: 2
     size: standard
     title: Night Shift Nurse
     wants:
@@ -443,7 +431,7 @@ customers:
   - id: anime-club
     type: customer
     tier: 2
-    copies: 1
+    copies: 2
     size: standard
     title: Anime Club
     wants:
@@ -458,7 +446,7 @@ customers:
   - id: seafood-lover
     type: customer
     tier: 2
-    copies: 1
+    copies: 2
     size: standard
     title: Seafood Lover
     wants:

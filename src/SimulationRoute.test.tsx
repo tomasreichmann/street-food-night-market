@@ -7,6 +7,10 @@ function renderAtSimulationRoute() {
   render(<App />);
 }
 
+function clickNextRound() {
+  fireEvent.click(screen.getAllByRole('button', { name: 'Next Round' })[0]!);
+}
+
 afterEach(() => {
   window.history.pushState({}, '', '/');
 });
@@ -19,8 +23,8 @@ describe('Simulation route', () => {
       screen.getByRole('heading', { name: 'Simulation' }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText('Players')).toHaveValue(15);
-    expect(screen.getByLabelText('Starting resources')).toHaveValue(2);
-    expect(screen.getByLabelText('Seafood supply')).toHaveValue(40);
+    expect(screen.getByLabelText('Starting resources')).toHaveValue(3);
+    expect(screen.getByLabelText('Seafood supply')).toHaveValue(30);
     expect(screen.getByLabelText('Customer decks')).toHaveValue(4);
   });
 
@@ -31,7 +35,7 @@ describe('Simulation route', () => {
       target: { value: '2' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Next Round' }));
+    clickNextRound();
 
     expect(screen.getAllByTestId('simulation-player-row')).toHaveLength(2);
     expect(screen.getByTestId('simulation-round-start-row')).toHaveTextContent(
@@ -41,7 +45,7 @@ describe('Simulation route', () => {
       'Greens',
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Next Round' }));
+    clickNextRound();
 
     expect(screen.getAllByTestId('simulation-player-row')).toHaveLength(4);
     expect(screen.getByText('Round 2')).toBeInTheDocument();
@@ -54,16 +58,22 @@ describe('Simulation route', () => {
       target: { value: '2' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Next Round' }));
+    clickNextRound();
 
     expect(
-      screen.getByRole('heading', { name: 'Claimed customers and score' }),
+      screen.getByRole('heading', { name: 'Claimed customers and final score' }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
       /Player 1/,
     );
     expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /coins/,
+      /points/,
+    );
+    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
+      /Meal bonus/,
+    );
+    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
+      /End game bonuses/,
     );
   });
 
@@ -74,7 +84,7 @@ describe('Simulation route', () => {
       target: { value: '2' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Next Round' }));
+    clickNextRound();
     expect(screen.getAllByTestId('simulation-player-row')).toHaveLength(2);
 
     fireEvent.click(screen.getByRole('button', { name: 'Restart' }));

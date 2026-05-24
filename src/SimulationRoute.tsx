@@ -1,6 +1,7 @@
 import { Fragment, useMemo, useState } from 'react';
 import type { GameConfig } from './content/loadGameConfig';
 import type { GameContent } from './content/schema';
+import { calculatePlayerScoreBreakdown } from './simulation/scoring';
 import {
   restartSimulation,
   simulateNextRound,
@@ -80,6 +81,14 @@ type DisplayRoundLogRow = RoundLogRow & {
   roundStartSupplyLabel?: string;
 };
 
+type DisplayScoreRow = {
+  player: SimulationState['players'][number];
+  claimedCustomers: string[];
+  resourcesLabel: string;
+  mealsLabel: string;
+  score: ReturnType<typeof calculatePlayerScoreBreakdown>;
+};
+
 function renderRoundRows(
   row: DisplayRoundLogRow,
   index: number,
@@ -153,6 +162,10 @@ export function SimulationRoute({
     () => new Map(content.dishes.map((dish) => [dish.id, dish.title])),
     [content.dishes],
   );
+  const customerLabels = useMemo(
+    () => new Map(content.customers.map((customer) => [customer.id, customer.title])),
+    [content.customers],
+  );
   const rows = simulationState.logRows.map((row, index, allRows) => {
     const previousRow = allRows[index - 1];
     const isFirstRowOfRound = !previousRow || previousRow.round !== row.round;
@@ -167,16 +180,17 @@ export function SimulationRoute({
             resourceIds,
             resourceLabels,
           )
-        : undefined,
+      : undefined,
     };
   });
-  const scoreRows = simulationState.players.map((player) => ({
+  const scoreRows: DisplayScoreRow[] = simulationState.players.map((player) => ({
     player,
-    claimedCustomers: player.claimedCustomers.map((customerId) => {
-      const customer = content.customers.find((item) => item.id === customerId);
-
-      return customer?.title ?? customerId;
-    }),
+    claimedCustomers: player.claimedCustomers.map(
+      (customerId) => customerLabels.get(customerId) ?? customerId,
+    ),
+    resourcesLabel: formatCounts(player.resources, resourceIds, resourceLabels),
+    mealsLabel: formatCounts(player.meals, dishIds, dishLabels),
+    score: calculatePlayerScoreBreakdown(content, player),
   }));
 
   function updateConfigField(
@@ -318,63 +332,96 @@ export function SimulationRoute({
         </aside>
       </section>
 
-      <section className="content-section simulation-table-section">
-        <div className="section-heading">
-          <p className="eyebrow">Round log</p>
-          <h2>Player actions</h2>
-        </div>
-        <div className="planning-table-wrap">
-          <table className="planning-table simulation-table">
-            <caption>Simulation round results</caption>
-            <thead>
-              <tr>
-                <th scope="col">Round</th>
-                <th scope="col">Player</th>
-                <th scope="col">Action</th>
-                <th scope="col">Meals Made</th>
-                <th scope="col">Customers Claimed</th>
-                <th scope="col">Coins</th>
-                <th scope="col">Resources</th>
-                <th scope="col">Meals</th>
-                <th scope="col">Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.length > 0 ? (
-                rows.map(renderRoundRows)
-              ) : (
-                <tr>
-                  <td colSpan={9}>No rounds generated.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </section>
+       <section className="content-section simulation-table-section">
+         <div className="section-heading">
+           <p className="eyebrow">Round log</p>
+           <h2>Player actions</h2>
+         </div>
+         <div className="planning-table-wrap">
+           <table className="planning-table simulation-table">
+             <caption>Simulation round results</caption>
+             <thead>
+               <tr>
+                 <th scope="col">Round</th>
+                 <th scope="col">Player</th>
+                 <th scope="col">Action</th>
+                 <th scope="col">Meals Made</th>
+                 <th scope="col">Customers Claimed</th>
+                 <th scope="col">Coins</th>
+                 <th scope="col">Resources</th>
+                 <th scope="col">Meals</th>
+                 <th scope="col">Notes</th>
+               </tr>
+             </thead>
+             <tbody>
+               {rows.length > 0 ? (
+                 rows.map(renderRoundRows)
+               ) : (
+                 <tr>
+                   <td colSpan={9}>No rounds generated.</td>
+                 </tr>
+               )}
+             </tbody>
+           </table>
+         </div>
+         <div className="simulation-actions">
+           <button
+             type="button"
+             className="button-primary"
+             onClick={nextRound}
+           >
+             Next Round
+           </button>
+         </div>
+       </section>
 
       <section className="content-section simulation-score-section">
         <div className="section-heading">
           <p className="eyebrow">Score</p>
-          <h2>Claimed customers and score</h2>
+          <h2>Claimed customers and final score</h2>
         </div>
-        <div
-          className="simulation-score-grid"
-          data-testid="simulation-score-summary"
-        >
-          {scoreRows.map(({ claimedCustomers, player }) => (
-            <article key={player.id} className="simulation-score-card">
-              <div>
-                <span>{player.id}</span>
-                <strong>{player.coins} coins</strong>
-              </div>
-              <p>
-                {claimedCustomers.length > 0
-                  ? claimedCustomers.join(', ')
-                  : 'No customers claimed'}
-              </p>
-            </article>
-          ))}
-        </div>
+         <div
+           className="simulation-score-grid"
+           data-testid="simulation-score-summary"
+         >
+           {scoreRows.map(
+             ({
+               claimedCustomers,
+               player,
+               resourcesLabel,
+               mealsLabel,
+               score,
+             }) => (
+             <article key={player.id} className="simulation-score-card">
+               <div>
+                 <span>{player.id}</span>
+                 <strong>{score.total} points</strong>
+               </div>
+               <p>
+                 {claimedCustomers.length > 0
+                   ? claimedCustomers.join(', ')
+                   : 'No customers claimed'}
+               </p>
+               <div className="simulation-score-details">
+                 <p>Coins: {score.coins}</p>
+                 <p>Unspent meals: {mealsLabel}</p>
+                 <p>Meal bonus: {score.mealBonus}</p>
+                 <p>End game bonuses: {score.endgameBonus}</p>
+                 <p>Resources: {resourcesLabel}</p>
+                 {score.endgameBonusBreakdown.length > 0 ? (
+                   <ul className="simulation-score-bonus-list">
+                     {score.endgameBonusBreakdown.map((bonus) => (
+                       <li key={`${player.id}-${bonus.customerId}`}>
+                         {bonus.label}: +{bonus.points}
+                       </li>
+                     ))}
+                   </ul>
+                 ) : null}
+               </div>
+             </article>
+             ),
+           )}
+         </div>
       </section>
     </>
   );

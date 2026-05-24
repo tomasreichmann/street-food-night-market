@@ -29,6 +29,13 @@ function getTagIcons(tags: string[], count?: number): RequirementIcon[] {
   }));
 }
 
+function getScalingRequirementPrefix(
+  minCount: number | undefined,
+  count: number,
+) {
+  return minCount && minCount > 1 ? `${minCount}-${count}x` : 'up to';
+}
+
 export function getCustomerRequirementVisuals(
   customer: CustomerCard,
   dishes: DishCard[],
@@ -71,23 +78,36 @@ export function getCustomerRequirementVisuals(
 
   if (customer.wants.mode === 'up_to_tag') {
     return {
-      requirementIcons: getTagIcons([customer.wants.tag], customer.wants.count),
+      requirementIcons:
+        customer.wants.minCount && customer.wants.minCount > 1
+          ? getTagIcons([customer.wants.tag])
+          : getTagIcons([customer.wants.tag], customer.wants.count),
       requirementLabel,
-      requirementPrefix: 'up to',
+      requirementPrefix: getScalingRequirementPrefix(
+        customer.wants.minCount,
+        customer.wants.count,
+      ),
     };
   }
 
   if (customer.wants.mode === 'up_to_any_tag') {
     return {
-      requirementIcons: getTagIcons(customer.wants.tags, customer.wants.count),
+      requirementIcons:
+        customer.wants.minCount && customer.wants.minCount > 1
+          ? getTagIcons(customer.wants.tags)
+          : getTagIcons(customer.wants.tags, customer.wants.count),
       requirementLabel,
-      requirementPrefix: 'up to',
+      requirementPrefix: getScalingRequirementPrefix(
+        customer.wants.minCount,
+        customer.wants.count,
+      ),
       requirementSeparator: '/',
     };
   }
 
   return {
-    requirementIcons: [{ src: cardIcons.dish, count: customer.wants.count }],
+    requirementIcons: [{ src: cardIcons.dish }],
+    requirementPrefix: `${customer.wants.count}x different`,
     requirementLabel,
   };
 }

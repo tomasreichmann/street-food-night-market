@@ -55,15 +55,15 @@ describe('CardPreview', () => {
     );
 
     const requirementIcons = container.querySelectorAll(
-      '[data-card-part="bottom-type-icon"] image',
+      '[data-card-part="bottom-type-icon"] img',
     );
     const counts = Array.from(
       container.querySelectorAll('[data-card-part="requirement-count"]'),
     ).map((node) => node.textContent);
 
     expect(requirementIcons).toHaveLength(2);
-    expect(requirementIcons[0]).toHaveAttribute('href', dishTypeIcons.rice);
-    expect(requirementIcons[1]).toHaveAttribute('href', dishTypeIcons.drink);
+    expect(requirementIcons[0]).toHaveAttribute('src', dishTypeIcons.rice);
+    expect(requirementIcons[1]).toHaveAttribute('src', dishTypeIcons.drink);
     expect(counts).toEqual([]);
     expect(container.textContent?.toLowerCase()).not.toContain('rice');
     expect(container.textContent?.toLowerCase()).not.toContain('drink');
@@ -109,6 +109,33 @@ describe('CardPreview', () => {
     ).toHaveTextContent('3');
   });
 
+  it('renders variety wants as different dishes with a prefix instead of a count badge', () => {
+    const { container } = render(
+      <CardPreview
+        kind="customer"
+        item={customer({
+          wants: {
+            mode: 'variety_tags',
+            count: 3,
+          },
+        })}
+        dishes={dishes}
+      />,
+    );
+
+    const requirementIcons = container.querySelectorAll(
+      '[data-card-part="bottom-type-icon"] img',
+    );
+
+    expect(
+      container.querySelector('[data-card-part="requirement-prefix"]'),
+    ).toHaveTextContent('3x different');
+    expect(requirementIcons).toHaveLength(1);
+    expect(
+      container.querySelector('[data-card-part="requirement-count"]'),
+    ).toBeNull();
+  });
+
   it('renders variable customer payout as count range and per-served coin lines', () => {
     const { getByText } = render(
       <CardPreview
@@ -127,6 +154,27 @@ describe('CardPreview', () => {
 
     expect(getByText('1-2')).toBeInTheDocument();
     expect(getByText('x6')).toBeInTheDocument();
+  });
+
+  it('renders scaled customer payout ranges with a minimum count', () => {
+    const { container } = render(
+      <CardPreview
+        kind="customer"
+        item={customer({
+          wants: {
+            mode: 'up_to_any_tag',
+            tags: ['rice', 'drink'],
+            minCount: 2,
+            count: 5,
+          },
+          payout: { coinsPerServed: 12, maxCoins: 60 },
+        })}
+        dishes={dishes}
+      />,
+    );
+
+    expect(container.textContent).toContain('2-5x');
+    expect(container.textContent).toContain('x12');
   });
 
   it('passes customer tier through to render tier stars', () => {

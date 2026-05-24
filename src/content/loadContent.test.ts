@@ -7,7 +7,7 @@ describe('loadContent', () => {
 
     expect(content.resources).toHaveLength(5);
     expect(content.dishes).toHaveLength(17);
-    expect(content.customers).toHaveLength(20);
+    expect(content.customers).toHaveLength(19);
     expect(content.dishes[0]?.title).toBe('Ramen Bowl');
     expect(content.customers.at(-1)?.title).toBe('K-Pop Band');
     expect(content.customers.at(-1)?.endgameBonus).toBe(
@@ -66,6 +66,24 @@ describe('loadContent', () => {
         tags: ['premium', 'meat', 'rice'],
       },
       endgameBonus: '+1 coin per male customer served',
+    });
+  });
+
+  it('updates Sumo Wrestler to a scaled meat-or-rice customer', () => {
+    const content = loadCardContent();
+
+    expect(content.customers.find((customer) => customer.id === 'sumo-wrestler')).toMatchObject({
+      wants: {
+        mode: 'up_to_any_tag',
+        tags: ['meat', 'rice'],
+        minCount: 2,
+        count: 5,
+      },
+      payout: {
+        coinsPerServed: 12,
+        maxCoins: 60,
+      },
+      text: 'Serve 2-5 Meat or Rice dishes. Gain 12 coins for each served.',
     });
   });
 

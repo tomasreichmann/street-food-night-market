@@ -54,17 +54,74 @@ describe('CardSvgFrame', () => {
     );
 
     const bottomIcons = container.querySelectorAll(
-      '[data-card-part="bottom-type-icon"] image',
+      '[data-card-part="bottom-type-icon"] img',
     );
     const separator = container.querySelector(
       '[data-card-part="bottom-type-separator"]',
     );
 
     expect(bottomIcons).toHaveLength(3);
-    expect(bottomIcons[0]).toHaveAttribute('width', '9.84');
-    expect(bottomIcons[0]).toHaveAttribute('height', '9.84');
+    expect(bottomIcons[0]).toHaveAttribute('style');
     expect(separator).toHaveTextContent('/');
-    expect(separator).toHaveAttribute('fill', '#3b322c');
+  });
+
+  it('renders the customer requirement row inside a scaling foreignObject', () => {
+    const { container } = render(
+      <CardSvgFrame
+        accentSoft="#fff"
+        artIconSrc="/customer.png"
+        footer={{ kind: 'customer', coinCount: 15 }}
+        kind="customer"
+        tagIcons={['/rice.png', '/drink.png']}
+        title="Scaling Row"
+        typeIconSrc="/customer.png"
+      />,
+    );
+
+    const foreignObject = container.querySelector(
+      '[data-card-part="bottom-requirements-html"]',
+    );
+    const icon = container.querySelector(
+      '[data-card-part="bottom-type-icon"] img',
+    );
+    const prefix = container.querySelector(
+      '[data-card-part="requirement-prefix"]',
+    );
+
+    expect(foreignObject).toBeInTheDocument();
+    expect(foreignObject).toHaveAttribute('width', '63');
+    expect(icon).toHaveAttribute('style', expect.stringContaining('1.575em'));
+    expect(prefix).toBeNull();
+  });
+
+  it('nudges plus separators slightly closer to the following icon', () => {
+    const plus = render(
+      <CardSvgFrame
+        accentSoft="#fff"
+        artIconSrc="/customer.png"
+        footer={{ kind: 'customer', coinCount: 15 }}
+        kind="customer"
+        tagIcons={['/rice.png', '/drink.png']}
+        title="Combo Plus"
+        typeIconSrc="/customer.png"
+        requirementSeparator="+"
+      />,
+    ).container.querySelector('[data-card-part="bottom-type-separator"]');
+    const slash = render(
+      <CardSvgFrame
+        accentSoft="#fff"
+        artIconSrc="/customer.png"
+        footer={{ kind: 'customer', coinCount: 15 }}
+        kind="customer"
+        tagIcons={['/rice.png', '/drink.png']}
+        title="Combo Slash"
+        typeIconSrc="/customer.png"
+        requirementSeparator="/"
+      />,
+    ).container.querySelector('[data-card-part="bottom-type-separator"]');
+
+    expect(plus).toHaveStyle({ marginInline: '0.18em' });
+    expect(slash).toHaveStyle({ marginInline: '0.1em' });
   });
 
   it('renders exact dish requirements as cropped card art', () => {
@@ -170,6 +227,10 @@ describe('CardSvgFrame', () => {
     expect(
       container.querySelectorAll('[data-card-part="tier-star"]'),
     ).toHaveLength(3);
+
+    const firstStar = container.querySelector('[data-card-part="tier-star"]');
+    expect(firstStar).toHaveAttribute('stroke', '#fff9df');
+    expect(firstStar).toHaveAttribute('stroke-width', '0.12');
   });
 
   it('draws the bleed cut border after the illustration', () => {

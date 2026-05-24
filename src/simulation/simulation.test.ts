@@ -188,6 +188,10 @@ describe('simulateNextRound', () => {
       coins: 12,
     });
     expect(next.players[0]?.resources).toEqual({ greens: 1, fuel: 1 });
+    expect(next.resourceSupply.greens).toBe(
+      (state.resourceSupply.greens ?? 0) + 1,
+    );
+    expect(next.resourceSupply.fuel).toBe((state.resourceSupply.fuel ?? 0) + 1);
   });
 
   it('uses a bonus task to take finite resources prioritized by needed meals', () => {
@@ -195,6 +199,12 @@ describe('simulateNextRound', () => {
     const state: SimulationState = {
       ...started,
       bonusTasksRemaining: 1,
+      players: [
+        {
+          ...started.players[0]!,
+          bonusTasksRemaining: 1,
+        },
+      ],
       customerDecks: [[customer('soup-fan')]],
     };
 
@@ -204,7 +214,7 @@ describe('simulateNextRound', () => {
       action: 'Completed bonus task',
       customersClaimed: [],
     });
-    expect(next.bonusTasksRemaining).toBe(0);
+    expect(next.players[0]?.bonusTasksRemaining).toBe(0);
     expect(next.players[0]?.resources).toMatchObject({
       greens: 1,
       fuel: 1,
@@ -215,7 +225,61 @@ describe('simulateNextRound', () => {
     );
   });
 
-  it('trades one resource with another player if it enables a needed meal', () => {
+  it('does not allow more bonus task actions than the shared bonus task pool', () => {
+    const started = restartSimulation(
+      content,
+      {
+        ...config,
+        playerCount: 2,
+        startingResourcesPerPlayer: 0,
+        bonusTaskCount: 1,
+      },
+      () => 0,
+    );
+    const state: SimulationState = {
+      ...started,
+      bonusTasksRemaining: 1,
+      players: started.players.map((player) => ({
+        ...player,
+        resources: {},
+        meals: {},
+      })),
+      customerDecks: [[customer('soup-fan')]],
+    };
+
+    const next = simulateNextRound(state);
+
+    expect(next.logRows).toHaveLength(2);
+    expect(next.logRows[0]?.action).toBe('Completed bonus task');
+    expect(next.logRows[1]?.action).not.toBe('Completed bonus task');
+    expect(next.bonusTasksRemaining).toBe(0);
+  });
+
+  it('skips the bonus action when the resource supply is empty', () => {
+    const started = onePlayerState();
+    const state: SimulationState = {
+      ...started,
+      bonusTasksRemaining: 1,
+      resourceSupply: { greens: 0, fuel: 0, sea: 0 },
+      players: [
+        {
+          ...started.players[0]!,
+          bonusTasksRemaining: 1,
+        },
+      ],
+      customerDecks: [[customer('soup-fan')]],
+    };
+
+    const next = simulateNextRound(state);
+
+    expect(next.logRows[0]).toMatchObject({
+      action: 'No action',
+    });
+    expect(next.players[0]?.bonusTasksRemaining).toBe(1);
+    expect(next.bonusTasksRemaining).toBe(1);
+  });
+
+  it('trades one resource and cooks in the same round if it enables a needed meal', () => {
     const started = restartSimulation(
       content,
       { ...config, startingResourcesPerPlayer: 0, bonusTaskCount: 0 },
@@ -239,12 +303,14 @@ describe('simulateNextRound', () => {
     const next = simulateNextRound(state);
 
     expect(next.logRows[0]).toMatchObject({
-      action: 'Traded resource',
-      mealsMade: [],
-      customersClaimed: [],
+      action: 'Traded resource and cooked',
+      mealsMade: ['Ramen'],
+      customersClaimed: ['Soup Fan'],
     });
-    expect(next.players[0]?.resources).toEqual({ greens: 1, fuel: 1 });
+    expect(next.players[0]?.resources).toEqual({});
     expect(next.players[1]?.resources).toEqual({ sea: 1 });
+    expect(next.players[0]?.meals).toEqual({});
+    expect(next.players[0]?.coins).toBe(5);
   });
 
   it('buys finite resources for one needed meal, cooks it, and spends coins', () => {

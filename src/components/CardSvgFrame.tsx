@@ -13,9 +13,6 @@ const ART_HEIGHT = 69;
 const ICON_SIZE = 8.44;
 const ICON_MARGIN = 1.8;
 const RESOURCE_COST_ICON_SIZE = 9.84;
-const BOTTOM_REQUIREMENT_ICON_SIZE = RESOURCE_COST_ICON_SIZE;
-const BOTTOM_REQUIREMENT_ICON_GAP = 0.35;
-const BOTTOM_REQUIREMENT_SEPARATOR_WIDTH = 2.3;
 const COIN_ICON_SIZE = ICON_SIZE;
 const ICON_OUTLINE_COLOR = '#fff9df';
 const ICON_OUTLINE_RADIUS = 0.22;
@@ -26,7 +23,7 @@ const BONUS_FONT_SIZE = 2.85;
 const BONUS_LINE_HEIGHT = 3.2;
 const BONUS_MAX_CHARS_PER_LINE = 27;
 const CUSTOMER_BADGE_FONT_WEIGHT = 700;
-const TIER_STAR_SIZE = 1.55;
+const TIER_STAR_SIZE = 2.33;
 const TIER_STAR_GAP = 0.35;
 const BOTTOM_REQUIREMENT_CENTER_Y = 81.5;
 const BOTTOM_REQUIREMENT_ART_HEIGHT = RESOURCE_COST_ICON_SIZE;
@@ -176,8 +173,8 @@ function TierStars({ tier }: { tier?: number }) {
             TIER_STAR_SIZE / 2,
           )}
           fill="#e4b55a"
-          stroke="#7a5412"
-          strokeWidth={0.16}
+          stroke="#fff9df"
+          strokeWidth={0.12}
           strokeLinejoin="round"
         />
       ))}
@@ -318,112 +315,90 @@ function BottomRequirementIcons({
   }
 
   const visibleIcons = icons.slice(0, 4);
-  const sequence = visibleIcons.flatMap((icon, index) =>
-    index < visibleIcons.length - 1
-      ? [{ kind: 'icon' as const, icon }, { kind: 'separator' as const }]
-      : [{ kind: 'icon' as const, icon }],
-  );
-  const prefixWidth = prefix ? 9.2 : 0;
-  const countWidth = 3.2;
-  const totalWidth =
-    prefixWidth +
-    visibleIcons.length * (BOTTOM_REQUIREMENT_ICON_SIZE + countWidth) +
-    Math.max(0, visibleIcons.length - 1) * BOTTOM_REQUIREMENT_SEPARATOR_WIDTH +
-    Math.max(0, visibleIcons.length - 1) * BOTTOM_REQUIREMENT_ICON_GAP * 2;
-  const startX = (CARD_OUTER_WIDTH - totalWidth) / 2;
-  const centerY = BOTTOM_REQUIREMENT_CENTER_Y;
-  const stepWidth =
-    BOTTOM_REQUIREMENT_ICON_SIZE +
-    countWidth +
-    BOTTOM_REQUIREMENT_SEPARATOR_WIDTH +
-    BOTTOM_REQUIREMENT_ICON_GAP * 2;
-  const positionedItems = sequence.map((entry, index) => {
-    const pairIndex = Math.floor(index / 2);
-
-    if (entry.kind === 'separator') {
-      return {
-        kind: 'separator' as const,
-        x:
-          startX +
-          prefixWidth +
-          pairIndex * stepWidth +
-          countWidth +
-          BOTTOM_REQUIREMENT_ICON_SIZE +
-          BOTTOM_REQUIREMENT_ICON_GAP +
-          BOTTOM_REQUIREMENT_SEPARATOR_WIDTH / 2,
-      };
-    }
-
-    return {
-      kind: 'icon' as const,
-      icon: entry.icon,
-      x: startX + prefixWidth + pairIndex * stepWidth,
-    };
-  });
+  const rowHeight = 17.8;
+  const x = CARD_CUT_X;
+  const y = BOTTOM_REQUIREMENT_CENTER_Y - rowHeight / 2;
 
   return (
-    <g aria-hidden="true">
-      {prefix ? (
-        <text
-          data-card-part="requirement-prefix"
-          x={startX + prefixWidth / 2}
-          y={centerY}
-          fill="#3b322c"
-          fontSize={3.05}
-          fontWeight={800}
-          textAnchor="middle"
-          dominantBaseline="middle"
-        >
-          {prefix}
-        </text>
-      ) : null}
-      {positionedItems.map((entry, index) =>
-        entry.kind === 'separator' ? (
-          <text
-            key={`separator-${index}`}
-            data-card-part="bottom-type-separator"
-            x={entry.x}
-            y={centerY}
-            fill="#3b322c"
-            fontSize={5.2}
-            fontWeight={700}
-            textAnchor="middle"
-            dominantBaseline="middle"
-          >
-            {separator}
-          </text>
-        ) : (
-          <g
-            key={`${entry.icon.src}-${index}`}
+    <foreignObject
+      data-card-part="bottom-requirements-html"
+      x={x}
+      y={y}
+      width={CARD_CUT_WIDTH}
+      height={rowHeight}
+      requiredExtensions="http://www.w3.org/1999/xhtml"
+      aria-hidden="true"
+    >
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#3b322c',
+          fontSize: 6.1,
+          fontWeight: 800,
+          lineHeight: 1,
+          fontFamily: 'inherit',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+        }}
+      >
+        {prefix ? (
+          <span data-card-part="requirement-prefix">{prefix}</span>
+        ) : null}
+        {visibleIcons.map((icon, index) => (
+          <span
+            key={`${icon.src}-${index}`}
             data-card-part="bottom-type-icon"
-            filter={`url(#${pictureBrightnessId})`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: icon.count ? '0.14em' : 0,
+              flexShrink: 0,
+              filter: `url(#${pictureBrightnessId})`,
+            }}
           >
-            {entry.icon.count ? (
-              <text
+            {icon.count ? (
+              <span
                 data-card-part="requirement-count"
-                x={entry.x + countWidth / 2}
-                y={centerY}
-                fill="#3b322c"
-                fontSize={4.4}
-                fontWeight={800}
-                textAnchor="middle"
-                dominantBaseline="middle"
+                style={{
+                  minWidth: '0.95em',
+                  textAlign: 'center',
+                }}
               >
-                {entry.icon.count}
-              </text>
+                {icon.count}
+              </span>
             ) : null}
-            <image
-              href={entry.icon.src}
-              x={entry.x + countWidth}
-              y={centerY - BOTTOM_REQUIREMENT_ICON_SIZE / 2}
-              width={BOTTOM_REQUIREMENT_ICON_SIZE}
-              height={BOTTOM_REQUIREMENT_ICON_SIZE}
-              filter="url(#card-icon-outline)"
+            <img
+              src={icon.src}
+              alt=""
+              aria-hidden="true"
+              style={{
+                width: '1.575em',
+                height: '1.575em',
+                display: 'block',
+                filter: 'url(#card-icon-outline)',
+              }}
             />
-          </g>
-        ),
-      )}
-    </g>
+            {index < visibleIcons.length - 1 ? (
+              <span
+                data-card-part="bottom-type-separator"
+                aria-hidden="true"
+                style={{
+                  display: 'inline-block',
+                  marginInline: separator === '+' ? '0.18em' : '0.1em',
+                }}
+              >
+                {separator}
+              </span>
+            ) : null}
+          </span>
+        ))}
+      </div>
+    </foreignObject>
   );
 }
 

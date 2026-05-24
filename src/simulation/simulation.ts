@@ -12,6 +12,7 @@ export type SimulationAction =
   | 'Cooked meal'
   | 'Completed bonus task'
   | 'Traded resource'
+  | 'Traded resource and cooked'
   | 'Bought resources and cooked'
   | 'No action';
 
@@ -21,6 +22,7 @@ export type PlayerState = {
   resources: CountMap;
   meals: CountMap;
   claimedCustomers: string[];
+  bonusTasksRemaining: number;
 };
 
 export type RoundLogRow = {
@@ -82,6 +84,11 @@ type TradeCandidate = {
   otherPlayerIndex: number;
   requestedResourceId: string;
   offeredResourceId: string;
+};
+
+type TradeResult = {
+  state: SimulationState;
+  note: string;
 };
 
 const TIER_ORDER = [1, 2, 3];
@@ -475,7 +482,11 @@ function completeBonusTask(
   state: SimulationState,
   player: PlayerState,
 ): TurnActionResult | null {
-  if (state.bonusTasksRemaining <= 0) {
+  if (
+    player.bonusTasksRemaining <= 0 ||
+    state.bonusTasksRemaining <= 0 ||
+    !Object.values(state.resourceSupply).some((count) => count > 0)
+  ) {
     return null;
   }
 
@@ -502,6 +513,7 @@ function completeBonusTask(
     gained.push(resourceId);
   }
 
+  player.bonusTasksRemaining -= 1;
   state.bonusTasksRemaining -= 1;
 
   return {
@@ -587,6 +599,24 @@ function tradeOneResource(
   state: SimulationState,
   playerIndex: number,
 ): TurnActionResult | null {
+  const trade = executeTrade(state, playerIndex);
+
+  if (!trade) {
+    return null;
+  }
+
+  return {
+    state: trade.state,
+    action: 'Traded resource',
+    mealsMade: [],
+    notes: [trade.note],
+  };
+}
+
+function executeTrade(
+  state: SimulationState,
+  playerIndex: number,
+): TradeResult | null {
   const player = state.players[playerIndex];
   const trade = findTradeCandidate(state, playerIndex);
 
@@ -602,11 +632,42 @@ function tradeOneResource(
 
   return {
     state,
-    action: 'Traded resource',
-    mealsMade: [],
-    notes: [
-      `Traded ${trade.offeredResourceId} for ${trade.requestedResourceId}.`,
-    ],
+    note: `Traded ${trade.offeredResourceId} for ${trade.requestedResourceId}.`,
+  };
+}
+
+function tradeOneResourceAndCook(
+  state: SimulationState,
+  playerIndex: number,
+): TurnActionResult | null {
+  const trade = tradeOneResource(state, playerIndex);
+
+  if (!trade) {
+    return null;
+  }
+
+  const player = trade.state.players[playerIndex];
+
+  if (!player) {
+    return null;
+  }
+
+  const cookedMeal = cookOneAvailableMeal(trade.state, player);
+
+  if (!cookedMeal) {
+    return {
+      state: trade.state,
+      action: 'Traded resource',
+      mealsMade: [],
+      notes: [trade.note],
+    };
+  }
+
+  return {
+    state: cookedMeal.state,
+    action: 'Traded resource and cooked',
+    mealsMade: cookedMeal.mealsMade,
+    notes: [trade.note, ...cookedMeal.notes],
   };
 }
 
@@ -671,8 +732,8 @@ function takeTurnAction(
 
   return (
     cookOneAvailableMeal(state, player) ??
+    tradeOneResourceAndCook(state, playerIndex) ??
     completeBonusTask(state, player) ??
-    tradeOneResource(state, playerIndex) ??
     buyResourcesAndCook(state, player) ?? {
       state,
       action: 'No action',
@@ -781,6 +842,7 @@ export function restartSimulation(
     resources: {},
     meals: {},
     claimedCustomers: [],
+    bonusTasksRemaining: config.bonusTaskCount,
   }));
   const resourceSupply = buildResourceSupply(content, config);
 

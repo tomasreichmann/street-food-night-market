@@ -64,6 +64,15 @@ function formatCountedLabel(count: number, label: string) {
   return count === 1 ? label : `${count}x ${label}`;
 }
 
+function formatScalingWantRange(
+  minCount: number | undefined,
+  maxCount: number,
+) {
+  return minCount && minCount > 1
+    ? `${minCount}-${maxCount}x`
+    : `up to ${maxCount}x`;
+}
+
 function titleizeId(id: string) {
   return id
     .split('-')
@@ -102,14 +111,14 @@ export function formatCustomerWant(
   }
 
   if (customer.wants.mode === 'up_to_tag') {
-    return `up to ${formatCountedLabel(customer.wants.count, customer.wants.tag)}`;
+    return `${formatScalingWantRange(customer.wants.minCount, customer.wants.count)} ${customer.wants.tag}`;
   }
 
   if (customer.wants.mode === 'up_to_any_tag') {
-    return `up to ${formatCountedLabel(customer.wants.count, joinWithOr(customer.wants.tags))}`;
+    return `${formatScalingWantRange(customer.wants.minCount, customer.wants.count)} ${joinWithOr(customer.wants.tags)}`;
   }
 
-  return `${customer.wants.count} different dish types`;
+  return `${customer.wants.count}x different dish types`;
 }
 
 function formatPayout(customer: CustomerCard) {

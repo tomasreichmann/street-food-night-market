@@ -16,26 +16,26 @@ describe('contentSummary', () => {
     const summary = summarizeCardContent(loadCardContent());
 
     expect(summary.dishRows).toHaveLength(17);
-    expect(summary.customerRows).toHaveLength(20);
-    expect(summary.totals.dishCopies).toBe(36);
-    expect(summary.totals.customerCopies).toBe(30);
-    expect(summary.totals.totalCardCopies).toBe(66);
+    expect(summary.customerRows).toHaveLength(19);
+    expect(summary.totals.dishCopies).toBe(42);
+    expect(summary.totals.customerCopies).toBe(44);
+    expect(summary.totals.totalCardCopies).toBe(86);
     expect(summary.totals.dishTypeTotals).toEqual([
-      ['soup', 6],
-      ['noodles', 5],
-      ['rice', 7],
-      ['vegetarian', 8],
-      ['drink', 4],
-      ['sweet', 4],
-      ['meat', 11],
+      ['soup', 7],
+      ['noodles', 6],
+      ['rice', 8],
+      ['vegetarian', 10],
+      ['drink', 5],
+      ['sweet', 5],
+      ['meat', 13],
       ['seafood', 9],
       ['premium', 8],
     ]);
     expect(summary.totals.resourceUsageTotals).toEqual([
-      ['greens', 33],
-      ['fungi', 18],
-      ['fuel', 30],
-      ['meat', 13],
+      ['greens', 39],
+      ['fungi', 19],
+      ['fuel', 36],
+      ['meat', 15],
       ['sea', 20],
     ]);
   });
@@ -54,19 +54,19 @@ describe('contentSummary', () => {
 
   it('formats dish costs and customer wants', () => {
     const content = loadCardContent();
+    const wantFor = (customerId: string) =>
+      formatCustomerWant(
+        content.customers.find((customer) => customer.id === customerId)!,
+      );
 
     expect(formatCost(content.dishes[0]!.cost)).toBe(
       'greens 1, fungi 1, fuel 1',
     );
-    expect(formatCustomerWant(content.customers[0]!)).toBe('any noodles');
-    expect(formatCustomerWant(content.customers[4]!)).toBe('any seafood');
-    expect(formatCustomerWant(content.customers[10]!)).toBe('meat + rice');
-    expect(formatCustomerWant(content.customers[11]!)).toBe(
-      '3 different dish types',
-    );
-    expect(formatCustomerWant(content.customers[15]!)).toBe(
-      'up to 3x sweet or drink',
-    );
+    expect(wantFor('tea-auntie')).toBe('meat + noodles');
+    expect(wantFor('tourist')).toBe('any seafood');
+    expect(wantFor('sumo-wrestler')).toBe('2-5x meat or rice');
+    expect(wantFor('food-blogger')).toBe('3x different dish types');
+    expect(wantFor('anime-club')).toBe('up to 3x sweet or drink');
   });
 
   it('enumerates every valid dish combination for representative customer wants', () => {
@@ -253,9 +253,7 @@ describe('contentSummary', () => {
     });
     expect(
       content.customers.find((customer) => customer.id === 'hungry-student'),
-    ).toMatchObject({
-      wants: { mode: 'any_tag', tag: 'noodles', count: 1 },
-    });
+    ).toBeUndefined();
     expect(
       content.customers.find((customer) => customer.id === 'salaryman'),
     ).toMatchObject({
@@ -269,7 +267,39 @@ describe('contentSummary', () => {
     expect(
       content.customers.find((customer) => customer.id === 'tea-auntie'),
     ).toMatchObject({
-      wants: { mode: 'any_tag', tag: 'drink', count: 1 },
+      title: 'Auntie',
+      tier: 2,
+      copies: 4,
+      wants: { mode: 'combo_tags', tags: ['meat', 'noodles'] },
+      payout: { coins: 14 },
+    });
+  });
+
+  it('keeps promoted Auntie and Business Executive on baseline coin rewards', () => {
+    const summary = summarizeCardContent(loadCardContent());
+    const auntie = summary.customerRows.find((row) => row.id === 'tea-auntie');
+    const businessExecutive = summary.customerRows.find(
+      (row) => row.id === 'business-executive',
+    );
+
+    expect(auntie).toMatchObject({
+      title: 'Auntie',
+      tier: 2,
+      copies: 4,
+      want: 'meat + noodles',
+      matchedCostBasis: 5.666666666666667,
+      reward: '14 coins',
+      economyRatio: '2.47x',
+      economyStatus: 'OK',
+    });
+    expect(businessExecutive).toMatchObject({
+      tier: 3,
+      copies: 1,
+      want: 'premium + noodles + vegetarian',
+      matchedCostBasis: 8.666666666666666,
+      reward: '32 coins',
+      economyRatio: '3.69x',
+      economyStatus: 'OK',
     });
   });
 
@@ -347,15 +377,15 @@ describe('contentSummary', () => {
 
   it('evaluates tier 1 fixed payout against matched dish cost', () => {
     const summary = summarizeCardContent(loadCardContent());
-    const hungryStudent = summary.customerRows.find(
-      (row) => row.title === 'Hungry Student',
+    const auntie = summary.customerRows.find(
+      (row) => row.title === 'Auntie',
     );
 
-    expect(hungryStudent).toMatchObject({
+    expect(auntie).toMatchObject({
       matchedDishTitle: '3-cheapest average',
-      matchedCostBasis: 3.5,
-      reward: '5 coins',
-      economyRatio: '1.43x',
+      matchedCostBasis: 5.666666666666667,
+      reward: '14 coins',
+      economyRatio: '2.47x',
       economyStatus: 'OK',
     });
   });
@@ -368,9 +398,9 @@ describe('contentSummary', () => {
 
     expect(sumoWrestler).toMatchObject({
       matchedDishTitle: '3-cheapest average',
-      matchedCostBasis: 5.333333333333333,
-      reward: '13 coins',
-      economyRatio: '2.44x',
+      matchedCostBasis: 4.666666666666667,
+      reward: '12 coins per served, max 60',
+      economyRatio: '2.57x',
       economyStatus: 'OK',
     });
   });
@@ -404,7 +434,7 @@ describe('contentSummary', () => {
   it('keeps every customer matched and economically balanced', () => {
     const summary = summarizeCardContent(loadCardContent());
 
-    expect(summary.customerRows).toHaveLength(20);
+    expect(summary.customerRows).toHaveLength(19);
     expect(
       summary.customerRows.filter((row) => row.economyStatus !== 'OK'),
     ).toEqual([]);

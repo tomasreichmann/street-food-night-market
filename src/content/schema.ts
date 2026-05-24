@@ -74,6 +74,7 @@ const customerWantsSchema = z.discriminatedUnion('mode', [
     .object({
       mode: z.literal('up_to_tag'),
       tag: nonEmptyText,
+      minCount: positiveInteger.optional(),
       count: positiveInteger,
     })
     .strict(),
@@ -81,6 +82,7 @@ const customerWantsSchema = z.discriminatedUnion('mode', [
     .object({
       mode: z.literal('up_to_any_tag'),
       tags: z.array(nonEmptyText).min(1),
+      minCount: positiveInteger.optional(),
       count: positiveInteger,
     })
     .strict(),

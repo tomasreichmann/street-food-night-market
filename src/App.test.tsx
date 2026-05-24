@@ -10,14 +10,15 @@ describe('App', () => {
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
     expect(screen.getAllByText('Ramen Bowl').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('Hungry Student').length).toBeGreaterThan(0);
+    expect(screen.queryByText('Hungry Student')).not.toBeInTheDocument();
+    expect(screen.getAllByText('Auntie').length).toBeGreaterThan(0);
     expect(screen.getByText('Resources')).toBeInTheDocument();
     expect(screen.getByText('Customers')).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: 'Card planning table' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('soup: 6')).toBeInTheDocument();
-    expect(screen.getByText('greens: 33')).toBeInTheDocument();
+    expect(screen.getByText('meat: 13')).toBeInTheDocument();
+    expect(screen.getByText('greens: 39')).toBeInTheDocument();
     expect(screen.getAllByText('Festival Judge').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Imperial Tasting Menu').length).toBeGreaterThan(
       0,
