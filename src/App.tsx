@@ -3,6 +3,7 @@ import { CardMockups } from './components/CardMockups';
 import { CardPlanningTable } from './components/CardPlanningTable';
 import { loadDefaultGameConfig } from './content/loadGameConfig';
 import { loadCardContent } from './content/loadContent';
+import { PrintRoute } from './PrintRoute';
 import { SimulationRoute } from './SimulationRoute';
 
 function getContentState() {
@@ -30,6 +31,7 @@ function AppNav() {
     <nav className="app-nav" aria-label="Primary navigation">
       <a href="/">Home</a>
       <a href="/simulation">Simulation</a>
+      <a href="/print">Print</a>
     </nav>
   );
 }
@@ -142,12 +144,15 @@ export default function App() {
     );
   }
 
+  const isPrintRoute = window.location.pathname === '/print';
   const isSimulationRoute = window.location.pathname === '/simulation';
 
   return (
     <main className="app-shell">
       <AppNav />
-      {isSimulationRoute ? (
+      {isPrintRoute ? (
+        <PrintRoute content={contentState.content} />
+      ) : isSimulationRoute ? (
         <SimulationRoute
           content={contentState.content}
           initialConfig={contentState.config}

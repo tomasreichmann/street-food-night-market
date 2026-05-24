@@ -667,6 +667,92 @@ img {
   height: 100%;
 }
 
+.print-route {
+  display: grid;
+  gap: 2rem;
+  overflow-x: auto;
+}
+
+.print-route__intro {
+  max-width: 70ch;
+}
+
+.print-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.print-section__heading {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.print-section__heading h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.print-section__copy {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--muted);
+}
+
+.print-section__pages {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.print-sheet {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #fff;
+  box-shadow: var(--shadow);
+  break-after: page;
+  page-break-after: always;
+}
+
+.print-sheet:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+.print-sheet__marks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.print-sheet__grid {
+  position: absolute;
+  display: grid;
+  gap: 0;
+}
+
+.print-sheet__slot {
+  width: 100%;
+  height: 100%;
+}
+
+.print-sheet__slot .preview-card {
+  width: 100%;
+  height: 100%;
+}
+
+.print-route .preview-card {
+  box-shadow: none;
+}
+
+.print-route .card-svg__cutline {
+  display: block;
+}
+
 .card-svg__cutline {
   opacity: 1;
 }
@@ -723,7 +809,7 @@ img {
 
 @media print {
   @page {
-    margin: 12mm;
+    margin: 0;
   }
 
   :root {
@@ -744,9 +830,16 @@ img {
     padding: 0;
   }
 
+  .app-nav,
+  .print-route__intro,
+  .print-section__heading {
+    display: none;
+  }
+
   .hero,
   .preview-card,
   .mockup-card,
+  .print-sheet,
   .stats div,
   .planning-table-section,
   .planning-table-wrap,
@@ -761,6 +854,7 @@ img {
 
   .preview-card,
   .mockup-card,
+  .print-sheet,
   .stats div {
     break-inside: avoid;
     page-break-inside: avoid;
@@ -768,6 +862,25 @@ img {
 
   .card-svg__cutline {
     display: none;
+  }
+
+  .print-route .card-svg__cutline {
+    display: block;
+  }
+
+  .print-sheet {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .print-sheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
   }
 
   .planning-table-wrap {
