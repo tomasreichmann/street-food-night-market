@@ -14,6 +14,18 @@ const PRINT_GRID_TOP_MM =
   (PRINT_PAGE_HEIGHT_MM - PRINT_GRID_ROWS * PRINT_CARD_HEIGHT_MM) / 2;
 const PRINT_GRID_WIDTH_MM = PRINT_GRID_COLUMNS * PRINT_CARD_WIDTH_MM;
 const PRINT_GRID_HEIGHT_MM = PRINT_GRID_ROWS * PRINT_CARD_HEIGHT_MM;
+const PRINT_CARD_TRIM_INSET_MM = 3;
+const PRINT_CARD_TRIM_WIDTH_MM = PRINT_CARD_WIDTH_MM - PRINT_CARD_TRIM_INSET_MM * 2;
+const PRINT_CARD_TRIM_HEIGHT_MM =
+  PRINT_CARD_HEIGHT_MM - PRINT_CARD_TRIM_INSET_MM * 2;
+const PRINT_CARD_TRIM_LEFT_MM =
+  PRINT_GRID_LEFT_MM + PRINT_CARD_TRIM_INSET_MM;
+const PRINT_CARD_TRIM_TOP_MM = PRINT_GRID_TOP_MM + PRINT_CARD_TRIM_INSET_MM;
+const PRINT_CARD_TRIM_RIGHT_MM =
+  PRINT_CARD_TRIM_LEFT_MM + PRINT_CARD_TRIM_WIDTH_MM;
+const PRINT_CARD_TRIM_BOTTOM_MM =
+  PRINT_CARD_TRIM_TOP_MM + PRINT_CARD_TRIM_HEIGHT_MM;
+const PRINT_CROP_MARK_LENGTH_MM = 5;
 
 type PrintableCard =
   | {
@@ -73,52 +85,52 @@ function RegistrationAndCropMarks() {
         vectorEffect="non-scaling-stroke"
       >
         <line
-          x1={PRINT_GRID_LEFT_MM}
-          y1={PRINT_GRID_TOP_MM - 5}
-          x2={PRINT_GRID_LEFT_MM}
-          y2={PRINT_GRID_TOP_MM}
+          x1={PRINT_CARD_TRIM_LEFT_MM}
+          y1={PRINT_CARD_TRIM_TOP_MM - PRINT_CROP_MARK_LENGTH_MM}
+          x2={PRINT_CARD_TRIM_LEFT_MM}
+          y2={PRINT_CARD_TRIM_TOP_MM}
         />
         <line
           x1={0}
-          y1={PRINT_GRID_TOP_MM}
-          x2={PRINT_GRID_LEFT_MM}
-          y2={PRINT_GRID_TOP_MM}
+          y1={PRINT_CARD_TRIM_TOP_MM}
+          x2={PRINT_CARD_TRIM_LEFT_MM}
+          y2={PRINT_CARD_TRIM_TOP_MM}
         />
         <line
-          x1={PRINT_PAGE_WIDTH_MM - PRINT_GRID_LEFT_MM}
-          y1={PRINT_GRID_TOP_MM - 5}
-          x2={PRINT_PAGE_WIDTH_MM - PRINT_GRID_LEFT_MM}
-          y2={PRINT_GRID_TOP_MM}
+          x1={PRINT_CARD_TRIM_RIGHT_MM}
+          y1={PRINT_CARD_TRIM_TOP_MM - PRINT_CROP_MARK_LENGTH_MM}
+          x2={PRINT_CARD_TRIM_RIGHT_MM}
+          y2={PRINT_CARD_TRIM_TOP_MM}
         />
         <line
-          x1={PRINT_PAGE_WIDTH_MM - PRINT_GRID_LEFT_MM}
-          y1={PRINT_GRID_TOP_MM}
+          x1={PRINT_CARD_TRIM_RIGHT_MM}
+          y1={PRINT_CARD_TRIM_TOP_MM}
           x2={PRINT_PAGE_WIDTH_MM}
-          y2={PRINT_GRID_TOP_MM}
+          y2={PRINT_CARD_TRIM_TOP_MM}
         />
         <line
-          x1={PRINT_GRID_LEFT_MM}
-          y1={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM}
-          x2={PRINT_GRID_LEFT_MM}
-          y2={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM + 5}
+          x1={PRINT_CARD_TRIM_LEFT_MM}
+          y1={PRINT_CARD_TRIM_BOTTOM_MM}
+          x2={PRINT_CARD_TRIM_LEFT_MM}
+          y2={PRINT_CARD_TRIM_BOTTOM_MM + PRINT_CROP_MARK_LENGTH_MM}
         />
         <line
           x1={0}
-          y1={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM}
-          x2={PRINT_GRID_LEFT_MM}
-          y2={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM}
+          y1={PRINT_CARD_TRIM_BOTTOM_MM}
+          x2={PRINT_CARD_TRIM_LEFT_MM}
+          y2={PRINT_CARD_TRIM_BOTTOM_MM}
         />
         <line
-          x1={PRINT_PAGE_WIDTH_MM - PRINT_GRID_LEFT_MM}
-          y1={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM}
-          x2={PRINT_PAGE_WIDTH_MM - PRINT_GRID_LEFT_MM}
-          y2={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM + 5}
+          x1={PRINT_CARD_TRIM_RIGHT_MM}
+          y1={PRINT_CARD_TRIM_BOTTOM_MM}
+          x2={PRINT_CARD_TRIM_RIGHT_MM}
+          y2={PRINT_CARD_TRIM_BOTTOM_MM + PRINT_CROP_MARK_LENGTH_MM}
         />
         <line
-          x1={PRINT_PAGE_WIDTH_MM - PRINT_GRID_LEFT_MM}
-          y1={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM}
+          x1={PRINT_CARD_TRIM_RIGHT_MM}
+          y1={PRINT_CARD_TRIM_BOTTOM_MM}
           x2={PRINT_PAGE_WIDTH_MM}
-          y2={PRINT_PAGE_HEIGHT_MM - PRINT_GRID_TOP_MM}
+          y2={PRINT_CARD_TRIM_BOTTOM_MM}
         />
       </g>
       <g

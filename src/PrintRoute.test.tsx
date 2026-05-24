@@ -32,6 +32,9 @@ describe('Print route', () => {
 
     expect(container.querySelectorAll('.print-sheet__marks')).toHaveLength(5);
     expect(
+      container.querySelector('.print-sheet__crop-marks line'),
+    ).toHaveAttribute('x1', '4.5');
+    expect(
       container.querySelectorAll('.print-sheet__registration-marks line'),
     ).toHaveLength(40);
     expect(container.querySelectorAll('.print-sheet__crop-marks line')).toHaveLength(
