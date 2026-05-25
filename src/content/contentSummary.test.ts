@@ -288,7 +288,7 @@ describe('contentSummary', () => {
       copies: 4,
       want: 'meat + noodles',
       matchedCostBasis: 5.666666666666667,
-      reward: '14 coins',
+      reward: '14 coins; end game: +2 coins per kid served',
       economyRatio: '2.47x',
       economyStatus: 'OK',
     });
@@ -297,7 +297,7 @@ describe('contentSummary', () => {
       copies: 1,
       want: 'premium + noodles + vegetarian',
       matchedCostBasis: 8.666666666666666,
-      reward: '32 coins',
+      reward: '32 coins; end game: +2 coins per Salaryman served',
       economyRatio: '3.69x',
       economyStatus: 'OK',
     });
@@ -382,7 +382,7 @@ describe('contentSummary', () => {
     expect(auntie).toMatchObject({
       matchedDishTitle: '3-cheapest average',
       matchedCostBasis: 5.666666666666667,
-      reward: '14 coins',
+      reward: '14 coins; end game: +2 coins per kid served',
       economyRatio: '2.47x',
       economyStatus: 'OK',
     });
@@ -415,7 +415,8 @@ describe('contentSummary', () => {
     expect(animeClub).toMatchObject({
       matchedDishTitle: 'OR-branch average',
       matchedCostBasis: 2.833333333333333,
-      reward: '7 coins per served, max 21',
+      reward:
+        '7 coins per served, max 21; end game: counts as 2x male and 2x female customers',
       economyRatio: '2.47x',
       economyStatus: 'OK',
     });

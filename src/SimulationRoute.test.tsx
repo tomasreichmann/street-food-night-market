@@ -23,7 +23,7 @@ describe('Simulation route', () => {
       screen.getByRole('heading', { name: 'Simulation' }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText('Players')).toHaveValue(15);
-    expect(screen.getByLabelText('Starting resources')).toHaveValue(3);
+    expect(screen.getByLabelText('Starting resources')).toHaveValue(5);
     expect(screen.getByLabelText('Seafood supply')).toHaveValue(30);
     expect(screen.getByLabelText('Customer decks')).toHaveValue(4);
   });
@@ -61,7 +61,9 @@ describe('Simulation route', () => {
     clickNextRound();
 
     expect(
-      screen.getByRole('heading', { name: 'Claimed customers and final score' }),
+      screen.getByRole('heading', {
+        name: 'Claimed customers and final score',
+      }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
       /Player 1/,
@@ -70,7 +72,13 @@ describe('Simulation route', () => {
       /points/,
     );
     expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /Meal bonus/,
+      /Dish bonus/,
+    );
+    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
+      /Leftover resources/,
+    );
+    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
+      /Resource bonus/,
     );
     expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
       /End game bonuses/,

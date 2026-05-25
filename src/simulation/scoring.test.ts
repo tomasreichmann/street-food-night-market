@@ -4,7 +4,7 @@ import type { PlayerState } from './simulation';
 import { calculatePlayerScoreBreakdown } from './scoring';
 
 describe('calculatePlayerScoreBreakdown', () => {
-  it('adds coins, unspent meal tiers, and end game bonuses', () => {
+  it('adds coins, unspent dish cost, leftover resources, and end game bonuses', () => {
     const content = loadCardContent();
     const player: PlayerState = {
       id: 'Player 1',
@@ -29,9 +29,10 @@ describe('calculatePlayerScoreBreakdown', () => {
 
     expect(calculatePlayerScoreBreakdown(content, player)).toEqual({
       coins: 10,
-      mealBonus: 6,
+      dishBonus: 11,
+      resourceBonus: 2,
       endgameBonus: 17,
-      total: 33,
+      total: 40,
       endgameBonusBreakdown: [
         {
           customerId: 'seafood-lover',
@@ -54,6 +55,26 @@ describe('calculatePlayerScoreBreakdown', () => {
           points: 2,
         },
       ],
+    });
+  });
+
+  it('rounds leftover resources down to whole points', () => {
+    const content = loadCardContent();
+    const player: PlayerState = {
+      id: 'Player 2',
+      coins: 0,
+      resources: { sea: 1, greens: 1, fuel: 1 },
+      meals: {},
+      claimedCustomers: [],
+      bonusTasksRemaining: 0,
+    };
+
+    expect(calculatePlayerScoreBreakdown(content, player)).toMatchObject({
+      coins: 0,
+      dishBonus: 0,
+      resourceBonus: 1,
+      endgameBonus: 0,
+      total: 1,
     });
   });
 });

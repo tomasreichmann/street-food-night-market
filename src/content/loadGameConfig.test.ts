@@ -9,7 +9,7 @@ describe('loadGameConfig', () => {
 
     expect(config).toEqual({
       playerCount: 15,
-      startingResourcesPerPlayer: 3,
+      startingResourcesPerPlayer: 5,
       resourceSupply: {
         sea: 30,
         greens: 30,

@@ -6,7 +6,7 @@ describe('loadContent', () => {
     const content = loadCardContent();
 
     expect(content.resources).toHaveLength(5);
-    expect(content.dishes).toHaveLength(17);
+    expect(content.dishes).toHaveLength(18);
     expect(content.customers).toHaveLength(19);
     expect(content.dishes[0]?.title).toBe('Ramen Bowl');
     expect(content.customers.at(-1)?.title).toBe('K-Pop Band');
@@ -72,7 +72,9 @@ describe('loadContent', () => {
   it('updates Sumo Wrestler to a scaled meat-or-rice customer', () => {
     const content = loadCardContent();
 
-    expect(content.customers.find((customer) => customer.id === 'sumo-wrestler')).toMatchObject({
+    expect(
+      content.customers.find((customer) => customer.id === 'sumo-wrestler'),
+    ).toMatchObject({
       wants: {
         mode: 'up_to_any_tag',
         tags: ['meat', 'rice'],
@@ -80,10 +82,10 @@ describe('loadContent', () => {
         count: 5,
       },
       payout: {
-        coinsPerServed: 12,
-        maxCoins: 60,
+        coinsPerServed: 6,
+        maxCoins: 30,
       },
-      text: 'Serve 2-5 Meat or Rice dishes. Gain 12 coins for each served.',
+      text: 'Serve 2-5 Meat or Rice dishes. Gain 6 coins for each served.',
     });
   });
 

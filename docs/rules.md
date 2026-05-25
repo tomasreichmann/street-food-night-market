@@ -1,230 +1,98 @@
 # Street Food Night Market Rules
 
-## Overview
+## Welcome
 
-Street Food Night Market is a light party game about collecting ingredients,
-trading with other players, cooking dishes, and racing to serve hungry guests.
+Welcome to Street Food Night Market. You are running a small food stall in a busy night market. You will trade, cook, serve customers, and try to finish with the best score.
 
-Players earn coins by serving customer cards. The player with the most coins at
-the end wins.
+The game is social on purpose. You can move around, talk, trade, and keep the market lively.
 
-## Players and Time
+## What You Need
 
 - 15 to 20 players
-- 30 to 45 minutes
-- Best with a host or facilitator
-
-## Components
-
-- Resource tokens:
-  - Sea
-  - Greens / Grain
-  - Fuel / Wood
-  - Fungi / Umami
-  - Meat / Protein
+- About 60 minutes
+- Resource tokens
 - Dish cards
-- Customer cards
+- Customer stacks
 - Coin tokens or a score sheet
-- Optional market task cards, bingo sheets, or hidden resource cards
+- Bonus task sheets
 
 ## Setup
 
-1. Give each player 2 random resource tokens.
-2. Put all remaining resources in a central market supply.
-3. Put all dish cards face up as the available dish supply.
+1. Give each player 5 random resource tokens.
+2. Give each player a bonus task sheet.
+3. Put the remaining resources, dishes, and coins in their supply piles.
 4. Shuffle the customer deck.
-5. Reveal 4 customers face up in a row.
-6. Put the coin supply where everyone can reach it.
-7. If using bingo sheets or market tasks, give each player one sheet or reveal
-   the first set of tasks.
+5. Reveal 4 customer stacks.
+6. Put the market where everyone can reach it.
 
-For a shorter or easier game, reveal 5 customers. For a tighter race, reveal 3.
+## Player Actions
 
-## Goal
+During the game, you can do any of these things:
 
-Earn the most coins by the end of the game.
+### Exchange resources for dishes
 
-Coins come mainly from serving customers. Some late customers also give end game
-bonus coins if their card says so.
+Spend the listed resources to take a dish. The spent resources go back to the supply.
 
-## Turn Structure
+### Exchange dishes for customers
 
-Players do not need strict seated turns. The game works best as a live market
-where everyone acts at the same time.
+Spend the dishes a customer asks for. Those dishes go back to the supply. Then take the printed coins from the supply.
 
-During the market, players may:
+Customer wants can mean different things:
 
-- gain resources from tasks or hidden market cards
-- trade resources, dishes, or promises with other players
-- cook dishes by paying their resource costs
-- serve face-up customers by spending matching dishes
+- `type + type` means the customer wants both types.
+- `type / type` means the customer wants one of the listed types.
+- `1-2 type` means the customer wants between 1 and 2 of that type.
+- `dish =/= dish` means the customer wants one dish that is not the other named dish.
 
-The host should keep the game moving and announce time checks.
+### Exchange coins for resources
 
-## Trading
+You may buy resources from the supply at 1 coin for 1 resource.
 
-Players may trade freely.
+### Trade with other players
 
-Allowed trades include:
+You may trade resources, coins, and dishes in any way you want. Do not trade customers.
 
-- resource for resource
-- resource for dish
-- dish for dish
-- coins for resources or dishes
-- multi-player deals
+### Complete bonus tasks
 
-Promises are allowed, but only current cards, tokens, and coins are enforceable.
-
-## Gaining Resources
-
-Use one or more of these methods:
-
-- Complete a bingo square or market task to gain the listed resource.
-- Find a hidden resource card and exchange it for the shown resource.
-- Trade with another player.
-- Receive extra resources from the host if the game stalls.
-
-If a task does not specify a resource, gain 1 random resource from the market
-supply.
-
-## Cooking Dishes
-
-To cook a dish:
-
-1. Choose a dish card from the face-up dish supply.
-2. Pay all resources shown on the dish card.
-3. Take that dish card and place it in front of you.
-
-Each dish card has one or more dish types, such as Soup, Noodles, Rice, Seafood,
-Meat, Vegetarian, Grill, Sweet, Drink, or Premium.
-
-Dish types are used to satisfy customers.
+If you finish a bonus task, get a signature from the person you completed it with. Then take 3 resources of your choice from the supply. Each task can only be completed once.
 
 ## Serving Customers
 
-To serve a customer:
+To serve a customer, spend the dishes that customer wants. The dishes go back to the supply and you take the customer’s coins from the supply.
 
-1. Choose one face-up customer.
-2. Spend the dishes required by that customer.
-3. Return those spent dishes out of play.
-4. Gain the coins shown on the customer card.
-5. Keep the served customer card in front of you.
-6. Reveal a new customer from the deck to refill the row.
+Keep the served customer card in front of you. Some customers may have an end game bonus printed on the card.
 
-If two players want the same customer at the same time, the player who clearly
-has the required dishes ready first serves the customer. If there is a tie, the
-host decides quickly.
+## End of the Game
 
-## Customer Requirements
+The game ends when either of these happens:
 
-Customer cards use a few requirement patterns.
-
-### Any Type
-
-Serve one dish with the requested type.
-
-Example: "Serve any Soup dish."
-
-### Any Of Several Types
-
-Serve one dish matching at least one listed type.
-
-Example: "Serve any Noodles or Rice dish."
-
-### Exact Dish
-
-Serve the named dish.
-
-Example: "Serve Ramen Bowl."
-
-### Combo
-
-Serve one matching dish for each listed type.
-
-Example: "Serve 1 Sweet and 1 Drink."
-
-The same dish can satisfy more than one required type only if the host allows
-that shortcut before the game starts. The recommended rule is one spent dish per
-listed requirement because it keeps customer values balanced.
-
-### Scalable
-
-Serve up to the listed number of matching dishes. Gain coins for each dish
-served, up to the printed maximum.
-
-Example: "Serve up to 3 Sweet or Drink dishes. Gain 4 coins for each served."
-
-### Variety
-
-Serve the listed number of dishes with different dish types.
-
-Example: "Serve 3 dishes with different types."
-
-For variety requirements, each spent dish must contribute a different dish type.
-A dish with multiple types may choose which one it counts as.
-
-## End Game Bonuses
-
-Some late customers include an "End game" bonus. Keep those customer cards after
-serving them.
-
-At the end of the game, score each end game bonus exactly as written on the
-served customer card.
-
-End game bonuses do not apply unless you served and kept that customer.
-
-## Ending the Game
-
-The game ends when any one of these happens:
-
-- the host calls time
-- the customer deck runs out
-- a player serves their fifth customer
-
-For a 30 minute game, the host should call a 5 minute warning and then finish
-after the next served customer.
+- 60 minutes pass
+- 3 of the 4 customer stacks are gone
 
 ## Final Scoring
 
-Each player adds:
+Count your points at the end:
 
-- coins earned during the game
-- end game bonus coins from served customers
+- Coins earned during the game are 1 point each.
+- Each unspent dish is worth points equal to its printed resource cost.
+- Every 2 leftover resources score 1 point, rounded down.
+- Add any end game bonus points printed on served customer cards.
 
-Unspent resources and unserved dishes are worth 0 coins unless a served customer
-bonus says otherwise.
+The player with the most points wins.
 
-The player with the most coins wins.
-
-Tie breakers:
+Tie breakers, in order:
 
 1. Most served customers
-2. Most unspent dishes
-3. Most unspent resources
+2. Most leftover dishes
+3. Most leftover resources
 4. Shared victory
 
-## Host Guidelines
+## Card Reading Guide
 
-Keep the game fast and social.
+### Dish cards
 
-- Encourage trading.
-- Refill the customer row immediately.
-- Clarify customer requirements before a dispute becomes a slowdown.
-- Add resources to the market if too many players are stuck.
-- Call time before energy drops.
+The title tells you the dish name. The artwork helps you spot it quickly. The type icons show what kind of customer it can satisfy. The cost shows the resources you spend to get it. The short text is a reminder of what the dish does.
 
-The game should feel like a busy market, not a rules exam.
+### Customer cards
 
-## Balance Notes
-
-Dish tiers and customer tiers are design tools only. Players do not need to know
-or reference them.
-
-The intended economy is:
-
-- early customers give a small profit over the dish cost
-- mid customers pay about double the dish cost
-- late customers pay more, scale with multiple dishes, or add end game bonuses
-
-When testing, adjust customer payouts before changing resource values. All
-resources are currently treated as equal value.
+The title tells you who wants the food. The stars show how demanding the customer is. The requirement row shows what you must spend. The payout shows the coins you take from the supply. Any end game bonus only scores after the customer has been served. The short text is the plain-language reminder of the customer’s wants.

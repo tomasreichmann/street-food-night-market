@@ -1,4 +1,5 @@
 import { CardPreview } from './components/CardPreview';
+import { PrintCropMarks } from './components/PrintCropMarks';
 import type { CustomerCard, DishCard, GameContent } from './content/schema';
 
 const CARDS_PER_PAGE = 9;
@@ -18,7 +19,6 @@ const PRINT_CARD_TRIM_INSET_MM = 3;
 const PRINT_CARD_TRIM_WIDTH_MM = PRINT_CARD_WIDTH_MM - PRINT_CARD_TRIM_INSET_MM * 2;
 const PRINT_CARD_TRIM_HEIGHT_MM =
   PRINT_CARD_HEIGHT_MM - PRINT_CARD_TRIM_INSET_MM * 2;
-const PRINT_CROP_MARK_LENGTH_MM = 1;
 const PRINT_CARD_CORNER_RADIUS_MM = 0;
 
 type PrintableCard =
@@ -75,47 +75,6 @@ function expandPrintableCards(content: GameContent): PrintableCardInstance[] {
   return cards;
 }
 
-function renderCropMarksForRect(
-  left: number,
-  top: number,
-  right: number,
-  bottom: number,
-  keyPrefix: string,
-) {
-  return (
-    <g key={keyPrefix}>
-      <line
-        x1={left}
-        y1={top - PRINT_CROP_MARK_LENGTH_MM}
-        x2={left}
-        y2={top}
-      />
-      <line x1={0} y1={top} x2={left} y2={top} />
-      <line
-        x1={right}
-        y1={top - PRINT_CROP_MARK_LENGTH_MM}
-        x2={right}
-        y2={top}
-      />
-      <line x1={right} y1={top} x2={PRINT_PAGE_WIDTH_MM} y2={top} />
-      <line
-        x1={left}
-        y1={bottom}
-        x2={left}
-        y2={bottom + PRINT_CROP_MARK_LENGTH_MM}
-      />
-      <line x1={0} y1={bottom} x2={left} y2={bottom} />
-      <line
-        x1={right}
-        y1={bottom}
-        x2={right}
-        y2={bottom + PRINT_CROP_MARK_LENGTH_MM}
-      />
-      <line x1={right} y1={bottom} x2={PRINT_PAGE_WIDTH_MM} y2={bottom} />
-    </g>
-  );
-}
-
 function PrintSheetMarks() {
   const cropMarks = Array.from(
     { length: PRINT_GRID_ROWS * PRINT_GRID_COLUMNS },
@@ -133,27 +92,22 @@ function PrintSheetMarks() {
       const right = left + PRINT_CARD_TRIM_WIDTH_MM;
       const bottom = top + PRINT_CARD_TRIM_HEIGHT_MM;
 
-      return renderCropMarksForRect(left, top, right, bottom, `${row}-${column}`);
+      return {
+        bottom,
+        key: `${row}-${column}`,
+        left,
+        right,
+        top,
+      };
     },
   );
 
   return (
-    <svg
-      className="print-sheet__marks"
-      viewBox={`0 0 ${PRINT_PAGE_WIDTH_MM} ${PRINT_PAGE_HEIGHT_MM}`}
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <g
-        className="print-sheet__crop-marks"
-        fill="none"
-        stroke="#1f1d1b"
-        strokeWidth="0.4"
-        vectorEffect="non-scaling-stroke"
-      >
-        {cropMarks}
-      </g>
-    </svg>
+    <PrintCropMarks
+      pageHeightMm={PRINT_PAGE_HEIGHT_MM}
+      pageWidthMm={PRINT_PAGE_WIDTH_MM}
+      rects={cropMarks}
+    />
   );
 }
 

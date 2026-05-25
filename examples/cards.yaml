@@ -328,6 +328,7 @@ customers:
       tags: [meat, noodles]
     payout:
       coins: 14
+    endgameBonus: '+2 coins per kid served'
     text: 'Serve 1 Meat and 1 Noodles. Gain 14 coins.'
 
   - id: dockworker
@@ -412,6 +413,7 @@ customers:
       tags: [vegetarian, soup]
     payout:
       coins: 14
+    endgameBonus: '+2 coins per monk served'
     text: 'Serve 1 Vegetarian and 1 Soup. Gain 14 coins.'
 
   - id: night-shift-nurse
@@ -440,6 +442,7 @@ customers:
     payout:
       coinsPerServed: 7
       maxCoins: 21
+    endgameBonus: 'counts as 2x male and 2x female customers'
     text: 'Serve up to 3 Sweet or Drink dishes. Gain 7 coins for each served.'
 
   - id: seafood-lover
@@ -469,6 +472,7 @@ customers:
       tags: [premium, noodles, vegetarian]
     payout:
       coins: 32
+    endgameBonus: '+2 coins per Salaryman served'
     text: 'Serve 1 Premium, 1 Noodles, and 1 Vegetarian. Gain 32 coins.'
 
   - id: celebrity-chef

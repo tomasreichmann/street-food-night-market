@@ -3,6 +3,8 @@ import { CardMockups } from './components/CardMockups';
 import { CardPlanningTable } from './components/CardPlanningTable';
 import { loadDefaultGameConfig } from './content/loadGameConfig';
 import { loadCardContent } from './content/loadContent';
+import { BonusTasksRoute } from './BonusTasksRoute';
+import { RulesRoute } from './RulesRoute';
 import { PrintRoute } from './PrintRoute';
 import { SimulationRoute } from './SimulationRoute';
 
@@ -30,7 +32,9 @@ function AppNav() {
   return (
     <nav className="app-nav" aria-label="Primary navigation">
       <a href="/">Home</a>
+      <a href="/rules">Rules</a>
       <a href="/simulation">Simulation</a>
+      <a href="/bonus-tasks">Bonus Tasks</a>
       <a href="/print">Print</a>
     </nav>
   );
@@ -145,13 +149,19 @@ export default function App() {
   }
 
   const isPrintRoute = window.location.pathname === '/print';
+  const isRulesRoute = window.location.pathname === '/rules';
   const isSimulationRoute = window.location.pathname === '/simulation';
+  const isBonusTasksRoute = window.location.pathname === '/bonus-tasks';
 
   return (
     <main className="app-shell">
       <AppNav />
-      {isPrintRoute ? (
+      {isRulesRoute ? (
+        <RulesRoute content={contentState.content} />
+      ) : isPrintRoute ? (
         <PrintRoute content={contentState.content} />
+      ) : isBonusTasksRoute ? (
+        <BonusTasksRoute config={contentState.config} />
       ) : isSimulationRoute ? (
         <SimulationRoute
           content={contentState.content}

@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import App from './App';
+
+afterEach(() => {
+  window.history.pushState({}, '', '/');
+});
 
 describe('App', () => {
   it('renders loaded content from cards.yaml', () => {
@@ -18,11 +22,24 @@ describe('App', () => {
       screen.getByRole('heading', { name: 'Card planning table' }),
     ).toBeInTheDocument();
     expect(screen.getByText('meat: 13')).toBeInTheDocument();
-    expect(screen.getByText('greens: 39')).toBeInTheDocument();
+    expect(screen.getByText('greens: 41')).toBeInTheDocument();
     expect(screen.getAllByText('Festival Judge').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Imperial Tasting Menu').length).toBeGreaterThan(
       0,
     );
     expect(screen.queryByText('Review')).not.toBeInTheDocument();
+  });
+
+  it('exposes a rules navigation link from the app shell', () => {
+    render(<App />);
+
+    expect(screen.getByRole('link', { name: 'Rules' })).toHaveAttribute(
+      'href',
+      '/rules',
+    );
+    expect(screen.getByRole('link', { name: 'Bonus Tasks' })).toHaveAttribute(
+      'href',
+      '/bonus-tasks',
+    );
   });
 });

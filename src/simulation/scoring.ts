@@ -9,7 +9,8 @@ export type EndgameBonusBreakdown = {
 
 export type PlayerScoreBreakdown = {
   coins: number;
-  mealBonus: number;
+  dishBonus: number;
+  resourceBonus: number;
   endgameBonus: number;
   total: number;
   endgameBonusBreakdown: EndgameBonusBreakdown[];
@@ -34,10 +35,13 @@ const MALE_CUSTOMER_IDS = new Set([
   'street-musician',
 ]);
 
-// The content schema does not currently encode customer gender, so these
-// bonuses are resolved from the current card naming conventions.
-function getDishTierById(content: GameContent) {
-  return new Map(content.dishes.map((dish) => [dish.id, dish.tier]));
+function getDishCostTotalById(content: GameContent) {
+  return new Map(
+    content.dishes.map((dish) => [
+      dish.id,
+      Object.values(dish.cost).reduce((total, amount) => total + amount, 0),
+    ]),
+  );
 }
 
 function getCustomerById(content: GameContent) {
@@ -49,6 +53,13 @@ function getResourceCountById(content: GameContent, player: PlayerState) {
 
   return (resourceId: string) =>
     resourceIds.has(resourceId) ? (player.resources[resourceId] ?? 0) : 0;
+}
+
+function getTotalResourceCount(content: GameContent, player: PlayerState) {
+  return content.resources.reduce(
+    (total, resource) => total + (player.resources[resource.id] ?? 0),
+    0,
+  );
 }
 
 function getCustomerCountByGender(
@@ -184,12 +195,13 @@ export function calculatePlayerScoreBreakdown(
   content: GameContent,
   player: PlayerState,
 ): PlayerScoreBreakdown {
-  const dishTierById = getDishTierById(content);
+  const dishCostById = getDishCostTotalById(content);
   const customerById = getCustomerById(content);
-  const mealBonus = Object.entries(player.meals).reduce(
-    (total, [dishId, count]) => total + (dishTierById.get(dishId) ?? 0) * count,
+  const dishBonus = Object.entries(player.meals).reduce(
+    (total, [dishId, count]) => total + (dishCostById.get(dishId) ?? 0) * count,
     0,
   );
+  const resourceBonus = Math.floor(getTotalResourceCount(content, player) / 2);
   const endgameBonusBreakdown = player.claimedCustomers
     .map((customerId) =>
       scoreEndgameBonus(customerId, content, player, customerById),
@@ -199,11 +211,12 @@ export function calculatePlayerScoreBreakdown(
     (total, entry) => total + entry.points,
     0,
   );
-  const total = player.coins + mealBonus + endgameBonus;
+  const total = player.coins + dishBonus + resourceBonus + endgameBonus;
 
   return {
     coins: player.coins,
-    mealBonus,
+    dishBonus,
+    resourceBonus,
     endgameBonus,
     total,
     endgameBonusBreakdown,
