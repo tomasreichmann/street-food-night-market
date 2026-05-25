@@ -44,7 +44,7 @@ dishes:
   - id: tea
     type: dish
     tier: 1
-    copies: 4
+    copies: 3
     size: standard
     title: Tea
     tags: [drink]
@@ -52,6 +52,18 @@ dishes:
       greens: 1
       fuel: 1
     text: 'A calming cup between crowded stalls.'
+
+  - id: sake
+    type: dish
+    tier: 1
+    copies: 3
+    size: standard
+    title: Sake
+    tags: [drink]
+    cost:
+      greens: 1
+      fungi: 1
+    text: 'A japanese rice wine.'
 
   - id: sweet-bun
     type: dish
@@ -305,7 +317,7 @@ customers:
       coins: 5
     text: 'Serve any Vegetarian dish. Gain 5 coins.'
 
-  - id: tea-auntie
+  - id: auntie
     type: customer
     tier: 2
     copies: 4
@@ -372,9 +384,9 @@ customers:
       minCount: 2
       count: 5
     payout:
-      coinsPerServed: 12
-      maxCoins: 60
-    text: 'Serve 2-5 Meat or Rice dishes. Gain 12 coins for each served.'
+      coinsPerServed: 6
+      maxCoins: 30
+    text: 'Serve 2-5 Meat or Rice dishes. Gain 6 coins for each served.'
 
   - id: food-blogger
     type: customer
@@ -388,19 +400,6 @@ customers:
     payout:
       coins: 15
     text: 'Serve 3 dishes with different types. Gain 15 coins.'
-
-  - id: business-executive
-    type: customer
-    tier: 3
-    copies: 1
-    size: standard
-    title: Business Executive
-    wants:
-      mode: combo_tags
-      tags: [premium, noodles, vegetarian]
-    payout:
-      coins: 32
-    text: 'Serve 1 Premium, 1 Noodles, and 1 Vegetarian. Gain 32 coins.'
 
   - id: temple-caretaker
     type: customer
@@ -458,6 +457,19 @@ customers:
       maxCoins: 14
     endgameBonus: '+1 coin per leftover Sea resource'
     text: 'Serve up to 2 Seafood dishes. Gain 7 coins for each served. End game: +1 coin per leftover Sea resource.'
+
+  - id: business-executive
+    type: customer
+    tier: 3
+    copies: 1
+    size: standard
+    title: Business Executive
+    wants:
+      mode: combo_tags
+      tags: [premium, noodles, vegetarian]
+    payout:
+      coins: 32
+    text: 'Serve 1 Premium, 1 Noodles, and 1 Vegetarian. Gain 32 coins.'
 
   - id: celebrity-chef
     type: customer

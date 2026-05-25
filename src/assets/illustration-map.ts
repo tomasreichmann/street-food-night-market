@@ -15,7 +15,7 @@ import seafoodLoverIllustration from './illustrations/customers/seafood-lover.pn
 import soupRegularIllustration from './illustrations/customers/soup-regular.png';
 import streetMusicianIllustration from './illustrations/customers/street-musician.png';
 import sumoWrestlerIllustration from './illustrations/customers/sumo-wrestler.png';
-import teaAuntieIllustration from './illustrations/customers/tea-auntie.png';
+import auntieIllustration from './illustrations/customers/auntie.png';
 import templeCaretakerIllustration from './illustrations/customers/temple-caretaker.png';
 import touristIllustration from './illustrations/customers/tourist.png';
 import chickenSkewersIllustration from './illustrations/dishes/chicken-skewers.png';
@@ -76,7 +76,7 @@ const customerIllustrations: Record<string, string> = {
   'soup-regular': soupRegularIllustration,
   'street-musician': streetMusicianIllustration,
   'sumo-wrestler': sumoWrestlerIllustration,
-  'tea-auntie': teaAuntieIllustration,
+  auntie: auntieIllustration,
   'temple-caretaker': templeCaretakerIllustration,
   tourist: touristIllustration,
 };

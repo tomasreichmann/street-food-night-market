@@ -85,7 +85,7 @@ describe('CardPreview', () => {
     ).toHaveAttribute('href', getDishIllustration('rice-plate'));
   });
 
-  it('renders up-to wants with the requested numeric limit', () => {
+  it('renders up-to wants with a numeric range prefix', () => {
     const { container } = render(
       <CardPreview
         kind="customer"
@@ -103,13 +103,13 @@ describe('CardPreview', () => {
 
     expect(
       container.querySelector('[data-card-part="requirement-prefix"]'),
-    ).toHaveTextContent('up to');
+    ).toHaveTextContent('1-3');
     expect(
       container.querySelector('[data-card-part="requirement-count"]'),
-    ).toHaveTextContent('3');
+    ).toBeNull();
   });
 
-  it('renders variety wants as different dishes with a prefix instead of a count badge', () => {
+  it('renders variety wants as repeated dish icons without a prefix', () => {
     const { container } = render(
       <CardPreview
         kind="customer"
@@ -129,15 +129,15 @@ describe('CardPreview', () => {
 
     expect(
       container.querySelector('[data-card-part="requirement-prefix"]'),
-    ).toHaveTextContent('3x different');
-    expect(requirementIcons).toHaveLength(1);
+    ).toBeNull();
+    expect(requirementIcons).toHaveLength(3);
     expect(
       container.querySelector('[data-card-part="requirement-count"]'),
     ).toBeNull();
   });
 
   it('renders variable customer payout as count range and per-served coin lines', () => {
-    const { getByText } = render(
+    const { container, getByText } = render(
       <CardPreview
         kind="customer"
         item={customer({
@@ -152,7 +152,9 @@ describe('CardPreview', () => {
       />,
     );
 
-    expect(getByText('1-2')).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-card-part="requirement-prefix"]'),
+    ).toHaveTextContent('1-2');
     expect(getByText('x6')).toBeInTheDocument();
   });
 
@@ -173,7 +175,7 @@ describe('CardPreview', () => {
       />,
     );
 
-    expect(container.textContent).toContain('2-5x');
+    expect(container.textContent).toContain('2-5');
     expect(container.textContent).toContain('x12');
   });
 

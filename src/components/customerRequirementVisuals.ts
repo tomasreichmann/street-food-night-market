@@ -30,10 +30,10 @@ function getTagIcons(tags: string[], count?: number): RequirementIcon[] {
 }
 
 function getScalingRequirementPrefix(
-  minCount: number | undefined,
+  minCount: number | undefined = 1,
   count: number,
 ) {
-  return minCount && minCount > 1 ? `${minCount}-${count}x` : 'up to';
+  return `${minCount}-${count}`;
 }
 
 export function getCustomerRequirementVisuals(
@@ -78,10 +78,7 @@ export function getCustomerRequirementVisuals(
 
   if (customer.wants.mode === 'up_to_tag') {
     return {
-      requirementIcons:
-        customer.wants.minCount && customer.wants.minCount > 1
-          ? getTagIcons([customer.wants.tag])
-          : getTagIcons([customer.wants.tag], customer.wants.count),
+      requirementIcons: getTagIcons([customer.wants.tag]),
       requirementLabel,
       requirementPrefix: getScalingRequirementPrefix(
         customer.wants.minCount,
@@ -92,10 +89,7 @@ export function getCustomerRequirementVisuals(
 
   if (customer.wants.mode === 'up_to_any_tag') {
     return {
-      requirementIcons:
-        customer.wants.minCount && customer.wants.minCount > 1
-          ? getTagIcons(customer.wants.tags)
-          : getTagIcons(customer.wants.tags, customer.wants.count),
+      requirementIcons: getTagIcons(customer.wants.tags),
       requirementLabel,
       requirementPrefix: getScalingRequirementPrefix(
         customer.wants.minCount,
@@ -106,8 +100,10 @@ export function getCustomerRequirementVisuals(
   }
 
   return {
-    requirementIcons: [{ src: cardIcons.dish }],
-    requirementPrefix: `${customer.wants.count}x different`,
+    requirementIcons: Array.from({ length: customer.wants.count }, () => ({
+      src: cardIcons.dish,
+    })),
+    requirementSeparator: '≠',
     requirementLabel,
   };
 }

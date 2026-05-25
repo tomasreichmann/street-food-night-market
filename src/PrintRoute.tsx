@@ -18,14 +18,8 @@ const PRINT_CARD_TRIM_INSET_MM = 3;
 const PRINT_CARD_TRIM_WIDTH_MM = PRINT_CARD_WIDTH_MM - PRINT_CARD_TRIM_INSET_MM * 2;
 const PRINT_CARD_TRIM_HEIGHT_MM =
   PRINT_CARD_HEIGHT_MM - PRINT_CARD_TRIM_INSET_MM * 2;
-const PRINT_CARD_TRIM_LEFT_MM =
-  PRINT_GRID_LEFT_MM + PRINT_CARD_TRIM_INSET_MM;
-const PRINT_CARD_TRIM_TOP_MM = PRINT_GRID_TOP_MM + PRINT_CARD_TRIM_INSET_MM;
-const PRINT_CARD_TRIM_RIGHT_MM =
-  PRINT_CARD_TRIM_LEFT_MM + PRINT_CARD_TRIM_WIDTH_MM;
-const PRINT_CARD_TRIM_BOTTOM_MM =
-  PRINT_CARD_TRIM_TOP_MM + PRINT_CARD_TRIM_HEIGHT_MM;
-const PRINT_CROP_MARK_LENGTH_MM = 5;
+const PRINT_CROP_MARK_LENGTH_MM = 1;
+const PRINT_CARD_CORNER_RADIUS_MM = 0;
 
 type PrintableCard =
   | {
@@ -36,6 +30,10 @@ type PrintableCard =
       kind: 'customer';
       item: CustomerCard;
     };
+
+type PrintableCardInstance = PrintableCard & {
+  instanceIndex: number;
+};
 
 type PrintRouteProps = {
   content: GameContent;
@@ -51,25 +49,94 @@ function chunkCards<T>(items: T[], size: number) {
   return chunks;
 }
 
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+function expandPrintableCards(content: GameContent): PrintableCardInstance[] {
+  const cards: PrintableCardInstance[] = [];
+
+  for (const item of content.dishes) {
+    for (let instanceIndex = 0; instanceIndex < item.copies; instanceIndex += 1) {
+      cards.push({
+        kind: 'dish',
+        item,
+        instanceIndex,
+      });
+    }
+  }
+
+  for (const item of content.customers) {
+    for (let instanceIndex = 0; instanceIndex < item.copies; instanceIndex += 1) {
+      cards.push({
+        kind: 'customer',
+        item,
+        instanceIndex,
+      });
+    }
+  }
+
+  return cards;
 }
 
-function getPrintableCards(content: GameContent) {
-  return {
-    dishCards: content.dishes.map(
-      (item): PrintableCard => ({ kind: 'dish', item }),
-    ),
-    customerCards: content.customers.map(
-      (item): PrintableCard => ({ kind: 'customer', item }),
-    ),
-  };
+function renderCropMarksForRect(
+  left: number,
+  top: number,
+  right: number,
+  bottom: number,
+  keyPrefix: string,
+) {
+  return (
+    <g key={keyPrefix}>
+      <line
+        x1={left}
+        y1={top - PRINT_CROP_MARK_LENGTH_MM}
+        x2={left}
+        y2={top}
+      />
+      <line x1={0} y1={top} x2={left} y2={top} />
+      <line
+        x1={right}
+        y1={top - PRINT_CROP_MARK_LENGTH_MM}
+        x2={right}
+        y2={top}
+      />
+      <line x1={right} y1={top} x2={PRINT_PAGE_WIDTH_MM} y2={top} />
+      <line
+        x1={left}
+        y1={bottom}
+        x2={left}
+        y2={bottom + PRINT_CROP_MARK_LENGTH_MM}
+      />
+      <line x1={0} y1={bottom} x2={left} y2={bottom} />
+      <line
+        x1={right}
+        y1={bottom}
+        x2={right}
+        y2={bottom + PRINT_CROP_MARK_LENGTH_MM}
+      />
+      <line x1={right} y1={bottom} x2={PRINT_PAGE_WIDTH_MM} y2={bottom} />
+    </g>
+  );
 }
 
-function RegistrationAndCropMarks() {
+function PrintSheetMarks() {
+  const cropMarks = Array.from(
+    { length: PRINT_GRID_ROWS * PRINT_GRID_COLUMNS },
+    (_, index) => {
+      const column = index % PRINT_GRID_COLUMNS;
+      const row = Math.floor(index / PRINT_GRID_COLUMNS);
+      const left =
+        PRINT_GRID_LEFT_MM +
+        column * PRINT_CARD_WIDTH_MM +
+        PRINT_CARD_TRIM_INSET_MM;
+      const top =
+        PRINT_GRID_TOP_MM +
+        row * PRINT_CARD_HEIGHT_MM +
+        PRINT_CARD_TRIM_INSET_MM;
+      const right = left + PRINT_CARD_TRIM_WIDTH_MM;
+      const bottom = top + PRINT_CARD_TRIM_HEIGHT_MM;
+
+      return renderCropMarksForRect(left, top, right, bottom, `${row}-${column}`);
+    },
+  );
+
   return (
     <svg
       className="print-sheet__marks"
@@ -84,73 +151,7 @@ function RegistrationAndCropMarks() {
         strokeWidth="0.4"
         vectorEffect="non-scaling-stroke"
       >
-        <line
-          x1={PRINT_CARD_TRIM_LEFT_MM}
-          y1={PRINT_CARD_TRIM_TOP_MM - PRINT_CROP_MARK_LENGTH_MM}
-          x2={PRINT_CARD_TRIM_LEFT_MM}
-          y2={PRINT_CARD_TRIM_TOP_MM}
-        />
-        <line
-          x1={0}
-          y1={PRINT_CARD_TRIM_TOP_MM}
-          x2={PRINT_CARD_TRIM_LEFT_MM}
-          y2={PRINT_CARD_TRIM_TOP_MM}
-        />
-        <line
-          x1={PRINT_CARD_TRIM_RIGHT_MM}
-          y1={PRINT_CARD_TRIM_TOP_MM - PRINT_CROP_MARK_LENGTH_MM}
-          x2={PRINT_CARD_TRIM_RIGHT_MM}
-          y2={PRINT_CARD_TRIM_TOP_MM}
-        />
-        <line
-          x1={PRINT_CARD_TRIM_RIGHT_MM}
-          y1={PRINT_CARD_TRIM_TOP_MM}
-          x2={PRINT_PAGE_WIDTH_MM}
-          y2={PRINT_CARD_TRIM_TOP_MM}
-        />
-        <line
-          x1={PRINT_CARD_TRIM_LEFT_MM}
-          y1={PRINT_CARD_TRIM_BOTTOM_MM}
-          x2={PRINT_CARD_TRIM_LEFT_MM}
-          y2={PRINT_CARD_TRIM_BOTTOM_MM + PRINT_CROP_MARK_LENGTH_MM}
-        />
-        <line
-          x1={0}
-          y1={PRINT_CARD_TRIM_BOTTOM_MM}
-          x2={PRINT_CARD_TRIM_LEFT_MM}
-          y2={PRINT_CARD_TRIM_BOTTOM_MM}
-        />
-        <line
-          x1={PRINT_CARD_TRIM_RIGHT_MM}
-          y1={PRINT_CARD_TRIM_BOTTOM_MM}
-          x2={PRINT_CARD_TRIM_RIGHT_MM}
-          y2={PRINT_CARD_TRIM_BOTTOM_MM + PRINT_CROP_MARK_LENGTH_MM}
-        />
-        <line
-          x1={PRINT_CARD_TRIM_RIGHT_MM}
-          y1={PRINT_CARD_TRIM_BOTTOM_MM}
-          x2={PRINT_PAGE_WIDTH_MM}
-          y2={PRINT_CARD_TRIM_BOTTOM_MM}
-        />
-      </g>
-      <g
-        className="print-sheet__registration-marks"
-        fill="none"
-        stroke="#1f1d1b"
-        strokeWidth="0.5"
-        vectorEffect="non-scaling-stroke"
-      >
-        {[
-          [7, 7],
-          [PRINT_PAGE_WIDTH_MM - 7, 7],
-          [7, PRINT_PAGE_HEIGHT_MM - 7],
-          [PRINT_PAGE_WIDTH_MM - 7, PRINT_PAGE_HEIGHT_MM - 7],
-        ].map(([x, y]) => (
-          <g key={`${x}-${y}`}>
-            <line x1={x - 2.5} y1={y} x2={x + 2.5} y2={y} />
-            <line x1={x} y1={y - 2.5} x2={x} y2={y + 2.5} />
-          </g>
-        ))}
+        {cropMarks}
       </g>
     </svg>
   );
@@ -160,12 +161,12 @@ function PrintSheet({
   cards,
   dishes,
 }: {
-  cards: PrintableCard[];
+  cards: PrintableCardInstance[];
   dishes: DishCard[];
 }) {
   return (
     <article className="print-sheet" data-testid="print-sheet">
-      <RegistrationAndCropMarks />
+      <PrintSheetMarks />
       <div
         className="print-sheet__grid"
         style={{
@@ -185,11 +186,23 @@ function PrintSheet({
           }
 
           return (
-            <div key={`${card.kind}-${card.item.id}`} className="print-sheet__slot">
+            <div
+              key={`${card.kind}-${card.item.id}-${card.instanceIndex}`}
+              className="print-sheet__slot"
+            >
               {card.kind === 'dish' ? (
-                <CardPreview kind="dish" item={card.item} />
+                <CardPreview
+                  cornerRadius={PRINT_CARD_CORNER_RADIUS_MM}
+                  kind="dish"
+                  item={card.item}
+                />
               ) : (
-                <CardPreview kind="customer" item={card.item} dishes={dishes} />
+                <CardPreview
+                  cornerRadius={PRINT_CARD_CORNER_RADIUS_MM}
+                  kind="customer"
+                  item={card.item}
+                  dishes={dishes}
+                />
               )}
             </div>
           );
@@ -199,61 +212,15 @@ function PrintSheet({
   );
 }
 
-function PrintSection({
-  title,
-  cards,
-  dishes,
-}: {
-  title: string;
-  cards: PrintableCard[];
-  dishes: DishCard[];
-}) {
-  const pages = chunkCards(cards, CARDS_PER_PAGE);
-  const headingId = `${slugify(title)}-heading`;
-
-  return (
-    <section className="print-section" aria-labelledby={headingId}>
-      <div className="print-section__heading">
-        <p className="eyebrow">Printable sheets</p>
-        <h2 id={headingId}>{title}</h2>
-        <p className="print-section__copy">
-          One-sided cards are split into A4 pages with crop and registration
-          marks.
-        </p>
-      </div>
-      <div className="print-section__pages">
-        {pages.map((pageCards, index) => (
-          <PrintSheet
-            key={`${title}-${index}`}
-            cards={pageCards}
-            dishes={dishes}
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
-
 export function PrintRoute({ content }: PrintRouteProps) {
-  const { dishCards, customerCards } = getPrintableCards(content);
+  const cards = expandPrintableCards(content);
+  const pages = chunkCards(cards, CARDS_PER_PAGE);
 
   return (
     <div className="print-route">
-      <section className="print-route__intro" aria-labelledby="print-route-title">
-        <p className="eyebrow">Print compositor</p>
-        <h1 id="print-route-title">A4 card sheets</h1>
-        <p className="hero-copy">
-          Dish cards and customer cards are arranged separately for one-sided
-          printing.
-        </p>
-      </section>
-
-      <PrintSection title="Dish cards" cards={dishCards} dishes={content.dishes} />
-      <PrintSection
-        title="Customer cards"
-        cards={customerCards}
-        dishes={content.dishes}
-      />
+      {pages.map((pageCards, index) => (
+        <PrintSheet key={index} cards={pageCards} dishes={content.dishes} />
+      ))}
     </div>
   );
 }

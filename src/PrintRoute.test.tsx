@@ -12,33 +12,33 @@ afterEach(() => {
 });
 
 describe('Print route', () => {
-  it('renders separate A4 sheet stacks for dishes and customers', () => {
+  it('renders a single mixed A4 sheet stack', () => {
     renderAtPrintRoute();
 
     expect(
-      screen.getByRole('heading', { name: 'A4 card sheets' }),
+      screen.getByRole('navigation', { name: 'Primary navigation' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Dish cards' })).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: 'Customer cards' }),
-    ).toBeInTheDocument();
-    expect(screen.getAllByTestId('print-sheet')).toHaveLength(5);
-    expect(screen.getByText('Ramen Bowl')).toBeInTheDocument();
-    expect(screen.getByText('Sumo Wrestler')).toBeInTheDocument();
+      screen.queryByRole('heading', { name: 'A4 card sheets' }),
+    ).not.toBeInTheDocument();
+    const sheets = screen.getAllByTestId('print-sheet');
+    expect(sheets).toHaveLength(10);
+    expect(sheets[4].textContent).toContain('Imperial Tasting');
+    expect(sheets[4].textContent).toContain('Salaryman');
   });
 
-  it('includes crop and registration marks on each sheet', () => {
+  it('includes crop marks on each sheet', () => {
     const { container } = renderAtPrintRoute();
 
-    expect(container.querySelectorAll('.print-sheet__marks')).toHaveLength(5);
+    expect(container.querySelectorAll('.print-sheet__marks')).toHaveLength(10);
     expect(
       container.querySelector('.print-sheet__crop-marks line'),
-    ).toHaveAttribute('x1', '4.5');
+    ).toHaveAttribute('y1', '9.5');
     expect(
       container.querySelectorAll('.print-sheet__registration-marks line'),
-    ).toHaveLength(40);
+    ).toHaveLength(0);
     expect(container.querySelectorAll('.print-sheet__crop-marks line')).toHaveLength(
-      40,
+      720,
     );
   });
 });

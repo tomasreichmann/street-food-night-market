@@ -61,6 +61,7 @@ type CardSvgFrameProps = {
   endgameBonus?: string;
   footer: CardFooter;
   kind: 'resource' | 'dish' | 'customer';
+  cornerRadius?: number;
   requirementArtSrc?: string;
   requirementIcons?: RequirementIcon[];
   requirementLabel?: string;
@@ -539,6 +540,7 @@ function IllustrationArt({
 
 export function CardSvgFrame({
   accentSoft,
+  cornerRadius = CARD_CUT_RADIUS,
   artSrc,
   artIconSrc,
   footer,
@@ -584,8 +586,8 @@ export function CardSvgFrame({
             y={0}
             width={CARD_OUTER_WIDTH}
             height={CARD_OUTER_HEIGHT}
-            rx={CARD_CUT_RADIUS}
-            ry={CARD_CUT_RADIUS}
+            rx={cornerRadius}
+            ry={cornerRadius}
           />
         </clipPath>
 
@@ -788,7 +790,8 @@ export function CardSvgFrame({
           y={CARD_CUT_Y}
           width={CARD_CUT_WIDTH}
           height={CARD_CUT_HEIGHT}
-          rx={CARD_CUT_RADIUS}
+          rx={cornerRadius}
+          ry={cornerRadius}
           fill="none"
           stroke="#3b322c"
           strokeOpacity={0.45}

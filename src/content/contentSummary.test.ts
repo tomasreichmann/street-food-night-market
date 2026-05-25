@@ -15,26 +15,26 @@ describe('contentSummary', () => {
   it('calculates weighted card and dish type totals', () => {
     const summary = summarizeCardContent(loadCardContent());
 
-    expect(summary.dishRows).toHaveLength(17);
+    expect(summary.dishRows).toHaveLength(18);
     expect(summary.customerRows).toHaveLength(19);
-    expect(summary.totals.dishCopies).toBe(42);
+    expect(summary.totals.dishCopies).toBe(44);
     expect(summary.totals.customerCopies).toBe(44);
-    expect(summary.totals.totalCardCopies).toBe(86);
+    expect(summary.totals.totalCardCopies).toBe(88);
     expect(summary.totals.dishTypeTotals).toEqual([
       ['soup', 7],
       ['noodles', 6],
       ['rice', 8],
       ['vegetarian', 10],
-      ['drink', 5],
+      ['drink', 7],
       ['sweet', 5],
       ['meat', 13],
       ['seafood', 9],
       ['premium', 8],
     ]);
     expect(summary.totals.resourceUsageTotals).toEqual([
-      ['greens', 39],
-      ['fungi', 19],
-      ['fuel', 36],
+      ['greens', 41],
+      ['fungi', 22],
+      ['fuel', 35],
       ['meat', 15],
       ['sea', 20],
     ]);
@@ -62,7 +62,7 @@ describe('contentSummary', () => {
     expect(formatCost(content.dishes[0]!.cost)).toBe(
       'greens 1, fungi 1, fuel 1',
     );
-    expect(wantFor('tea-auntie')).toBe('meat + noodles');
+    expect(wantFor('auntie')).toBe('meat + noodles');
     expect(wantFor('tourist')).toBe('any seafood');
     expect(wantFor('sumo-wrestler')).toBe('2-5x meat or rice');
     expect(wantFor('food-blogger')).toBe('3x different dish types');
@@ -265,7 +265,7 @@ describe('contentSummary', () => {
       wants: { mode: 'any_tag', tag: 'sweet', count: 1 },
     });
     expect(
-      content.customers.find((customer) => customer.id === 'tea-auntie'),
+      content.customers.find((customer) => customer.id === 'auntie'),
     ).toMatchObject({
       title: 'Auntie',
       tier: 2,
@@ -277,7 +277,7 @@ describe('contentSummary', () => {
 
   it('keeps promoted Auntie and Business Executive on baseline coin rewards', () => {
     const summary = summarizeCardContent(loadCardContent());
-    const auntie = summary.customerRows.find((row) => row.id === 'tea-auntie');
+    const auntie = summary.customerRows.find((row) => row.id === 'auntie');
     const businessExecutive = summary.customerRows.find(
       (row) => row.id === 'business-executive',
     );
@@ -377,9 +377,7 @@ describe('contentSummary', () => {
 
   it('evaluates tier 1 fixed payout against matched dish cost', () => {
     const summary = summarizeCardContent(loadCardContent());
-    const auntie = summary.customerRows.find(
-      (row) => row.title === 'Auntie',
-    );
+    const auntie = summary.customerRows.find((row) => row.title === 'Auntie');
 
     expect(auntie).toMatchObject({
       matchedDishTitle: '3-cheapest average',
@@ -397,10 +395,10 @@ describe('contentSummary', () => {
     );
 
     expect(sumoWrestler).toMatchObject({
-      matchedDishTitle: '3-cheapest average',
-      matchedCostBasis: 4.666666666666667,
-      reward: '12 coins per served, max 60',
-      economyRatio: '2.57x',
+      matchedDishTitle: 'OR-branch average',
+      matchedCostBasis: 2.666666666666667,
+      reward: '6 coins per served, max 30',
+      economyRatio: '2.25x',
       economyStatus: 'OK',
     });
   });
@@ -415,18 +413,18 @@ describe('contentSummary', () => {
     );
 
     expect(animeClub).toMatchObject({
-      matchedDishTitle: '3-cheapest average',
-      matchedCostBasis: 2.6666666666666665,
+      matchedDishTitle: 'OR-branch average',
+      matchedCostBasis: 2.833333333333333,
       reward: '7 coins per served, max 21',
-      economyRatio: '2.63x',
+      economyRatio: '2.47x',
       economyStatus: 'OK',
     });
     expect(festivalJudge).toMatchObject({
       matchedDishTitle: '3-cheapest average',
-      matchedCostBasis: 9.666666666666666,
+      matchedCostBasis: 9.333333333333334,
       reward:
         '37 coins; end game: +1 coin per different customer archetype served',
-      economyRatio: '3.83x',
+      economyRatio: '3.96x',
       economyStatus: 'OK',
     });
   });

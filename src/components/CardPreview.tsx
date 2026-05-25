@@ -20,15 +20,18 @@ type CardPreviewProps =
   | {
       kind: 'resource';
       item: ResourceDefinition;
+      cornerRadius?: number;
     }
   | {
       kind: 'dish';
       item: DishCard;
+      cornerRadius?: number;
     }
   | {
       kind: 'customer';
       item: CustomerCard;
       dishes: DishCard[];
+      cornerRadius?: number;
     };
 
 function getResourceStyle(resourceId: string) {
@@ -66,8 +69,7 @@ function getCustomerPayoutDisplay(customer: CustomerCard) {
     'minCount' in customer.wants && customer.wants.minCount
       ? customer.wants.minCount
       : 1;
-  const rangeLabel =
-    minCount > 1 ? `${minCount}-${count}x` : `1-${count}`;
+  const rangeLabel = minCount > 1 ? `${minCount}-${count}` : `1-${count}`;
 
   return {
     lines: [rangeLabel, `x${customer.payout.coinsPerServed}`],
@@ -78,7 +80,13 @@ function getCustomerPayoutDisplay(customer: CustomerCard) {
   };
 }
 
-function ResourceCardPreview({ item }: { item: ResourceDefinition }) {
+function ResourceCardPreview({
+  cornerRadius,
+  item,
+}: {
+  cornerRadius?: number;
+  item: ResourceDefinition;
+}) {
   const { accentSoft } = getResourceStyle(item.id);
 
   return (
@@ -89,6 +97,7 @@ function ResourceCardPreview({ item }: { item: ResourceDefinition }) {
       <CardSvgFrame
         accentSoft={accentSoft}
         artIconSrc={getResourceIcon(item.id)}
+        cornerRadius={cornerRadius}
         footer={{ kind: 'none' }}
         kind="resource"
         title="Market token"
@@ -98,13 +107,20 @@ function ResourceCardPreview({ item }: { item: ResourceDefinition }) {
   );
 }
 
-function DishCardPreview({ item }: { item: DishCard }) {
+function DishCardPreview({
+  cornerRadius,
+  item,
+}: {
+  cornerRadius?: number;
+  item: DishCard;
+}) {
   return (
     <article className="preview-card preview-card--dish" data-kind="dish">
       <CardSvgFrame
         accentSoft="var(--color-cream-100)"
         artIconSrc={cardIcons.dish}
         artSrc={getDishIllustration(item.id)}
+        cornerRadius={cornerRadius}
         footer={{ kind: 'cost', cost: item.cost }}
         kind="dish"
         tagIcons={getDishTagIcons(item.tags)}
@@ -117,9 +133,11 @@ function DishCardPreview({ item }: { item: DishCard }) {
 
 function CustomerCardPreview({
   dishes,
+  cornerRadius,
   item,
 }: {
   dishes: DishCard[];
+  cornerRadius?: number;
   item: CustomerCard;
 }) {
   const requirementVisuals = getCustomerRequirementVisuals(item, dishes);
@@ -133,6 +151,7 @@ function CustomerCardPreview({
         accentSoft="var(--color-red-100)"
         artIconSrc={cardIcons.customer}
         artSrc={getCustomerIllustration(item.id)}
+        cornerRadius={cornerRadius}
         endgameBonus={item.endgameBonus}
         footer={{
           kind: 'customer',
@@ -154,12 +173,18 @@ function CustomerCardPreview({
 
 export function CardPreview(props: CardPreviewProps) {
   if (props.kind === 'resource') {
-    return <ResourceCardPreview item={props.item} />;
+    return <ResourceCardPreview cornerRadius={props.cornerRadius} item={props.item} />;
   }
 
   if (props.kind === 'dish') {
-    return <DishCardPreview item={props.item} />;
+    return <DishCardPreview cornerRadius={props.cornerRadius} item={props.item} />;
   }
 
-  return <CustomerCardPreview dishes={props.dishes} item={props.item} />;
+  return (
+    <CustomerCardPreview
+      cornerRadius={props.cornerRadius}
+      dishes={props.dishes}
+      item={props.item}
+    />
+  );
 }

@@ -84,6 +84,83 @@ function getDishTitleById(dishes: DishCard[], dishId: string) {
   return dishes.find((dish) => dish.id === dishId)?.title ?? titleizeId(dishId);
 }
 
+function getBaselineLabel(customer: CustomerCard) {
+  if (
+    customer.wants.mode === 'any_of_tags' ||
+    customer.wants.mode === 'up_to_any_tag'
+  ) {
+    return 'OR-branch average';
+  }
+
+  return '3-cheapest average';
+}
+
+function getOrBranchBaselineCosts(
+  customer: CustomerCard,
+  dishes: DishCard[],
+) {
+  if (customer.wants.mode !== 'any_of_tags' && customer.wants.mode !== 'up_to_any_tag') {
+    return [];
+  }
+
+  return customer.wants.tags
+    .map((tag) => {
+      const branchCustomer: CustomerCard =
+        customer.wants.mode === 'any_of_tags'
+          ? {
+              ...customer,
+              wants: {
+                mode: 'any_tag',
+                tag,
+                count: customer.wants.count,
+              },
+            }
+          : {
+              ...customer,
+              wants: {
+                mode: 'up_to_tag',
+                tag,
+                count: customer.wants.count,
+                minCount: customer.wants.minCount,
+              },
+            };
+
+      const baselineCombinations = getBaselineCombinations(branchCustomer, dishes);
+      return getAverageCheapestCombinationCost(baselineCombinations);
+    })
+    .filter((cost): cost is number => cost !== null);
+}
+
+function getMatchedCostBasis(customer: CustomerCard, dishes: DishCard[]) {
+  if (customer.wants.mode === 'any_of_tags') {
+    const branchCosts = getOrBranchBaselineCosts(customer, dishes);
+
+    if (branchCosts.length === 0) {
+      return null;
+    }
+
+    return branchCosts.reduce((total, cost) => total + cost, 0) / branchCosts.length;
+  }
+
+  if (customer.wants.mode === 'up_to_any_tag') {
+    const branchCosts = getOrBranchBaselineCosts(customer, dishes);
+
+    if (branchCosts.length === 0) {
+      return null;
+    }
+
+    const minimumSize = customer.wants.minCount ?? 1;
+    const branchAverage =
+      branchCosts.reduce((total, cost) => total + cost, 0) / branchCosts.length;
+
+    return branchAverage / minimumSize;
+  }
+
+  const baselineCombinations = getBaselineCombinations(customer, dishes);
+
+  return getAverageCheapestCombinationCost(baselineCombinations);
+}
+
 export function formatCost(cost: Record<string, number>) {
   return Object.entries(cost)
     .map(([resourceId, quantity]) => `${resourceId} ${quantity}`)
@@ -151,11 +228,11 @@ function getEconomyStatus(
   hasEndgameBonus: boolean,
 ): EconomyStatus {
   if (tier === 1) {
-    return ratio >= 1.35 && ratio <= 1.75 ? 'OK' : 'Review';
+    return ratio >= 1.35 && ratio <= 1.9 ? 'OK' : 'Review';
   }
 
   if (tier === 2) {
-    return ratio >= 2.25 && ratio <= 2.75 ? 'OK' : 'Review';
+    return ratio >= 1.9 && ratio <= 2.85 ? 'OK' : 'Review';
   }
 
   if (tier === 3) {
@@ -204,9 +281,7 @@ function summarizeCustomer(
     combinations.length > 0
       ? `${Math.min(5, combinations.length)} of ${combinations.length} shown`
       : '0 combinations';
-  const baselineCombinations = getBaselineCombinations(customer, dishes);
-  const matchedCostBasis =
-    getAverageCheapestCombinationCost(baselineCombinations);
+  const matchedCostBasis = getMatchedCostBasis(customer, dishes);
 
   if (matchedCostBasis === null) {
     return {
@@ -243,7 +318,7 @@ function summarizeCustomer(
     copies: customer.copies,
     want: formatCustomerWant(customer, dishes),
     reward: formatPayout(customer),
-    matchedDishTitle: '3-cheapest average',
+    matchedDishTitle: getBaselineLabel(customer),
     matchedCostBasis,
     dishCombinations,
     dishCombinationCount: combinations.length,

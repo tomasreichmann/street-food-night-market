@@ -670,7 +670,7 @@ img {
 .print-route {
   display: grid;
   gap: 2rem;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 .print-route__intro {
@@ -750,7 +750,7 @@ img {
 }
 
 .print-route .card-svg__cutline {
-  display: block;
+  display: none;
 }
 
 .card-svg__cutline {
@@ -812,12 +812,15 @@ img {
     margin: 0;
   }
 
+  html,
   :root {
     color: #000;
     background: #fff;
   }
 
+  html,
   body {
+    overflow: visible;
     background: #fff;
   }
 
@@ -825,9 +828,18 @@ img {
     display: none;
   }
 
+  #root,
+  .app-shell,
+  .print-route,
+  .print-section,
+  .print-section__pages {
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+
   .app-shell {
     width: 100%;
-    padding: 0;
   }
 
   .app-nav,
@@ -864,18 +876,21 @@ img {
     display: none;
   }
 
-  .print-route .card-svg__cutline {
-    display: block;
-  }
-
   .print-sheet {
     width: 210mm;
     height: 297mm;
     margin: 0;
     border: 0;
     box-shadow: none;
+    overflow: hidden;
     break-after: page;
     page-break-after: always;
+  }
+
+  .print-route,
+  .print-section,
+  .print-section__pages {
+    gap: 0;
   }
 
   .print-sheet:last-child {

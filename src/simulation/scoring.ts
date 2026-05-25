@@ -17,7 +17,7 @@ export type PlayerScoreBreakdown = {
 
 const FEMALE_CUSTOMER_IDS = new Set([
   'maid-cafe-maid',
-  'tea-auntie',
+  'auntie',
   'night-shift-nurse',
   'food-blogger',
   'celebrity-chef',
@@ -48,7 +48,7 @@ function getResourceCountById(content: GameContent, player: PlayerState) {
   const resourceIds = new Set(content.resources.map((resource) => resource.id));
 
   return (resourceId: string) =>
-    resourceIds.has(resourceId) ? player.resources[resourceId] ?? 0 : 0;
+    resourceIds.has(resourceId) ? (player.resources[resourceId] ?? 0) : 0;
 }
 
 function getCustomerCountByGender(
