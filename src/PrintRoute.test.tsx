@@ -37,8 +37,8 @@ describe('Print route', () => {
     expect(
       container.querySelectorAll('.print-sheet__registration-marks line'),
     ).toHaveLength(0);
-    expect(container.querySelectorAll('.print-sheet__crop-marks line')).toHaveLength(
-      720,
-    );
+    expect(
+      container.querySelectorAll('.print-sheet__crop-marks line'),
+    ).toHaveLength(720);
   });
 });

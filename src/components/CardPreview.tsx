@@ -173,11 +173,18 @@ function CustomerCardPreview({
 
 export function CardPreview(props: CardPreviewProps) {
   if (props.kind === 'resource') {
-    return <ResourceCardPreview cornerRadius={props.cornerRadius} item={props.item} />;
+    return (
+      <ResourceCardPreview
+        cornerRadius={props.cornerRadius}
+        item={props.item}
+      />
+    );
   }
 
   if (props.kind === 'dish') {
-    return <DishCardPreview cornerRadius={props.cornerRadius} item={props.item} />;
+    return (
+      <DishCardPreview cornerRadius={props.cornerRadius} item={props.item} />
+    );
   }
 
   return (

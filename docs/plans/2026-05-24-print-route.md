@@ -13,6 +13,7 @@
 ### Task 1: Add the printable route shell
 
 **Files:**
+
 - Create: `src/PrintRoute.tsx`
 - Modify: `src/App.tsx`
 - Test: `src/PrintRoute.test.tsx`
@@ -45,6 +46,7 @@ git commit -m "feat: add print route shell"
 ### Task 2: Add A4 pagination and sheet marks
 
 **Files:**
+
 - Modify: `src/PrintRoute.tsx`
 - Modify: `src/styles/global.css`
 - Test: `src/PrintRoute.test.tsx`
@@ -77,6 +79,7 @@ git commit -m "feat: paginate printable cards on a4 sheets"
 ### Task 3: Verify app navigation and print output
 
 **Files:**
+
 - Modify: `src/App.tsx`
 - Modify: `src/styles/global.css`
 - Test: `src/App.test.tsx`

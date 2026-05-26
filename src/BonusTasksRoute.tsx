@@ -29,8 +29,7 @@ function chunkItems<T>(items: T[], size: number) {
 
 function buildPageCropRects(pageIndex: number) {
   return Array.from({ length: SHEETS_PER_PAGE }, (_, sheetIndex) => {
-    const top =
-      PAGE_VERTICAL_PADDING_MM + sheetIndex * SHEET_HEIGHT_MM;
+    const top = PAGE_VERTICAL_PADDING_MM + sheetIndex * SHEET_HEIGHT_MM;
     const bottom = top + SHEET_HEIGHT_MM;
 
     return {
@@ -45,16 +44,18 @@ function buildPageCropRects(pageIndex: number) {
 
 function getCellText(row: number, column: number) {
   return (
-    bonusTaskCells.find(
-      (cell) => cell.row === row && cell.column === column,
-    )?.text ?? ''
+    bonusTaskCells.find((cell) => cell.row === row && cell.column === column)
+      ?.text ?? ''
   );
 }
 
 function BonusTaskSheet({ index }: { index: number }) {
   return (
     <section className="bonus-task-sheet" data-testid="bonus-task-sheet">
-      <table className="bonus-task-sheet__table" aria-label={`Bonus task sheet ${index + 1}`}>
+      <table
+        className="bonus-task-sheet__table"
+        aria-label={`Bonus task sheet ${index + 1}`}
+      >
         <tbody>
           {Array.from({ length: CELL_ROWS }, (_, row) => (
             <tr key={row}>
@@ -77,7 +78,10 @@ function BonusTasksPage({
   sheetIndexes: number[];
 }) {
   return (
-    <article className="print-sheet bonus-task-page" data-testid="bonus-task-page">
+    <article
+      className="print-sheet bonus-task-page"
+      data-testid="bonus-task-page"
+    >
       <PrintCropMarks
         pageHeightMm={A4_PAGE_HEIGHT_MM}
         pageWidthMm={A4_PAGE_WIDTH_MM}
@@ -107,9 +111,8 @@ export function BonusTasksRoute({ config }: BonusTasksRouteProps) {
           <h1>Bonus task sheets</h1>
         </div>
         <p className="print-route__intro">
-          Print one sheet per player. Each sheet has 9 centered prompts in a
-          3x3 grid. The default game config prints one page for every 3
-          players.
+          Print one sheet per player. Each sheet has 9 centered prompts in a 3x3
+          grid. The default game config prints one page for every 3 players.
         </p>
         <p className="print-route__intro">
           Tasks per sheet: {bonusTaskSheetCellCount}

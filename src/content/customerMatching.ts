@@ -93,9 +93,8 @@ function enumerateUpToTagCombinations(
   return Array.from(
     { length: Math.max(0, count - minCount + 1) },
     (_, index) => index + minCount,
-  ).flatMap(
-    (combinationSize) =>
-      enumerateTagCombinations(dishes, tags, combinationSize),
+  ).flatMap((combinationSize) =>
+    enumerateTagCombinations(dishes, tags, combinationSize),
   );
 }
 

@@ -40,11 +40,13 @@ describe('Bonus tasks route', () => {
         'Find someone who visited the most asian countries',
       ),
     ).toBeInTheDocument();
+    expect(screen.getAllByText('Find someone who can make sushi')).toHaveLength(
+      15,
+    );
     expect(
-      screen.getAllByText('Find someone who can make sushi'),
-    ).toHaveLength(15);
-    expect(
-      container.querySelectorAll('.bonus-task-page .print-sheet__crop-marks line'),
+      container.querySelectorAll(
+        '.bonus-task-page .print-sheet__crop-marks line',
+      ),
     ).toHaveLength(120);
   });
 });

@@ -55,7 +55,11 @@ export function PrintCropMarks({
         vectorEffect="non-scaling-stroke"
       >
         {rects.map((rect) =>
-          renderCropMarksForRect(rect, pageWidthMm, DEFAULT_CROP_MARK_LENGTH_MM),
+          renderCropMarksForRect(
+            rect,
+            pageWidthMm,
+            DEFAULT_CROP_MARK_LENGTH_MM,
+          ),
         )}
       </g>
     </svg>

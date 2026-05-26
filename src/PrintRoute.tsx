@@ -16,7 +16,8 @@ const PRINT_GRID_TOP_MM =
 const PRINT_GRID_WIDTH_MM = PRINT_GRID_COLUMNS * PRINT_CARD_WIDTH_MM;
 const PRINT_GRID_HEIGHT_MM = PRINT_GRID_ROWS * PRINT_CARD_HEIGHT_MM;
 const PRINT_CARD_TRIM_INSET_MM = 3;
-const PRINT_CARD_TRIM_WIDTH_MM = PRINT_CARD_WIDTH_MM - PRINT_CARD_TRIM_INSET_MM * 2;
+const PRINT_CARD_TRIM_WIDTH_MM =
+  PRINT_CARD_WIDTH_MM - PRINT_CARD_TRIM_INSET_MM * 2;
 const PRINT_CARD_TRIM_HEIGHT_MM =
   PRINT_CARD_HEIGHT_MM - PRINT_CARD_TRIM_INSET_MM * 2;
 const PRINT_CARD_CORNER_RADIUS_MM = 0;
@@ -53,7 +54,11 @@ function expandPrintableCards(content: GameContent): PrintableCardInstance[] {
   const cards: PrintableCardInstance[] = [];
 
   for (const item of content.dishes) {
-    for (let instanceIndex = 0; instanceIndex < item.copies; instanceIndex += 1) {
+    for (
+      let instanceIndex = 0;
+      instanceIndex < item.copies;
+      instanceIndex += 1
+    ) {
       cards.push({
         kind: 'dish',
         item,
@@ -63,7 +68,11 @@ function expandPrintableCards(content: GameContent): PrintableCardInstance[] {
   }
 
   for (const item of content.customers) {
-    for (let instanceIndex = 0; instanceIndex < item.copies; instanceIndex += 1) {
+    for (
+      let instanceIndex = 0;
+      instanceIndex < item.copies;
+      instanceIndex += 1
+    ) {
       cards.push({
         kind: 'customer',
         item,

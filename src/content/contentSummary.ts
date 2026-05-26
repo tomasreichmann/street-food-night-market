@@ -95,11 +95,11 @@ function getBaselineLabel(customer: CustomerCard) {
   return '3-cheapest average';
 }
 
-function getOrBranchBaselineCosts(
-  customer: CustomerCard,
-  dishes: DishCard[],
-) {
-  if (customer.wants.mode !== 'any_of_tags' && customer.wants.mode !== 'up_to_any_tag') {
+function getOrBranchBaselineCosts(customer: CustomerCard, dishes: DishCard[]) {
+  if (
+    customer.wants.mode !== 'any_of_tags' &&
+    customer.wants.mode !== 'up_to_any_tag'
+  ) {
     return [];
   }
 
@@ -125,7 +125,10 @@ function getOrBranchBaselineCosts(
               },
             };
 
-      const baselineCombinations = getBaselineCombinations(branchCustomer, dishes);
+      const baselineCombinations = getBaselineCombinations(
+        branchCustomer,
+        dishes,
+      );
       return getAverageCheapestCombinationCost(baselineCombinations);
     })
     .filter((cost): cost is number => cost !== null);
@@ -139,7 +142,9 @@ function getMatchedCostBasis(customer: CustomerCard, dishes: DishCard[]) {
       return null;
     }
 
-    return branchCosts.reduce((total, cost) => total + cost, 0) / branchCosts.length;
+    return (
+      branchCosts.reduce((total, cost) => total + cost, 0) / branchCosts.length
+    );
   }
 
   if (customer.wants.mode === 'up_to_any_tag') {
