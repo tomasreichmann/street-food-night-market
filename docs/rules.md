@@ -79,8 +79,6 @@ Tiebreakers, in order:
 
 ## Card legend
 
-The numbered markers on the sample cards match the descriptions below.
-
 ### Dish cards
 
 1. Dish title: the name players use when trading or serving.

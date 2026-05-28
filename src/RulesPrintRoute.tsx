@@ -5,6 +5,7 @@ import {
   dishTypeIcons,
   resourceIcons,
 } from './assets/icon-map';
+import qrCodeRulesSrc from './assets/qr-code-rules.png';
 import { CardPreview } from './components/CardPreview';
 import type {
   CustomerCard,
@@ -298,21 +299,31 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               serve visible customers before the market closes.
             </p>
           </div>
+          <div
+            className="rules-print-hero__aside"
+            aria-label="Print hero extras"
+          >
+            <div className="rules-hero__aside" aria-label="Game stats">
+              <div className="rules-hero__stat">
+                <span>Players</span>
+                <strong>15-20</strong>
+              </div>
+              <div className="rules-hero__stat">
+                <span>Time</span>
+                <strong>60 min</strong>
+              </div>
+              <div className="rules-hero__stat">
+                <span>Win</span>
+                <strong>Most points</strong>
+              </div>
+            </div>
+            <img
+              className="rules-print-hero__qr"
+              src={qrCodeRulesSrc}
+              alt="Rules QR code"
+            />
+          </div>
         </section>
-        <div className="rules-hero__aside" aria-label="Game stats">
-          <div className="rules-hero__stat">
-            <span>Players</span>
-            <strong>15-20</strong>
-          </div>
-          <div className="rules-hero__stat">
-            <span>Time</span>
-            <strong>60 min</strong>
-          </div>
-          <div className="rules-hero__stat">
-            <span>Win</span>
-            <strong>Most points</strong>
-          </div>
-        </div>
         <section className="rules-print-page__content">
           <div className="section-heading section-heading--rules">
             <p className="eyebrow">Goal</p>
@@ -610,10 +621,6 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
             <p className="eyebrow">Card legend</p>
             <h2>What the sample cards are showing</h2>
           </div>
-          <p className="print-section__copy">
-            The numbered markers on the sample cards match the descriptions
-            below.
-          </p>
           <div className="rules-anatomy-grid">
             <CardLegend
               kind="dish"

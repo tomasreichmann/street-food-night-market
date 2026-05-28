@@ -364,6 +364,15 @@ export function RulesRoute({ content }: RulesRouteProps) {
                 </ComponentPill>
               </li>
               <li>
+                <ComponentPill
+                  iconLabel="Stall card"
+                  iconSrc={cardIcons.dish}
+                  tone="task"
+                >
+                  1 stall card
+                </ComponentPill>
+              </li>
+              <li>
                 <span>
                   Pick a cool name and customize your stall card to earn extra
                   coins at the end of the game
@@ -510,9 +519,9 @@ export function RulesRoute({ content }: RulesRouteProps) {
           </div>
           <div>
             <RulesIcon src={cardIcons.dish} label="Dish type" />
-            <strong>≠</strong>
+            <strong>!=</strong>
             <RulesIcon src={cardIcons.dish} label="Dish type" />
-            <strong>≠</strong>
+            <strong>!=</strong>
             <RulesIcon src={cardIcons.dish} label="Dish type" />
             <p>
               Different dish types means you need three separate dishes, and
@@ -591,9 +600,6 @@ export function RulesRoute({ content }: RulesRouteProps) {
         heading="What the sample cards are showing"
         testId="rules-anatomy"
       >
-        <p className="print-section__copy">
-          The numbered markers on the sample cards match the descriptions below.
-        </p>
         <div className="rules-anatomy-grid">
           <CardLegend
             kind="dish"

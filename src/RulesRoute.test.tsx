@@ -42,6 +42,10 @@ describe('Rules route', () => {
     expect(screen.getByTestId('rules-setup')).toHaveTextContent(
       /At the start of the game, you will get/i,
     );
+    expect(screen.getByTestId('rules-setup')).toHaveTextContent(
+      /1 stall card/i,
+    );
+    expect(screen.queryByAltText('Rules QR code')).toBeNull();
     expect(screen.queryByText(/shorter or easier first game/i)).toBeNull();
     expect(
       screen.getByRole('heading', { name: 'What you can do' }),
@@ -50,9 +54,7 @@ describe('Rules route', () => {
       screen.getByText(/each task can only be completed once/i),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /8 or more coins after claiming a customer or a trade/i,
-      ),
+      screen.getByText(/8 or more coins after claiming a customer or a trade/i),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
@@ -80,11 +82,6 @@ describe('Rules route', () => {
     expect(within(anatomySection).getByText('Dish title')).toBeInTheDocument();
     expect(
       within(anatomySection).getByText('Printed coin value'),
-    ).toBeInTheDocument();
-    expect(
-      within(anatomySection).getByText(
-        'The numbered markers on the sample cards match the descriptions below.',
-      ),
     ).toBeInTheDocument();
     expect(
       within(anatomySection).getByTestId('rules-card-legend-marker-dish-1'),

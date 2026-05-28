@@ -18,6 +18,7 @@ describe('Rules print route', () => {
     expect(
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
+    expect(screen.getByAltText('Rules QR code')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Rules Print' })).toHaveAttribute(
       'href',
       '/rules-print',
@@ -27,6 +28,7 @@ describe('Rules print route', () => {
     expect(pages).toHaveLength(5);
     expect(within(pages[0]).getByText('Goal')).toBeInTheDocument();
     expect(within(pages[0]).getByText('Setup')).toBeInTheDocument();
+    expect(within(pages[0]).getByText('1 stall card')).toBeInTheDocument();
     expect(within(pages[1]).getByText('Actions')).toBeInTheDocument();
     expect(within(pages[2]).getByText('Customer wants')).toBeInTheDocument();
     expect(within(pages[3]).getByText('Scoring')).toBeInTheDocument();
