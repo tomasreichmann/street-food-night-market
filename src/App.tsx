@@ -1,9 +1,9 @@
 import { CardPreview } from './components/CardPreview';
-import { CardMockups } from './components/CardMockups';
-import { CardPlanningTable } from './components/CardPlanningTable';
+import { summarizeCardContent } from './content/contentSummary';
 import { loadDefaultGameConfig } from './content/loadGameConfig';
 import { loadCardContent } from './content/loadContent';
 import { BonusTasksRoute } from './BonusTasksRoute';
+import { PlanningRoute } from './PlanningRoute';
 import { RulesPrintRoute } from './RulesPrintRoute';
 import { RulesRoute } from './RulesRoute';
 import { PrintRoute } from './PrintRoute';
@@ -13,12 +13,14 @@ function getContentState() {
   try {
     const content = loadCardContent();
     const config = loadDefaultGameConfig(content);
+    const summary = summarizeCardContent(content);
 
-    return { content, config, error: null as Error | null };
+    return { content, config, summary, error: null as Error | null };
   } catch (error) {
     return {
       content: null,
       config: null,
+      summary: null,
       error:
         error instanceof Error
           ? error
@@ -36,6 +38,7 @@ function AppNav() {
       <a href="/rules">Rules</a>
       <a href="/simulation">Simulation</a>
       <a href="/bonus-tasks">Bonus Tasks</a>
+      <a href="/planning">Planning</a>
       <a href="/print">Print</a>
       <a href="/rules-print">Rules Print</a>
     </nav>
@@ -47,54 +50,35 @@ function HomeRoute({
 }: {
   content: NonNullable<typeof contentState.content>;
 }) {
-  const { resources, dishes, customers } = content;
-  const featuredDish = dishes[0];
-  const featuredCustomer = customers[0];
+  const summary = contentState.summary;
+  const { dishes, customers } = content;
 
   return (
     <>
       <section className="hero">
         <div className="hero__intro">
-          <p className="eyebrow">Printable party game scaffold</p>
+          <p className="eyebrow">Printable party game</p>
           <h1>Street Food Night Market</h1>
           <p className="hero-copy">
-            Declarative card content, validated at load time, ready for a future
-            print compositor.
+            A social night market game about trading ingredients, cooking
+            dishes, and racing to serve the most tempting customers.
           </p>
         </div>
 
         <dl className="stats">
           <div>
-            <dt>Resources</dt>
-            <dd>{resources.length}</dd>
+            <dt>Dish cards</dt>
+            <dd>{summary?.totals.dishCopies ?? 0}</dd>
           </div>
           <div>
-            <dt>Dishes</dt>
-            <dd>{dishes.length}</dd>
+            <dt>Customer cards</dt>
+            <dd>{summary?.totals.customerCopies ?? 0}</dd>
           </div>
           <div>
-            <dt>Customers</dt>
-            <dd>{customers.length}</dd>
+            <dt>Total cards</dt>
+            <dd>{summary?.totals.totalCardCopies ?? 0}</dd>
           </div>
         </dl>
-      </section>
-
-      <CardMockups
-        dish={featuredDish!}
-        customer={featuredCustomer!}
-        dishes={dishes}
-      />
-
-      <section className="content-section" aria-labelledby="resources-heading">
-        <div className="section-heading">
-          <p className="eyebrow">Resource set</p>
-          <h2 id="resources-heading">Core ingredients and symbols</h2>
-        </div>
-        <div className="resource-ribbon">
-          {resources.map((resource) => (
-            <CardPreview key={resource.id} kind="resource" item={resource} />
-          ))}
-        </div>
       </section>
 
       <section className="content-section" aria-labelledby="dishes-heading">
@@ -125,8 +109,6 @@ function HomeRoute({
           ))}
         </div>
       </section>
-
-      <CardPlanningTable content={content} />
     </>
   );
 }
@@ -155,6 +137,7 @@ export default function App() {
   const isRulesPrintRoute = window.location.pathname === '/rules-print';
   const isSimulationRoute = window.location.pathname === '/simulation';
   const isBonusTasksRoute = window.location.pathname === '/bonus-tasks';
+  const isPlanningRoute = window.location.pathname === '/planning';
 
   return (
     <main className="app-shell">
@@ -163,6 +146,8 @@ export default function App() {
         <RulesPrintRoute content={contentState.content} />
       ) : isRulesRoute ? (
         <RulesRoute content={contentState.content} />
+      ) : isPlanningRoute ? (
+        <PlanningRoute content={contentState.content} />
       ) : isPrintRoute ? (
         <PrintRoute content={contentState.content} />
       ) : isBonusTasksRoute ? (
