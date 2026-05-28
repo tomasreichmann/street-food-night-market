@@ -18,15 +18,26 @@ describe('Rules print route', () => {
     expect(
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Rules Print' })).toHaveAttribute(
+      'href',
+      '/rules-print',
+    );
 
     const pages = screen.getAllByTestId('rules-print-page');
-    expect(pages).toHaveLength(7);
+    expect(pages).toHaveLength(5);
     expect(within(pages[0]).getByText('Goal')).toBeInTheDocument();
-    expect(within(pages[1]).getByText('Setup')).toBeInTheDocument();
-    expect(within(pages[2]).getByText('Actions')).toBeInTheDocument();
-    expect(within(pages[3]).getByText('Customer wants')).toBeInTheDocument();
-    expect(within(pages[4]).getByText('Scoring')).toBeInTheDocument();
-    expect(within(pages[5]).getByText('Card legend')).toBeInTheDocument();
-    expect(within(pages[6]).getByText('Street Food Night Market')).toBeInTheDocument();
+    expect(within(pages[0]).getByText('Setup')).toBeInTheDocument();
+    expect(within(pages[1]).getByText('Actions')).toBeInTheDocument();
+    expect(within(pages[2]).getByText('Customer wants')).toBeInTheDocument();
+    expect(within(pages[3]).getByText('Scoring')).toBeInTheDocument();
+    expect(within(pages[3]).getByText('The game ends when:')).toBeInTheDocument();
+    expect(
+      within(pages[3]).getByText('When all customers are claimed.'),
+    ).toBeInTheDocument();
+    expect(within(pages[3]).getByText('After 60 minutes.')).toBeInTheDocument();
+    expect(
+      within(pages[3]).getByText('The coolest stall card gets +10 points.'),
+    ).toBeInTheDocument();
+    expect(within(pages[4]).getByText('Card legend')).toBeInTheDocument();
   });
 });

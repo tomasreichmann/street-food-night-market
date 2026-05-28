@@ -34,10 +34,10 @@ function AppNav() {
     <nav className="app-nav" aria-label="Primary navigation">
       <a href="/">Home</a>
       <a href="/rules">Rules</a>
-      <a href="/rules-print">Rules Print</a>
       <a href="/simulation">Simulation</a>
       <a href="/bonus-tasks">Bonus Tasks</a>
       <a href="/print">Print</a>
+      <a href="/rules-print">Rules Print</a>
     </nav>
   );
 }
@@ -157,9 +157,7 @@ export default function App() {
   const isBonusTasksRoute = window.location.pathname === '/bonus-tasks';
 
   return (
-    <main
-      className={`app-shell${isRulesPrintRoute ? ' app-shell--rules-print' : ''}`}
-    >
+    <main className="app-shell">
       <AppNav />
       {isRulesPrintRoute ? (
         <RulesPrintRoute content={contentState.content} />

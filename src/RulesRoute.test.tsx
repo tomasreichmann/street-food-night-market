@@ -19,6 +19,18 @@ describe('Rules route', () => {
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('rules-scoring')).toHaveTextContent(
+      /The game ends when:/i,
+    );
+    expect(screen.getByTestId('rules-scoring')).toHaveTextContent(
+      /When all customers are claimed\./i,
+    );
+    expect(screen.getByTestId('rules-scoring')).toHaveTextContent(
+      /After 60 minutes\./i,
+    );
+    expect(screen.getByTestId('rules-scoring')).toHaveTextContent(
+      /The coolest stall card gets \+10 points\./i,
+    );
+    expect(screen.getByTestId('rules-scoring')).toHaveTextContent(
       /most leftover dishes/i,
     );
     expect(screen.getByTestId('rules-scoring')).toHaveTextContent(
@@ -34,7 +46,14 @@ describe('Rules route', () => {
     expect(
       screen.getByRole('heading', { name: 'What you can do' }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/each task can only be completed once/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/each task can only be completed once/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /8 or more coins after claiming a customer or a trade/i,
+      ),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(
         /3 separate dishes\. even if one dish shows more than one matching type, it still only counts once\./i,
@@ -63,7 +82,9 @@ describe('Rules route', () => {
       within(anatomySection).getByText('Printed coin value'),
     ).toBeInTheDocument();
     expect(
-      within(anatomySection).getByText('The numbered markers on the sample cards match the descriptions below.'),
+      within(anatomySection).getByText(
+        'The numbered markers on the sample cards match the descriptions below.',
+      ),
     ).toBeInTheDocument();
     expect(
       within(anatomySection).getByTestId('rules-card-legend-marker-dish-1'),

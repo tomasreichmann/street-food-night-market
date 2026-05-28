@@ -29,6 +29,48 @@ describe('loadContent', () => {
     });
   });
 
+  it('uses the rebalanced dish costs and customer copies for full A4 sheets', () => {
+    const content = loadCardContent();
+
+    expect(
+      content.dishes.find((dish) => dish.id === 'rice-plate'),
+    ).toMatchObject({
+      cost: { greens: 1, fuel: 1 },
+    });
+    expect(content.dishes.find((dish) => dish.id === 'tea')).toMatchObject({
+      cost: { greens: 1 },
+    });
+    expect(
+      content.dishes.find((dish) => dish.id === 'sushi-platter'),
+    ).toMatchObject({
+      cost: { sea: 2, greens: 1 },
+    });
+    expect(content.dishes.find((dish) => dish.id === 'sashimi')).toMatchObject({
+      cost: { sea: 2 },
+    });
+    expect(
+      content.customers.reduce((total, customer) => total + customer.copies, 0),
+    ).toBe(55);
+    expect(content.dishes.reduce((total, dish) => total + dish.copies, 0)).toBe(
+      44,
+    );
+    expect(
+      content.customers.find((customer) => customer.id === 'street-musician'),
+    ).toMatchObject({
+      payout: { coins: 3 },
+    });
+    expect(
+      content.customers.find((customer) => customer.id === 'anime-club'),
+    ).toMatchObject({
+      payout: { coinsPerServed: 6, maxCoins: 18 },
+    });
+    expect(
+      content.customers.find((customer) => customer.id === 'festival-judge'),
+    ).toMatchObject({
+      payout: { coins: 34 },
+    });
+  });
+
   it('uses a seafood want for Tourist', () => {
     const content = loadCardContent();
     const tourist = content.customers.find(
@@ -50,6 +92,18 @@ describe('loadContent', () => {
   it('updates requested endgame bonuses and stronger K-Pop requirements', () => {
     const content = loadCardContent();
 
+    expect(
+      content.customers.find((customer) => customer.id === 'auntie')
+        ?.endgameBonus,
+    ).toBe('+2 coins per Night Market Kid served');
+    expect(
+      content.customers.find((customer) => customer.id === 'temple-caretaker')
+        ?.endgameBonus,
+    ).toBe('+2 coins per served customer with a Greens want');
+    expect(
+      content.customers.find((customer) => customer.id === 'business-executive')
+        ?.endgameBonus,
+    ).toBe('+3 coins per different customer tier you served');
     expect(
       content.customers.find((customer) => customer.id === 'celebrity-chef')
         ?.endgameBonus,

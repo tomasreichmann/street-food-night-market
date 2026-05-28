@@ -84,6 +84,61 @@ function getCustomerCountByGender(
   }, 0);
 }
 
+function customerWantsTag(
+  customer: GameContent['customers'][number],
+  tag: string,
+) {
+  if (customer.wants.mode === 'any_tag') {
+    return customer.wants.tag === tag;
+  }
+
+  if (
+    customer.wants.mode === 'any_of_tags' ||
+    customer.wants.mode === 'combo_tags' ||
+    customer.wants.mode === 'up_to_any_tag'
+  ) {
+    return customer.wants.tags.includes(tag);
+  }
+
+  if (customer.wants.mode === 'up_to_tag') {
+    return customer.wants.tag === tag;
+  }
+
+  return false;
+}
+
+function getServedCustomerCountById(
+  customerIds: string[],
+  wantedCustomerId: string,
+) {
+  return customerIds.filter((customerId) => customerId === wantedCustomerId)
+    .length;
+}
+
+function getDifferentServedTierCount(
+  customerIds: string[],
+  customerById: Map<string, GameContent['customers'][number]>,
+) {
+  return new Set(
+    customerIds
+      .map((customerId) => customerById.get(customerId)?.tier)
+      .filter((tier): tier is number => typeof tier === 'number'),
+  ).size;
+}
+
+function getGreensWantCustomerCount(
+  customerIds: string[],
+  customerById: Map<string, GameContent['customers'][number]>,
+) {
+  return customerIds.reduce((total, customerId) => {
+    const servedCustomer = customerById.get(customerId);
+
+    return servedCustomer && customerWantsTag(servedCustomer, 'vegetarian')
+      ? total + 1
+      : total;
+  }, 0);
+}
+
 function isFemaleCustomer(customerId: string, title: string) {
   if (FEMALE_CUSTOMER_IDS.has(customerId)) {
     return true;
@@ -159,6 +214,31 @@ function scoreEndgameBonus(
       customerId,
       label: customer.endgameBonus,
       points: uniqueCustomerCount,
+    };
+  }
+
+  if (bonusText.includes('night market kid served')) {
+    return {
+      customerId,
+      label: customer.endgameBonus,
+      points:
+        getServedCustomerCountById(servedCustomerIds, 'night-market-kid') * 2,
+    };
+  }
+
+  if (bonusText.includes('served customer with a greens want')) {
+    return {
+      customerId,
+      label: customer.endgameBonus,
+      points: getGreensWantCustomerCount(servedCustomerIds, customerById) * 2,
+    };
+  }
+
+  if (bonusText.includes('different customer tier you served')) {
+    return {
+      customerId,
+      label: customer.endgameBonus,
+      points: getDifferentServedTierCount(servedCustomerIds, customerById) * 3,
     };
   }
 

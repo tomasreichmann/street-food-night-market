@@ -10,7 +10,7 @@ The game is social on purpose. Move around, talk, trade resources, dishes, and c
 
 - 5 random resources: Seafood, Greens, Fuel, Umami, and Meat are the resource types.
 - 1 bonus task sheet.
-- A stall name if you want one. It is for flavor only.
+- Pick a cool name and customize your stall card to earn extra coins at the end of the game
 
 The shared market has the remaining resources, dish cards, coin supply, and 4 visible customer stacks.
 
@@ -31,6 +31,10 @@ Example: Serve Sushi Platter or Sashimi to Seafood Lover. Gain 7 coins per serve
 ### Buy a resource
 
 Spend 1 coin to take 1 resource from the supply.
+
+If you have 8 or more coins after claiming a customer or a trade, you cannot
+receive any more coins unless you spend some. Claiming another customer when
+you are at maximum means you get the card, but not the coins.
 
 ### Trade with players
 

@@ -18,8 +18,8 @@ describe('contentSummary', () => {
     expect(summary.dishRows).toHaveLength(18);
     expect(summary.customerRows).toHaveLength(19);
     expect(summary.totals.dishCopies).toBe(44);
-    expect(summary.totals.customerCopies).toBe(44);
-    expect(summary.totals.totalCardCopies).toBe(88);
+    expect(summary.totals.customerCopies).toBe(55);
+    expect(summary.totals.totalCardCopies).toBe(99);
     expect(summary.totals.dishTypeTotals).toEqual([
       ['soup', 7],
       ['noodles', 6],
@@ -32,11 +32,11 @@ describe('contentSummary', () => {
       ['premium', 8],
     ]);
     expect(summary.totals.resourceUsageTotals).toEqual([
-      ['greens', 41],
-      ['fungi', 22],
-      ['fuel', 35],
-      ['meat', 15],
-      ['sea', 20],
+      ['greens', 30],
+      ['fungi', 25],
+      ['fuel', 32],
+      ['meat', 19],
+      ['sea', 17],
     ]);
   });
 
@@ -244,7 +244,7 @@ describe('contentSummary', () => {
       content.dishes.find((dish) => dish.id === 'oyster-plate'),
     ).toMatchObject({
       tags: ['seafood', 'premium'],
-      cost: { sea: 3, fungi: 1, fuel: 1 },
+      cost: { sea: 2, fungi: 1, fuel: 1 },
     });
     expect(
       content.customers.find((customer) => customer.id === 'tourist'),
@@ -275,6 +275,40 @@ describe('contentSummary', () => {
     });
   });
 
+  it('sets customer copies to fill eleven A4 card sheets with dishes', () => {
+    const content = loadCardContent();
+    const copiesById = new Map(
+      content.customers.map((customer) => [customer.id, customer.copies]),
+    );
+
+    expect(
+      content.customers.reduce((total, customer) => total + customer.copies, 0),
+    ).toBe(55);
+    expect(copiesById).toEqual(
+      new Map([
+        ['salaryman', 4],
+        ['street-musician', 4],
+        ['maid-cafe-maid', 3],
+        ['tourist', 4],
+        ['monk', 4],
+        ['auntie', 4],
+        ['dockworker', 4],
+        ['night-market-kid', 4],
+        ['soup-regular', 4],
+        ['sumo-wrestler', 2],
+        ['food-blogger', 3],
+        ['temple-caretaker', 3],
+        ['night-shift-nurse', 3],
+        ['anime-club', 2],
+        ['seafood-lover', 3],
+        ['business-executive', 1],
+        ['celebrity-chef', 1],
+        ['festival-judge', 1],
+        ['k-pop-band-female', 1],
+      ]),
+    );
+  });
+
   it('keeps promoted Auntie and Business Executive on baseline coin rewards', () => {
     const summary = summarizeCardContent(loadCardContent());
     const auntie = summary.customerRows.find((row) => row.id === 'auntie');
@@ -288,7 +322,7 @@ describe('contentSummary', () => {
       copies: 4,
       want: 'meat + noodles',
       matchedCostBasis: 5.666666666666667,
-      reward: '14 coins; end game: +2 coins per kid served',
+      reward: '14 coins; end game: +2 coins per Night Market Kid served',
       economyRatio: '2.47x',
       economyStatus: 'OK',
     });
@@ -296,9 +330,10 @@ describe('contentSummary', () => {
       tier: 3,
       copies: 1,
       want: 'premium + noodles + vegetarian',
-      matchedCostBasis: 8.666666666666666,
-      reward: '32 coins; end game: +2 coins per Salaryman served',
-      economyRatio: '3.69x',
+      matchedCostBasis: 8,
+      reward:
+        '32 coins; end game: +3 coins per different customer tier you served',
+      economyRatio: '4.00x',
       economyStatus: 'OK',
     });
   });
@@ -382,7 +417,7 @@ describe('contentSummary', () => {
     expect(auntie).toMatchObject({
       matchedDishTitle: '3-cheapest average',
       matchedCostBasis: 5.666666666666667,
-      reward: '14 coins; end game: +2 coins per kid served',
+      reward: '14 coins; end game: +2 coins per Night Market Kid served',
       economyRatio: '2.47x',
       economyStatus: 'OK',
     });
@@ -396,9 +431,9 @@ describe('contentSummary', () => {
 
     expect(sumoWrestler).toMatchObject({
       matchedDishTitle: 'OR-branch average',
-      matchedCostBasis: 2.666666666666667,
+      matchedCostBasis: 2.416666666666667,
       reward: '6 coins per served, max 30',
-      economyRatio: '2.25x',
+      economyRatio: '2.48x',
       economyStatus: 'OK',
     });
   });
@@ -414,18 +449,18 @@ describe('contentSummary', () => {
 
     expect(animeClub).toMatchObject({
       matchedDishTitle: 'OR-branch average',
-      matchedCostBasis: 2.833333333333333,
+      matchedCostBasis: 2.25,
       reward:
-        '7 coins per served, max 21; end game: counts as 2x male and 2x female customers',
-      economyRatio: '2.47x',
+        '6 coins per served, max 18; end game: counts as 2x male and 2x female customers',
+      economyRatio: '2.67x',
       economyStatus: 'OK',
     });
     expect(festivalJudge).toMatchObject({
       matchedDishTitle: '3-cheapest average',
-      matchedCostBasis: 9.333333333333334,
+      matchedCostBasis: 8.333333333333334,
       reward:
-        '37 coins; end game: +1 coin per different customer archetype served',
-      economyRatio: '3.96x',
+        '34 coins; end game: +1 coin per different customer archetype served',
+      economyRatio: '4.08x',
       economyStatus: 'OK',
     });
   });

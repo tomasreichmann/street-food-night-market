@@ -58,6 +58,45 @@ describe('calculatePlayerScoreBreakdown', () => {
     });
   });
 
+  it('scores end game bonuses from retained customer cards only', () => {
+    const content = loadCardContent();
+    const player: PlayerState = {
+      id: 'Player 3',
+      coins: 0,
+      resources: {},
+      meals: {},
+      claimedCustomers: [
+        'night-market-kid',
+        'monk',
+        'temple-caretaker',
+        'business-executive',
+        'auntie',
+      ],
+      bonusTasksRemaining: 0,
+    };
+
+    expect(calculatePlayerScoreBreakdown(content, player)).toMatchObject({
+      endgameBonus: 17,
+      endgameBonusBreakdown: [
+        {
+          customerId: 'temple-caretaker',
+          label: '+2 coins per served customer with a Greens want',
+          points: 6,
+        },
+        {
+          customerId: 'business-executive',
+          label: '+3 coins per different customer tier you served',
+          points: 9,
+        },
+        {
+          customerId: 'auntie',
+          label: '+2 coins per Night Market Kid served',
+          points: 2,
+        },
+      ],
+    });
+  });
+
   it('rounds leftover resources down to whole points', () => {
     const content = loadCardContent();
     const player: PlayerState = {

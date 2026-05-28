@@ -365,13 +365,14 @@ export function RulesRoute({ content }: RulesRouteProps) {
               </li>
               <li>
                 <span>
-                  A stall name if you want one. It is for flavor only.
+                  Pick a cool name and customize your stall card to earn extra
+                  coins at the end of the game
                 </span>
               </li>
             </ul>
           </div>
 
-          <div className="rules-setup-panel">
+          {/* <div className="rules-setup-panel">
             <h3>The shared market</h3>
             <ul className="rules-icon-list">
               <li>Put all remaining resources, dishes, and coins nearby.</li>
@@ -384,7 +385,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
                 of the 4 customer stacks are gone.
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </RulesSection>
 
@@ -454,6 +455,12 @@ export function RulesRoute({ content }: RulesRouteProps) {
               You can spend 1 coin to take 1 resource from the supply. Use this
               when a trade is not available and you need one more token.
             </p>
+            <p>
+              If you have 8 or more coins after claiming a customer or a trade,
+              you cannot receive any more coins unless you spend some. Claiming
+              another customer when you are at maximum means you get the card,
+              but not the coins.
+            </p>
           </ActionCard>
 
           <ActionCard
@@ -474,9 +481,9 @@ export function RulesRoute({ content }: RulesRouteProps) {
             title="Complete a bonus task"
           >
             <p>
-              When you complete a task with another player, get their
-              signature, cross off the task, and take 3 resources of your
-              choice from the supply. Each task can only be completed once.
+              When you complete a task with another player, get their signature,
+              cross off the task, and take 3 resources of your choice from the
+              supply. Each task can only be completed once.
             </p>
           </ActionCard>
         </div>
@@ -555,12 +562,18 @@ export function RulesRoute({ content }: RulesRouteProps) {
         testId="rules-scoring"
       >
         <div className="rules-scorebox">
+          <p>The game ends when:</p>
+          <ul className="rules-steps rules-steps--tight">
+            <li>When all customers are claimed.</li>
+            <li>After 60 minutes.</li>
+          </ul>
           <ol className="rules-steps rules-steps--tight">
             <li>Coins earned during play are 1 point each.</li>
             <li>
               Each unspent dish is worth points equal to its printed coin value.
             </li>
             <li>Every 2 leftover resources score 1 point, rounded down.</li>
+            <li>The coolest stall card gets +10 points.</li>
             <li>
               Add any endgame bonus points printed on served customer cards.
             </li>
@@ -579,8 +592,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
         testId="rules-anatomy"
       >
         <p className="print-section__copy">
-          The numbered markers on the sample cards match the descriptions
-          below.
+          The numbered markers on the sample cards match the descriptions below.
         </p>
         <div className="rules-anatomy-grid">
           <CardLegend

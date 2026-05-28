@@ -22,15 +22,17 @@ describe('Print route', () => {
       screen.queryByRole('heading', { name: 'A4 card sheets' }),
     ).not.toBeInTheDocument();
     const sheets = screen.getAllByTestId('print-sheet');
-    expect(sheets).toHaveLength(10);
+    expect(sheets).toHaveLength(11);
     expect(sheets[4].textContent).toContain('Imperial Tasting');
     expect(sheets[4].textContent).toContain('Salaryman');
+    expect(screen.getAllByTestId('stall-sheet')).toHaveLength(2);
+    expect(screen.getAllByAltText('Stall card template')).toHaveLength(18);
   });
 
   it('includes crop marks on each sheet', () => {
     const { container } = renderAtPrintRoute();
 
-    expect(container.querySelectorAll('.print-sheet__marks')).toHaveLength(10);
+    expect(container.querySelectorAll('.print-sheet__marks')).toHaveLength(13);
     expect(container.querySelector('.print-sheet__marks')).toHaveStyle({
       zIndex: '0',
     });
@@ -42,6 +44,6 @@ describe('Print route', () => {
     ).toHaveLength(0);
     expect(
       container.querySelectorAll('.print-sheet__crop-marks line'),
-    ).toHaveLength(720);
+    ).toHaveLength(936);
   });
 });

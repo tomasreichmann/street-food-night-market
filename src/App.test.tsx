@@ -22,7 +22,7 @@ describe('App', () => {
       screen.getByRole('heading', { name: 'Card planning table' }),
     ).toBeInTheDocument();
     expect(screen.getByText('meat: 13')).toBeInTheDocument();
-    expect(screen.getByText('greens: 41')).toBeInTheDocument();
+    expect(screen.getByText('greens: 30')).toBeInTheDocument();
     expect(screen.getAllByText('Festival Judge').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Imperial Tasting Menu').length).toBeGreaterThan(
       0,
@@ -33,17 +33,16 @@ describe('App', () => {
   it('exposes a rules navigation link from the app shell', () => {
     render(<App />);
 
-    expect(screen.getByRole('link', { name: 'Rules' })).toHaveAttribute(
-      'href',
-      '/rules',
-    );
-    expect(screen.getByRole('link', { name: 'Rules Print' })).toHaveAttribute(
-      'href',
-      '/rules-print',
-    );
-    expect(screen.getByRole('link', { name: 'Bonus Tasks' })).toHaveAttribute(
-      'href',
-      '/bonus-tasks',
-    );
+    const navLinks = screen.getAllByRole('link');
+    expect(navLinks.map((link) => link.textContent)).toEqual([
+      'Home',
+      'Rules',
+      'Simulation',
+      'Bonus Tasks',
+      'Print',
+      'Rules Print',
+    ]);
+    expect(navLinks[1]).toHaveAttribute('href', '/rules');
+    expect(navLinks[5]).toHaveAttribute('href', '/rules-print');
   });
 });

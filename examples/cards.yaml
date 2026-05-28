@@ -37,7 +37,7 @@ dishes:
     title: Rice Plate
     tags: [rice, vegetarian]
     cost:
-      greens: 2
+      greens: 1
       fuel: 1
     text: 'Plain, warm, and useful for almost anyone.'
 
@@ -50,7 +50,6 @@ dishes:
     tags: [drink]
     cost:
       greens: 1
-      fuel: 1
     text: 'A calming cup between crowded stalls.'
 
   - id: sake
@@ -98,7 +97,7 @@ dishes:
     tags: [meat]
     cost:
       meat: 1
-      greens: 1
+      fungi: 1
       fuel: 1
     text: 'Small bites with serious staying power.'
 
@@ -133,7 +132,7 @@ dishes:
     title: Oyster Plate
     tags: [seafood, premium]
     cost:
-      sea: 3
+      sea: 2
       fungi: 1
       fuel: 1
     text: 'Briny, bright, and served like a small luxury.'
@@ -146,8 +145,7 @@ dishes:
     title: Curry Bowl
     tags: [rice, meat]
     cost:
-      meat: 1
-      greens: 1
+      meat: 2
       fungi: 1
       fuel: 1
     text: 'Deep flavor for a hungry crowd.'
@@ -174,9 +172,8 @@ dishes:
     title: Deluxe Bao Set
     tags: [meat, premium]
     cost:
-      meat: 1
+      meat: 2
       greens: 1
-      fungi: 1
     text: 'A neat stack that feels like a treat.'
 
   - id: mushroom-hotpot
@@ -214,9 +211,10 @@ dishes:
     title: Royal Seafood Feast
     tags: [seafood, premium]
     cost:
-      sea: 3
+      sea: 2
       greens: 1
       fuel: 1
+      fungi: 1
     text: 'Shells, steam, and a little spectacle.'
 
   - id: dessert-tea-set
@@ -227,7 +225,7 @@ dishes:
     title: Dessert Tea Set
     tags: [sweet, drink, premium]
     cost:
-      greens: 2
+      greens: 1
       fungi: 1
       fuel: 1
     text: 'A calm finish in the middle of the noise.'
@@ -251,7 +249,7 @@ customers:
   - id: salaryman
     type: customer
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Salaryman
     wants:
@@ -265,7 +263,7 @@ customers:
   - id: street-musician
     type: customer
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Street Musician
     wants:
@@ -273,8 +271,8 @@ customers:
       tag: drink
       count: 1
     payout:
-      coins: 5
-    text: 'Serve any Drink dish. Gain 5 coins.'
+      coins: 3
+    text: 'Serve any Drink dish. Gain 3 coins.'
 
   - id: maid-cafe-maid
     type: customer
@@ -286,13 +284,13 @@ customers:
       mode: combo_tags
       tags: [sweet, drink]
     payout:
-      coins: 8
-    text: 'Serve 1 Sweet and 1 Drink. Gain 8 coins.'
+      coins: 6
+    text: 'Serve 1 Sweet and 1 Drink. Gain 6 coins.'
 
   - id: tourist
     type: customer
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Tourist
     wants:
@@ -306,7 +304,7 @@ customers:
   - id: monk
     type: customer
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Monk
     wants:
@@ -328,13 +326,13 @@ customers:
       tags: [meat, noodles]
     payout:
       coins: 14
-    endgameBonus: '+2 coins per kid served'
+    endgameBonus: '+2 coins per Night Market Kid served'
     text: 'Serve 1 Meat and 1 Noodles. Gain 14 coins.'
 
   - id: dockworker
     type: customer
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Dockworker
     wants:
@@ -348,7 +346,7 @@ customers:
   - id: night-market-kid
     type: customer
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Night Market Kid
     wants:
@@ -356,13 +354,13 @@ customers:
       tag: sweet
       count: 1
     payout:
-      coins: 5
-    text: 'Serve any Sweet dish. Gain 5 coins.'
+      coins: 4
+    text: 'Serve any Sweet dish. Gain 4 coins.'
 
   - id: soup-regular
     type: customer
     tier: 1
-    copies: 3
+    copies: 4
     size: standard
     title: Soup Regular
     wants:
@@ -392,20 +390,20 @@ customers:
   - id: food-blogger
     type: customer
     tier: 2
-    copies: 2
+    copies: 3
     size: standard
     title: Food Blogger
     wants:
       mode: variety_tags
       count: 3
     payout:
-      coins: 15
-    text: 'Serve 3 dishes with different types. Gain 15 coins.'
+      coins: 14
+    text: 'Serve 3 dishes with different types. Gain 14 coins.'
 
   - id: temple-caretaker
     type: customer
     tier: 2
-    copies: 2
+    copies: 3
     size: standard
     title: Temple Caretaker
     wants:
@@ -413,21 +411,21 @@ customers:
       tags: [vegetarian, soup]
     payout:
       coins: 14
-    endgameBonus: '+2 coins per monk served'
+    endgameBonus: '+2 coins per served customer with a Greens want'
     text: 'Serve 1 Vegetarian and 1 Soup. Gain 14 coins.'
 
   - id: night-shift-nurse
     type: customer
     tier: 2
-    copies: 2
+    copies: 3
     size: standard
     title: Night Shift Nurse
     wants:
       mode: combo_tags
       tags: [soup, drink]
     payout:
-      coins: 15
-    text: 'Serve 1 Soup and 1 Drink. Gain 15 coins.'
+      coins: 12
+    text: 'Serve 1 Soup and 1 Drink. Gain 12 coins.'
 
   - id: anime-club
     type: customer
@@ -440,15 +438,15 @@ customers:
       tags: [sweet, drink]
       count: 3
     payout:
-      coinsPerServed: 7
-      maxCoins: 21
+      coinsPerServed: 6
+      maxCoins: 18
     endgameBonus: 'counts as 2x male and 2x female customers'
-    text: 'Serve up to 3 Sweet or Drink dishes. Gain 7 coins for each served.'
+    text: 'Serve up to 3 Sweet or Drink dishes. Gain 6 coins for each served.'
 
   - id: seafood-lover
     type: customer
     tier: 2
-    copies: 2
+    copies: 3
     size: standard
     title: Seafood Lover
     wants:
@@ -458,8 +456,8 @@ customers:
     payout:
       coinsPerServed: 7
       maxCoins: 14
-    endgameBonus: '+1 coin per leftover Sea resource'
-    text: 'Serve up to 2 Seafood dishes. Gain 7 coins for each served. End game: +1 coin per leftover Sea resource.'
+    endgameBonus: '+1 coin per leftover Seafood resource'
+    text: 'Serve up to 2 Seafood dishes. Gain 7 coins for each served. End game: +1 coin per leftover Seafood resource.'
 
   - id: business-executive
     type: customer
@@ -472,7 +470,7 @@ customers:
       tags: [premium, noodles, vegetarian]
     payout:
       coins: 32
-    endgameBonus: '+2 coins per Salaryman served'
+    endgameBonus: '+3 coins per different customer tier you served'
     text: 'Serve 1 Premium, 1 Noodles, and 1 Vegetarian. Gain 32 coins.'
 
   - id: celebrity-chef
@@ -499,9 +497,9 @@ customers:
       mode: combo_tags
       tags: [premium, seafood, sweet, drink]
     payout:
-      coins: 37
+      coins: 34
     endgameBonus: '+1 coin per different customer archetype served'
-    text: 'Serve 1 Premium, 1 Seafood, 1 Sweet, and 1 Drink. Gain 37 coins. End game: +1 coin per different customer archetype served.'
+    text: 'Serve 1 Premium, 1 Seafood, 1 Sweet, and 1 Drink. Gain 34 coins. End game: +1 coin per different customer archetype served.'
 
   - id: k-pop-band-female
     type: customer

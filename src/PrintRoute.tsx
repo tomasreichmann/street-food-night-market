@@ -1,5 +1,6 @@
 import { CardPreview } from './components/CardPreview';
 import { PrintCropMarks } from './components/PrintCropMarks';
+import stallTemplate from './assets/stall.png';
 import type { CustomerCard, DishCard, GameContent } from './content/schema';
 
 const CARDS_PER_PAGE = 9;
@@ -21,6 +22,7 @@ const PRINT_CARD_TRIM_WIDTH_MM =
 const PRINT_CARD_TRIM_HEIGHT_MM =
   PRINT_CARD_HEIGHT_MM - PRINT_CARD_TRIM_INSET_MM * 2;
 const PRINT_CARD_CORNER_RADIUS_MM = 0;
+const STALL_SHEET_COUNT = 2;
 
 type PrintableCard =
   | {
@@ -175,6 +177,41 @@ function PrintSheet({
   );
 }
 
+function StallSheet({ index }: { index: number }) {
+  return (
+    <article
+      className="print-sheet print-sheet--stall"
+      data-testid="stall-sheet"
+    >
+      <PrintSheetMarks />
+      <div
+        className="print-sheet__grid"
+        style={{
+          left: `${PRINT_GRID_LEFT_MM}mm`,
+          top: `${PRINT_GRID_TOP_MM}mm`,
+          width: `${PRINT_GRID_WIDTH_MM}mm`,
+          height: `${PRINT_GRID_HEIGHT_MM}mm`,
+          gridTemplateColumns: `repeat(${PRINT_GRID_COLUMNS}, ${PRINT_CARD_WIDTH_MM}mm)`,
+          gridTemplateRows: `repeat(${PRINT_GRID_ROWS}, ${PRINT_CARD_HEIGHT_MM}mm)`,
+        }}
+      >
+        {Array.from({ length: CARDS_PER_PAGE }, (_, cardIndex) => (
+          <div
+            key={`${index}-${cardIndex}`}
+            className="print-sheet__slot print-sheet__slot--stall"
+          >
+            <img
+              className="stall-card"
+              src={stallTemplate}
+              alt="Stall card template"
+            />
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
 export function PrintRoute({ content }: PrintRouteProps) {
   const cards = expandPrintableCards(content);
   const pages = chunkCards(cards, CARDS_PER_PAGE);
@@ -183,6 +220,9 @@ export function PrintRoute({ content }: PrintRouteProps) {
     <div className="print-route">
       {pages.map((pageCards, index) => (
         <PrintSheet key={index} cards={pageCards} dishes={content.dishes} />
+      ))}
+      {Array.from({ length: STALL_SHEET_COUNT }, (_, index) => (
+        <StallSheet key={`stall-${index}`} index={index} />
       ))}
     </div>
   );

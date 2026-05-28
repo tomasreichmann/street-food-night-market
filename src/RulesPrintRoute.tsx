@@ -336,19 +336,19 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
             <p className="eyebrow">Setup</p>
             <h2>At the start of the game, you will get</h2>
           </div>
-          <div className="rules-setup-grid">
-            <div className="rules-setup-panel">
-              <h3>Your starting pieces</h3>
-              <ul className="rules-icon-list">
-                <li>
-                  <span>5 random resources:</span>
-                  <div className="rules-pill-row">
-                    {content.resources.map((resource) => (
-                      <ResourcePill key={resource.id} resource={resource} />
-                    ))}
-                  </div>
-                </li>
-                <li>
+          <div className="rules-setup-panel">
+            <h3>Your starting pieces</h3>
+            <ul className="rules-icon-list">
+              <li>
+                <span>5 random resources:</span>
+                <div className="rules-pill-row">
+                  {content.resources.map((resource) => (
+                    <ResourcePill key={resource.id} resource={resource} />
+                  ))}
+                </div>
+              </li>
+              <li>
+                <div className="rules-pill-row">
                   <ComponentPill
                     iconLabel="Bonus task sheet"
                     iconSrc={cardIcons.customer}
@@ -356,16 +356,25 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
                   >
                     1 bonus task sheet
                   </ComponentPill>
-                </li>
-                <li>
-                  <span>
-                    A stall name if you want one. It is for flavor only.
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="rules-setup-panel">
+                  <ComponentPill
+                    iconLabel="Stall card"
+                    iconSrc={cardIcons.dish}
+                    tone="task"
+                  >
+                    1 stall card
+                  </ComponentPill>
+                </div>
+              </li>
+              <li>
+                <span>
+                  Pick a cool name and customize your stall card to earn extra
+                  coins at the end of the game
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div className="rules-setup-grid">
+            {/* {<div className="rules-setup-panel">
               <h3>The shared market</h3>
               <ul className="rules-icon-list">
                 <li>Put all remaining resources, dishes, and coins nearby.</li>
@@ -378,7 +387,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
                   of the 4 customer stacks are gone.
                 </li>
               </ul>
-            </div>
+            </div>} */}
           </div>
         </section>
       </PrintPage>
@@ -453,6 +462,12 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               <p>
                 You can spend 1 coin to take 1 resource from the supply. Use
                 this when a trade is not available and you need one more token.
+              </p>
+              <p>
+                If you have 8 or more coins after claiming a customer or a
+                trade, you cannot receive any more coins unless you spend some.
+                Claiming another customer when you are at maximum means you get
+                the card, but not the coins.
               </p>
             </ActionCard>
 
@@ -563,6 +578,11 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
             <h2>How the game ends and how points are counted</h2>
           </div>
           <div className="rules-scorebox">
+            <p>The game ends when:</p>
+            <ul className="rules-steps rules-steps--tight">
+              <li>When all customers are claimed.</li>
+              <li>After 60 minutes.</li>
+            </ul>
             <ol className="rules-steps rules-steps--tight">
               <li>Coins earned during play are 1 point each.</li>
               <li>
@@ -570,6 +590,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
                 value.
               </li>
               <li>Every 2 leftover resources score 1 point, rounded down.</li>
+              <li>The coolest stall card gets +10 points.</li>
               <li>
                 Add any endgame bonus points printed on served customer cards.
               </li>
