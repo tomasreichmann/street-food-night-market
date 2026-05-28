@@ -12,6 +12,7 @@ describe('illustration-map', () => {
       'imperial-tasting-menu',
     );
     expect(getDishIllustration('ramen-bowl')).toContain('ramen');
+    expect(getDishIllustration('sake')).toContain('sake');
     expect(getDishIllustration('tea')).toContain('tea');
   });
 

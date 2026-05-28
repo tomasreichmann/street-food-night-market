@@ -37,6 +37,7 @@ type CardFooter =
   | {
       kind: 'cost';
       cost: DishCard['cost'];
+      coinValue?: number;
     }
   | {
       kind: 'customer';
@@ -223,9 +224,11 @@ function CostIconRow({
 function DishTypeColumn({
   icons,
   pictureBrightnessId,
+  topOffset = 0,
 }: {
   icons: string[];
   pictureBrightnessId: string;
+  topOffset?: number;
 }) {
   return (
     <g aria-hidden="true">
@@ -234,7 +237,12 @@ function DishTypeColumn({
           <image
             href={src}
             x={CARD_CUT_X + CARD_CUT_WIDTH - ICON_MARGIN - ICON_SIZE}
-            y={CARD_CUT_Y + ICON_MARGIN + index * (ICON_SIZE + 0.8)}
+            y={
+              CARD_CUT_Y +
+              ICON_MARGIN +
+              topOffset +
+              index * (ICON_SIZE + 0.8)
+            }
             width={ICON_SIZE}
             height={ICON_SIZE}
             filter="url(#card-icon-outline)"
@@ -248,9 +256,11 @@ function DishTypeColumn({
 function TopRightCoinAmount({
   payoutDisplay,
   pictureBrightnessId,
+  valueDataPart = 'coin-amount',
 }: {
   payoutDisplay: PayoutDisplay;
   pictureBrightnessId: string;
+  valueDataPart?: string;
 }) {
   const startY = CARD_CUT_Y + ICON_MARGIN - 0.05;
   const iconX = CARD_CUT_X + CARD_CUT_WIDTH - ICON_MARGIN - COIN_ICON_SIZE;
@@ -279,7 +289,7 @@ function TopRightCoinAmount({
       {payoutDisplay.lines.map((line, index) => (
         <text
           key={`${line}-${index}`}
-          data-card-part="coin-amount"
+          data-card-part={valueDataPart}
           x={textX}
           y={firstLineY + index * lineHeight}
           fill="#fffaf3"
@@ -746,6 +756,9 @@ export function CardSvgFrame({
           <DishTypeColumn
             icons={tagIcons}
             pictureBrightnessId={pictureBrightnessId}
+            topOffset={
+              footer.kind === 'cost' && footer.coinValue ? ICON_SIZE + 0.8 : 0
+            }
           />
         ) : null}
         {kind === 'customer' &&
@@ -776,6 +789,18 @@ export function CardSvgFrame({
               }
             }
             pictureBrightnessId={pictureBrightnessId}
+          />
+        ) : null}
+        {kind === 'dish' &&
+        footer.kind === 'cost' &&
+        footer.coinValue !== undefined ? (
+          <TopRightCoinAmount
+            payoutDisplay={{
+              lines: [`${footer.coinValue}`],
+              ariaLabel: `${footer.coinValue} coins at end game`,
+            }}
+            pictureBrightnessId={pictureBrightnessId}
+            valueDataPart="dish-endgame-coin-value"
           />
         ) : null}
         {kind === 'dish' && footer.kind === 'cost' ? (

@@ -75,6 +75,89 @@ function getTopCustomers(state: SimulationState) {
   }));
 }
 
+function serializeCountMap(
+  counts: CountMap,
+  orderedIds: string[],
+  labelById: Map<string, string>,
+): SerializedCountEntry[] {
+  return orderedIds
+    .map((id) => ({
+      id,
+      label: labelById.get(id) ?? id,
+      count: counts[id] ?? 0,
+    }))
+    .filter((entry) => entry.count > 0);
+}
+
+function buildSimulationExportPayload({
+  content,
+  state,
+  resourceIds,
+  resourceLabels,
+  dishIds,
+  dishLabels,
+  customerLabels,
+  scoreRows,
+}: {
+  content: GameContent;
+  state: SimulationState;
+  resourceIds: string[];
+  resourceLabels: Map<string, string>;
+  dishIds: string[];
+  dishLabels: Map<string, string>;
+  customerLabels: Map<string, string>;
+  scoreRows: DisplayScoreRow[];
+}): SimulationExportPayload {
+  return {
+    schemaVersion: 1,
+    round: state.round,
+    config: state.config,
+    bonusTasksRemaining: state.bonusTasksRemaining,
+    resources: serializeCountMap(
+      state.resourceSupply,
+      resourceIds,
+      resourceLabels,
+    ),
+    dishes: serializeCountMap(state.dishSupply, dishIds, dishLabels),
+    customers: content.customers.map((customer) => ({
+      id: customer.id,
+      title: customer.title,
+      tier: customer.tier,
+    })),
+    roundStartResourceSupply: Object.entries(state.roundStartResourceSupply)
+      .map(([round, counts]) => ({
+        round: Number.parseInt(round, 10),
+        resources: serializeCountMap(counts, resourceIds, resourceLabels),
+      }))
+      .sort((first, second) => first.round - second.round),
+    players: state.players.map((player) => ({
+      id: player.id,
+      coins: player.coins,
+      resources: serializeCountMap(player.resources, resourceIds, resourceLabels),
+      meals: serializeCountMap(player.meals, dishIds, dishLabels),
+      claimedCustomers: player.claimedCustomers.map((customerId) => ({
+        id: customerId,
+        title: customerLabels.get(customerId) ?? customerId,
+      })),
+      bonusTasksRemaining: player.bonusTasksRemaining,
+      score:
+        scoreRows.find((row) => row.player.id === player.id)?.score ??
+        calculatePlayerScoreBreakdown(content, player),
+    })),
+    logRows: state.logRows.map((row) => ({
+      round: row.round,
+      playerId: row.playerId,
+      action: row.action,
+      mealsMade: row.mealsMade,
+      customersClaimed: row.customersClaimed,
+      coins: row.coins,
+      resources: serializeCountMap(row.resources, resourceIds, resourceLabels),
+      meals: serializeCountMap(row.meals, dishIds, dishLabels),
+      notes: row.notes,
+    })),
+  };
+}
+
 type DisplayRoundLogRow = RoundLogRow & {
   resourcesLabel: string;
   mealsLabel: string;
@@ -87,6 +170,53 @@ type DisplayScoreRow = {
   resourcesLabel: string;
   mealsLabel: string;
   score: ReturnType<typeof calculatePlayerScoreBreakdown>;
+};
+
+type SerializedCountEntry = {
+  id: string;
+  label: string;
+  count: number;
+};
+
+type SimulationExportPayload = {
+  schemaVersion: 1;
+  round: number;
+  config: GameConfig;
+  bonusTasksRemaining: number;
+  resources: SerializedCountEntry[];
+  dishes: SerializedCountEntry[];
+  customers: Array<{
+    id: string;
+    title: string;
+    tier: number;
+  }>;
+  roundStartResourceSupply: Array<{
+    round: number;
+    resources: SerializedCountEntry[];
+  }>;
+  players: Array<{
+    id: string;
+    coins: number;
+    resources: SerializedCountEntry[];
+    meals: SerializedCountEntry[];
+    claimedCustomers: Array<{
+      id: string;
+      title: string;
+    }>;
+    bonusTasksRemaining: number;
+    score: ReturnType<typeof calculatePlayerScoreBreakdown>;
+  }>;
+  logRows: Array<{
+    round: number;
+    playerId: string;
+    action: SimulationState['logRows'][number]['action'];
+    mealsMade: string[];
+    customersClaimed: string[];
+    coins: number;
+    resources: SerializedCountEntry[];
+    meals: SerializedCountEntry[];
+    notes: string[];
+  }>;
 };
 
 function renderRoundRows(
@@ -201,6 +331,9 @@ export function SimulationRoute({
       score: calculatePlayerScoreBreakdown(content, player),
     }),
   );
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>(
+    'idle',
+  );
 
   function updateConfigField(
     field: Exclude<keyof GameConfig, 'resourceSupply'>,
@@ -228,6 +361,26 @@ export function SimulationRoute({
 
   function nextRound() {
     setSimulationState((current) => simulateNextRound(current));
+  }
+
+  async function copySimulationData() {
+    const payload = buildSimulationExportPayload({
+      content,
+      state: simulationState,
+      resourceIds,
+      resourceLabels,
+      dishIds,
+      dishLabels,
+      customerLabels,
+      scoreRows,
+    });
+
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+      setCopyStatus('copied');
+    } catch {
+      setCopyStatus('error');
+    }
   }
 
   return (
@@ -377,7 +530,17 @@ export function SimulationRoute({
           <button type="button" className="button-primary" onClick={nextRound}>
             Next Round
           </button>
+          <button type="button" onClick={copySimulationData}>
+            Copy data
+          </button>
         </div>
+        <p className="simulation-copy-status" aria-live="polite">
+          {copyStatus === 'copied'
+            ? 'Copied JSON to clipboard.'
+            : copyStatus === 'error'
+              ? 'Clipboard copy failed.'
+              : null}
+        </p>
       </section>
 
       <section className="content-section simulation-score-section">

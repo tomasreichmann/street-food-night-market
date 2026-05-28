@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 
 function renderAtSimulationRoute() {
@@ -99,5 +99,45 @@ describe('Simulation route', () => {
 
     expect(screen.queryAllByTestId('simulation-player-row')).toHaveLength(0);
     expect(screen.getByText('Current round 0')).toBeInTheDocument();
+  });
+
+  it('copies the current simulation results as JSON', async () => {
+    renderAtSimulationRoute();
+
+    fireEvent.change(screen.getByLabelText('Players'), {
+      target: { value: '2' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
+    clickNextRound();
+
+    const writeText = vi.fn().mockResolvedValue(undefined);
+
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Copy data' }));
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+
+    const copiedText = writeText.mock.calls[0]?.[0];
+
+    expect(typeof copiedText).toBe('string');
+
+    const copied = JSON.parse(copiedText as string) as {
+      schemaVersion: number;
+      round: number;
+      players: Array<{ id: string; score: { total: number } }>;
+      logRows: Array<{ round: number }>;
+    };
+
+    expect(copied.schemaVersion).toBe(1);
+    expect(copied.round).toBe(1);
+    expect(copied.players).toHaveLength(2);
+    expect(copied.players[0]?.id).toBe('Player 1');
+    expect(copied.players[0]?.score.total).toEqual(expect.any(Number));
+    expect(copied.logRows).toHaveLength(2);
+    expect(copied.logRows[0]?.round).toBe(1);
   });
 });

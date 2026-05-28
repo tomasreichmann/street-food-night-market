@@ -31,6 +31,7 @@ import ricePlateIllustration from './illustrations/dishes/rice-plate.png';
 import royalSeafoodFeastIllustration from './illustrations/dishes/royal-seafood-feast.png';
 import seafoodNoodlesIllustration from './illustrations/dishes/seafood-noodles.png';
 import sashimiIllustration from './illustrations/dishes/sashimi.png';
+import sakeIllustration from './illustrations/dishes/sake.png';
 import oysterPlateIllustration from './illustrations/dishes/oyster-plate.png';
 
 import sushiPlatterIllustration from './illustrations/dishes/sushi-platter.png';
@@ -51,6 +52,7 @@ const dishIllustrations: Record<string, string> = {
   'royal-seafood-feast': royalSeafoodFeastIllustration,
   'seafood-noodles': seafoodNoodlesIllustration,
   sashimi: sashimiIllustration,
+  sake: sakeIllustration,
   'oyster-plate': oysterPlateIllustration,
   'sushi-platter': sushiPlatterIllustration,
   'sweet-bun': sweetBunIllustration,

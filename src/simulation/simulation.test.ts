@@ -225,7 +225,7 @@ describe('simulateNextRound', () => {
     );
   });
 
-  it('does not allow more bonus task actions than the shared bonus task pool', () => {
+  it('allows each player to complete bonus tasks up to their own limit', () => {
     const started = restartSimulation(
       content,
       {
@@ -236,9 +236,9 @@ describe('simulateNextRound', () => {
       },
       () => 0,
     );
+    expect(started.bonusTasksRemaining).toBe(2);
     const state: SimulationState = {
       ...started,
-      bonusTasksRemaining: 1,
       players: started.players.map((player) => ({
         ...player,
         resources: {},
@@ -251,7 +251,9 @@ describe('simulateNextRound', () => {
 
     expect(next.logRows).toHaveLength(2);
     expect(next.logRows[0]?.action).toBe('Completed bonus task');
-    expect(next.logRows[1]?.action).not.toBe('Completed bonus task');
+    expect(next.logRows[1]?.action).toBe('Completed bonus task');
+    expect(next.players[0]?.bonusTasksRemaining).toBe(0);
+    expect(next.players[1]?.bonusTasksRemaining).toBe(0);
     expect(next.bonusTasksRemaining).toBe(0);
   });
 

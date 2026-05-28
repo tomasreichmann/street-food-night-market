@@ -10,6 +10,7 @@ import {
 } from '../assets/illustration-map';
 import { CardSvgFrame } from './CardSvgFrame';
 import { getCustomerRequirementVisuals } from './customerRequirementVisuals';
+import { getDishEndgameCoinValue } from '../content/dishValue';
 import type {
   CustomerCard,
   DishCard,
@@ -121,7 +122,11 @@ function DishCardPreview({
         artIconSrc={cardIcons.dish}
         artSrc={getDishIllustration(item.id)}
         cornerRadius={cornerRadius}
-        footer={{ kind: 'cost', cost: item.cost }}
+        footer={{
+          kind: 'cost',
+          cost: item.cost,
+          coinValue: getDishEndgameCoinValue(item),
+        }}
         kind="dish"
         tagIcons={getDishTagIcons(item.tags)}
         title={item.title}

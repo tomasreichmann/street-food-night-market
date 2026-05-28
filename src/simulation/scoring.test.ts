@@ -29,10 +29,10 @@ describe('calculatePlayerScoreBreakdown', () => {
 
     expect(calculatePlayerScoreBreakdown(content, player)).toEqual({
       coins: 10,
-      dishBonus: 11,
+      dishBonus: 19,
       resourceBonus: 2,
       endgameBonus: 17,
-      total: 40,
+      total: 48,
       endgameBonusBreakdown: [
         {
           customerId: 'seafood-lover',

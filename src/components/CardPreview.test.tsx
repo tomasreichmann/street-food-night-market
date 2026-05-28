@@ -49,6 +49,17 @@ function customer(overrides: Partial<CustomerCard>): CustomerCard {
 }
 
 describe('CardPreview', () => {
+  it('renders a computed dish endgame coin value', () => {
+    const { container, getByText } = render(
+      <CardPreview kind="dish" item={dishes[0]} />,
+    );
+
+    expect(getByText('2')).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-card-part="dish-endgame-coin-value"]'),
+    ).toBeInTheDocument();
+  });
+
   it('renders customer tag wants as icons with count markers instead of names', () => {
     const { container } = render(
       <CardPreview kind="customer" item={customer({})} dishes={dishes} />,

@@ -37,6 +37,10 @@ describe('App', () => {
       'href',
       '/rules',
     );
+    expect(screen.getByRole('link', { name: 'Rules Print' })).toHaveAttribute(
+      'href',
+      '/rules-print',
+    );
     expect(screen.getByRole('link', { name: 'Bonus Tasks' })).toHaveAttribute(
       'href',
       '/bonus-tasks',

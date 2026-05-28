@@ -1,3 +1,4 @@
+import { getDishEndgameCoinValue } from '../content/dishValue';
 import type { GameContent } from '../content/schema';
 import type { PlayerState } from './simulation';
 
@@ -35,12 +36,9 @@ const MALE_CUSTOMER_IDS = new Set([
   'street-musician',
 ]);
 
-function getDishCostTotalById(content: GameContent) {
+function getDishEndgameCoinValueById(content: GameContent) {
   return new Map(
-    content.dishes.map((dish) => [
-      dish.id,
-      Object.values(dish.cost).reduce((total, amount) => total + amount, 0),
-    ]),
+    content.dishes.map((dish) => [dish.id, getDishEndgameCoinValue(dish)]),
   );
 }
 
@@ -195,10 +193,11 @@ export function calculatePlayerScoreBreakdown(
   content: GameContent,
   player: PlayerState,
 ): PlayerScoreBreakdown {
-  const dishCostById = getDishCostTotalById(content);
+  const dishValueById = getDishEndgameCoinValueById(content);
   const customerById = getCustomerById(content);
   const dishBonus = Object.entries(player.meals).reduce(
-    (total, [dishId, count]) => total + (dishCostById.get(dishId) ?? 0) * count,
+    (total, [dishId, count]) =>
+      total + (dishValueById.get(dishId) ?? 0) * count,
     0,
   );
   const resourceBonus = Math.floor(getTotalResourceCount(content, player) / 2);

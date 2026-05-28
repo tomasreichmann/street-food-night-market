@@ -31,9 +31,12 @@ describe('Print route', () => {
     const { container } = renderAtPrintRoute();
 
     expect(container.querySelectorAll('.print-sheet__marks')).toHaveLength(10);
+    expect(container.querySelector('.print-sheet__marks')).toHaveStyle({
+      zIndex: '0',
+    });
     expect(
       container.querySelector('.print-sheet__crop-marks line'),
-    ).toHaveAttribute('y1', '9.5');
+    ).toHaveAttribute('y1', '6.5');
     expect(
       container.querySelectorAll('.print-sheet__registration-marks line'),
     ).toHaveLength(0);

@@ -856,7 +856,7 @@ export function restartSimulation(
     resourceSupply,
     dishSupply: buildDishSupply(content),
     customerDecks: buildCustomerDecks(content, config.customerDeckCount, rng),
-    bonusTasksRemaining: config.bonusTaskCount,
+    bonusTasksRemaining: config.bonusTaskCount * config.playerCount,
     logRows: [],
     roundStartResourceSupply: {},
   };

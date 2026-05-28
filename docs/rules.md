@@ -1,98 +1,92 @@
 # Street Food Night Market Rules
 
-## Welcome
+## Goal
 
-Welcome to Street Food Night Market. You are running a small food stall in a busy night market. You will trade, cook, serve customers, and try to finish with the best score.
+You run a food stall. Turn resources into dishes, spend those dishes to claim customers, and finish with the most points.
 
-The game is social on purpose. You can move around, talk, trade, and keep the market lively.
+The game is social on purpose. Move around, talk, trade resources, dishes, and coins, and watch the visible customer stacks before someone else serves them.
 
-## What You Need
+## At the start of the game, you will get
 
-- 15 to 20 players
-- About 60 minutes
-- Resource tokens
-- Dish cards
-- Customer stacks
-- Coin tokens or a score sheet
-- Bonus task sheets
+- 5 random resources: Seafood, Greens, Fuel, Umami, and Meat are the resource types.
+- 1 bonus task sheet.
+- A stall name if you want one. It is for flavor only.
 
-## Setup
+The shared market has the remaining resources, dish cards, coin supply, and 4 visible customer stacks.
 
-1. Give each player 5 random resource tokens.
-2. Give each player a bonus task sheet.
-3. Put the remaining resources, dishes, and coins in their supply piles.
-4. Shuffle the customer deck.
-5. Reveal 4 customer stacks.
-6. Put the market where everyone can reach it.
+## What you can do
 
-## Player Actions
+### Cook a dish
 
-During the game, you can do any of these things:
+Spend the resource icons printed at the bottom of a dish card. Take that dish. The spent resources go back to the supply.
 
-### Exchange resources for dishes
+Example: Spend Greens + Umami + Fuel to take Ramen Bowl.
 
-Spend the listed resources to take a dish. The spent resources go back to the supply.
+### Serve a customer
 
-### Exchange dishes for customers
+Spend dishes that match the customer's wants icons. Put those dishes back in the dish supply, then take the printed coins.
 
-Spend the dishes a customer asks for. Those dishes go back to the supply. Then take the printed coins from the supply.
+Example: Serve Sushi Platter or Sashimi to Seafood Lover. Gain 7 coins per served dish.
 
-Customer wants can mean different things:
+### Buy a resource
 
-- `type + type` means the customer wants both types.
-- `type / type` means the customer wants one of the listed types.
-- `1-2 type` means the customer wants between 1 and 2 of that type.
-- `dish =/= dish` means the customer wants one dish that is not the other named dish.
+Spend 1 coin to take 1 resource from the supply.
 
-### Exchange coins for resources
+### Trade with players
 
-You may buy resources from the supply at 1 coin for 1 resource.
+Trade resources, coins, and dishes in any deal both players accept. Customers are claimed points, so customers are not traded.
 
-### Trade with other players
+### Complete a bonus task
 
-You may trade resources, coins, and dishes in any way you want. Do not trade customers.
+When you complete a task with another player, get their signature, cross off the task, and take 3 resources of your choice from the supply. Each task can only be completed once.
 
-### Complete bonus tasks
+## How to read customer wants
 
-If you finish a bonus task, get a signature from the person you completed it with. Then take 3 resources of your choice from the supply. Each task can only be completed once.
+- Any Rice: serve one dish with the Rice type.
+- Sweet + Drink: serve one Sweet dish and one Drink dish.
+- 2-5 Meat / Rice: serve between 2 and 5 dishes. Each served dish must be Meat or Rice.
+- 3 different dish types: serve 3 separate dishes. Even if one dish shows more than one matching type, it still only counts once.
+- Premium + Noodles + Vegetarian: serve dishes that cover all three listed types.
 
-## Serving Customers
+A dish can only be spent once when serving a customer.
 
-To serve a customer, spend the dishes that customer wants. The dishes go back to the supply and you take the customer’s coins from the supply.
-
-Keep the served customer card in front of you. Some customers may have an end game bonus printed on the card.
-
-## End of the Game
+## End of the game
 
 The game ends when either of these happens:
 
 - 60 minutes pass
 - 3 of the 4 customer stacks are gone
 
-## Final Scoring
+## Final scoring
 
 Count your points at the end:
 
 - Coins earned during the game are 1 point each.
-- Each unspent dish is worth points equal to its printed resource cost.
+- Each unspent dish is worth points equal to its printed coin value.
 - Every 2 leftover resources score 1 point, rounded down.
-- Add any end game bonus points printed on served customer cards.
+- Add any endgame bonus points printed on served customer cards.
 
-The player with the most points wins.
-
-Tie breakers, in order:
+Tiebreakers, in order:
 
 1. Most served customers
 2. Most leftover dishes
 3. Most leftover resources
 4. Shared victory
 
-## Card Reading Guide
+## Card legend
+
+The numbered markers on the sample cards match the descriptions below.
 
 ### Dish cards
 
-The title tells you the dish name. The artwork helps you spot it quickly. The type icons show what kind of customer it can satisfy. The cost shows the resources you spend to get it. The short text is a reminder of what the dish does.
+1. Dish title: the name players use when trading or serving.
+2. Printed coin value: the endgame value if this dish is still unspent.
+3. Type icons: the customer wants this dish can satisfy.
+4. Resource cost: what you spend from your hand to cook this dish.
 
 ### Customer cards
 
-The title tells you who wants the food. The stars show how demanding the customer is. The requirement row shows what you must spend. The payout shows the coins you take from the supply. Any end game bonus only scores after the customer has been served. The short text is the plain-language reminder of the customer’s wants.
+1. Tier stars: how demanding the customer is.
+2. Customer wants: the dishes you must spend to claim this customer.
+3. Payout: the coins you take immediately after serving.
+4. Endgame bonus area: scores only if you served that customer.

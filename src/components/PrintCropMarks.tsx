@@ -1,4 +1,4 @@
-const DEFAULT_CROP_MARK_LENGTH_MM = 1;
+const DEFAULT_CROP_MARK_LENGTH_MM = 4;
 
 export type PrintCropMarkRect = {
   bottom: number;
@@ -45,6 +45,7 @@ export function PrintCropMarks({
       className="print-sheet__marks"
       viewBox={`0 0 ${pageWidthMm} ${pageHeightMm}`}
       preserveAspectRatio="none"
+      style={{ zIndex: 0 }}
       aria-hidden="true"
     >
       <g

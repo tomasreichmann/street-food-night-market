@@ -1,10 +1,23 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import {
+  cardIcons,
+  coinIconSrc,
+  dishTypeIcons,
+  resourceIcons,
+} from './assets/icon-map';
 import { CardPreview } from './components/CardPreview';
-import type { GameContent } from './content/schema';
+import type {
+  CustomerCard,
+  DishCard,
+  GameContent,
+  ResourceDefinition,
+} from './content/schema';
 
 type RulesRouteProps = {
   content: GameContent;
 };
+
+type ComponentPillTone = 'coin' | 'customer' | 'dish' | 'resource' | 'task';
 
 function RulesSection({
   eyebrow,
@@ -19,7 +32,7 @@ function RulesSection({
 }) {
   return (
     <section className="rules-section" data-testid={testId}>
-      <div className="section-heading">
+      <div className="section-heading section-heading--rules">
         <p className="eyebrow">{eyebrow}</p>
         <h2>{heading}</h2>
       </div>
@@ -28,66 +41,268 @@ function RulesSection({
   );
 }
 
-function CalloutList({
-  items,
+function findById<T extends { id: string }>(
+  items: T[],
+  id: string,
+  fallbackIndex = 0,
+) {
+  return items.find((item) => item.id === id) ?? items[fallbackIndex];
+}
+
+function RulesIcon({ label, src }: { label: string; src: string }) {
+  return <img className="rules-icon" src={src} alt={label} />;
+}
+
+function ComponentPill({
+  children,
+  iconLabel,
+  iconSrc,
+  tone,
 }: {
-  items: Array<{ title: string; text: string }>;
+  children: ReactNode;
+  iconLabel: string;
+  iconSrc: string;
+  tone: ComponentPillTone;
 }) {
   return (
-    <dl className="rules-callout-list">
-      {items.map((item) => (
-        <div key={item.title} className="rules-callout-item">
-          <dt>{item.title}</dt>
-          <dd>{item.text}</dd>
-        </div>
-      ))}
-    </dl>
+    <span className={`rules-pill rules-pill--${tone}`}>
+      <RulesIcon src={iconSrc} label={iconLabel} />
+      <span>{children}</span>
+    </span>
   );
 }
 
-function SampleCardAnatomy({
+function ResourcePill({ resource }: { resource: ResourceDefinition }) {
+  return (
+    <ComponentPill
+      iconLabel={`${resource.label} resource`}
+      iconSrc={resourceIcons[resource.id as keyof typeof resourceIcons]}
+      tone="resource"
+    >
+      {resource.label}
+    </ComponentPill>
+  );
+}
+
+function DishPill({ dish }: { dish: DishCard }) {
+  return (
+    <ComponentPill iconLabel="Dish card" iconSrc={cardIcons.dish} tone="dish">
+      {dish.title}
+    </ComponentPill>
+  );
+}
+
+function CoinPill({ children }: { children: ReactNode }) {
+  return (
+    <ComponentPill iconLabel="Coins" iconSrc={coinIconSrc} tone="coin">
+      {children}
+    </ComponentPill>
+  );
+}
+
+function ActionCard({
+  children,
+  iconLabel,
+  iconSrc,
   title,
-  card,
-  items,
-  kind,
 }: {
+  children: ReactNode;
+  iconLabel: string;
+  iconSrc: string;
   title: string;
-  card: ReactNode;
-  items: Array<{ title: string; text: string }>;
-  kind: 'dish' | 'customer';
 }) {
   return (
-    <article className={`rules-anatomy-card rules-anatomy-card--${kind}`}>
-      <div className="rules-anatomy-card__preview">{card}</div>
-      <div className="rules-anatomy-card__content">
-        <p className="eyebrow">{title}</p>
-        <CalloutList items={items} />
+    <article className="rules-action-card">
+      <div className="rules-action-card__header">
+        <RulesIcon src={iconSrc} label={iconLabel} />
+        <h3>{title}</h3>
+      </div>
+      {children}
+    </article>
+  );
+}
+
+function ActionExample({
+  from,
+  label,
+  to,
+}: {
+  from: ReactNode;
+  label: string;
+  to: ReactNode;
+}) {
+  return (
+    <div className="rules-example-strip">
+      <span className="rules-example-strip__label">{label}</span>
+      <div className="rules-example-strip__flow">
+        <div>{from}</div>
+        <strong aria-hidden="true">-&gt;</strong>
+        <div>{to}</div>
+      </div>
+    </div>
+  );
+}
+
+function TypeIconPill({ label, tag }: { label: string; tag: string }) {
+  return (
+    <ComponentPill
+      iconLabel={`${label} type`}
+      iconSrc={dishTypeIcons[tag as keyof typeof dishTypeIcons]}
+      tone="dish"
+    >
+      {label}
+    </ComponentPill>
+  );
+}
+
+function WantsExampleCard({
+  customer,
+  description,
+  dishes,
+  wantsText,
+}: {
+  customer: CustomerCard;
+  description: string;
+  dishes: DishCard[];
+  wantsText: string;
+}) {
+  return (
+    <article className="rules-wants-card">
+      <div className="rules-wants-card__preview">
+        <CardPreview
+          kind="customer"
+          item={customer}
+          dishes={dishes}
+          cornerRadius={0}
+        />
+      </div>
+      <div className="rules-wants-card__copy">
+        <p className="eyebrow">{customer.title}</p>
+        <h3>{wantsText}</h3>
+        <p>{description}</p>
       </div>
     </article>
   );
 }
 
-export function RulesRoute({ content }: RulesRouteProps) {
-  const featuredDish =
-    content.dishes.find((dish) => dish.id === 'ramen-bowl') ??
-    content.dishes[0];
-  const featuredCustomer =
-    content.customers.find((customer) => customer.id === 'seafood-lover') ??
-    content.customers[0];
+function LegendItem({
+  index,
+  text,
+  title,
+}: {
+  index: number;
+  text: string;
+  title: string;
+}) {
+  return (
+    <li className="rules-legend-item">
+      <strong>{index}</strong>
+      <span>
+        <b>{title}</b>
+        {text}
+      </span>
+    </li>
+  );
+}
 
-  if (!featuredDish || !featuredCustomer) {
+type CardLegendMarker = {
+  label: string;
+  style: CSSProperties;
+};
+
+function CardLegend({
+  card,
+  items,
+  kind,
+  markers,
+  title,
+}: {
+  card: ReactNode;
+  items: Array<{ title: string; text: string }>;
+  kind: 'customer' | 'dish';
+  markers: CardLegendMarker[];
+  title: string;
+}) {
+  return (
+    <article className={`rules-card-legend rules-card-legend--${kind}`}>
+      <div className="rules-card-legend__preview">
+        <p className="eyebrow">{title}</p>
+        <div className="rules-card-legend__stage">
+          {card}
+          {markers.map((marker, index) => (
+            <span
+              key={marker.label}
+              aria-hidden="true"
+              className="rules-card-legend__marker"
+              data-testid={`rules-card-legend-marker-${kind}-${index + 1}`}
+              style={marker.style}
+            >
+              {index + 1}
+            </span>
+          ))}
+        </div>
+      </div>
+      <ol className="rules-legend-list">
+        {items.map((item, index) => (
+          <LegendItem
+            key={item.title}
+            index={index + 1}
+            title={item.title}
+            text={item.text}
+          />
+        ))}
+      </ol>
+    </article>
+  );
+}
+
+export function RulesRoute({ content }: RulesRouteProps) {
+  const resourcesById = new Map(
+    content.resources.map((resource) => [resource.id, resource]),
+  );
+  const greens = resourcesById.get('greens') ?? content.resources[0];
+  const umami = resourcesById.get('fungi') ?? content.resources[1];
+  const fuel = resourcesById.get('fuel') ?? content.resources[2];
+  const seafood = resourcesById.get('sea') ?? content.resources[3];
+  const meat = resourcesById.get('meat') ?? content.resources[4];
+  const ramen = findById(content.dishes, 'ramen-bowl');
+  const sushi = findById(content.dishes, 'sushi-platter');
+  const sashimi = findById(content.dishes, 'sashimi');
+  const featuredCustomer = findById(content.customers, 'seafood-lover');
+  const salaryman = findById(content.customers, 'salaryman');
+  const maidCafeMaid = findById(content.customers, 'maid-cafe-maid');
+  const sumoWrestler = findById(content.customers, 'sumo-wrestler');
+  const foodBlogger = findById(content.customers, 'food-blogger');
+  const businessExecutive = findById(content.customers, 'business-executive');
+
+  if (
+    !greens ||
+    !umami ||
+    !fuel ||
+    !seafood ||
+    !meat ||
+    !ramen ||
+    !sushi ||
+    !sashimi ||
+    !featuredCustomer ||
+    !salaryman ||
+    !maidCafeMaid ||
+    !sumoWrestler ||
+    !foodBlogger ||
+    !businessExecutive
+  ) {
     return null;
   }
 
   return (
     <div className="rules-route">
-      <section className="hero rules-hero">
+      <section className="hero rules-hero rules-hero--web">
         <div className="hero__intro">
-          <p className="eyebrow">Printable rules handout</p>
+          <p className="eyebrow">Birthday night market rules</p>
           <h1>Street Food Night Market</h1>
           <p className="hero-copy">
-            Welcome to the market. You will trade, cook, serve, and race to the
-            best score in 60 minutes or before the customer stacks disappear.
+            Move around the room, trade with other players, cook dishes, and
+            serve visible customers before the market closes.
           </p>
         </div>
 
@@ -101,82 +316,236 @@ export function RulesRoute({ content }: RulesRouteProps) {
             <strong>60 min</strong>
           </div>
           <div className="rules-hero__stat">
-            <span>Goal</span>
+            <span>Win</span>
             <strong>Most points</strong>
           </div>
         </div>
       </section>
 
-      <RulesSection eyebrow="Overview" heading="How to play">
-        <div className="rules-text-grid">
+      <RulesSection eyebrow="Goal" heading="What you are trying to do">
+        <div className="rules-lead-grid">
           <p>
-            Each of you runs a small food stall in a busy night market. You get
-            resources, make dishes, trade with each other, and try to serve the
-            customers before someone else does.
+            You run a food stall. Your job is to turn resources into dishes,
+            spend those dishes to claim customers, and finish with the most
+            points.
           </p>
           <p>
-            Keep the game social. Move around, make deals, and use the visible
-            customer stacks as your shared race track.
+            Most of the game happens through talking: trade resources, dishes,
+            and coins with other players. Customers stay in front of the market;
+            you never trade customers.
           </p>
         </div>
       </RulesSection>
 
-      <RulesSection eyebrow="Setup" heading="Get ready to play">
-        <ol className="rules-steps">
-          <li>Give each player 5 random resources.</li>
-          <li>Give each player a sheet with bonus tasks.</li>
-          <li>
-            Put the rest of the resources, dishes, and coins in their supply
-            piles.
-          </li>
-          <li>Shuffle the customer deck and reveal 4 customer stacks.</li>
-          <li>Put the market where everyone can reach it.</li>
-          <li>
-            If you want a shorter or easier first game, keep the same setup and
-            just stop when time is up.
-          </li>
-        </ol>
+      <RulesSection
+        eyebrow="Setup"
+        heading="At the start of the game, you will get"
+        testId="rules-setup"
+      >
+        <div className="rules-setup-grid">
+          <div className="rules-setup-panel">
+            <h3>Your starting pieces</h3>
+            <ul className="rules-icon-list">
+              <li>
+                <span>5 random resources:</span>
+                <div className="rules-pill-row">
+                  {content.resources.map((resource) => (
+                    <ResourcePill key={resource.id} resource={resource} />
+                  ))}
+                </div>
+              </li>
+              <li>
+                <ComponentPill
+                  iconLabel="Bonus task sheet"
+                  iconSrc={cardIcons.customer}
+                  tone="task"
+                >
+                  1 bonus task sheet
+                </ComponentPill>
+              </li>
+              <li>
+                <span>
+                  A stall name if you want one. It is for flavor only.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="rules-setup-panel">
+            <h3>The shared market</h3>
+            <ul className="rules-icon-list">
+              <li>Put all remaining resources, dishes, and coins nearby.</li>
+              <li>
+                Shuffle customers and reveal 4 visible customer stacks where
+                everyone can reach them.
+              </li>
+              <li>
+                Start the timer. The market closes after 60 minutes, or when 3
+                of the 4 customer stacks are gone.
+              </li>
+            </ul>
+          </div>
+        </div>
       </RulesSection>
 
       <RulesSection eyebrow="Actions" heading="What you can do">
-        <div className="rules-flow">
-          <article>
-            <h3>Exchange resources for dishes</h3>
+        <div className="rules-action-grid">
+          <ActionCard
+            iconLabel="Dish card"
+            iconSrc={cardIcons.dish}
+            title="Cook a dish"
+          >
             <p>
-              Spend the listed resources to take that dish. The spent resources
-              go back to the supply.
+              Spend the resource icons printed at the bottom of a dish card.
+              Take that dish. The spent resources go back to the supply.
             </p>
-          </article>
-          <article>
-            <h3>Exchange dishes for customers</h3>
+            <ActionExample
+              label="Example"
+              from={
+                <>
+                  <ResourcePill resource={greens} />
+                  <ResourcePill resource={umami} />
+                  <ResourcePill resource={fuel} />
+                </>
+              }
+              to={<DishPill dish={ramen} />}
+            />
+          </ActionCard>
+
+          <ActionCard
+            iconLabel="Customer card"
+            iconSrc={cardIcons.customer}
+            title="Serve a customer"
+          >
             <p>
-              Spend the dishes a customer asks for. The dishes go back to the
-              supply, and you take coins from the supply based on that
-              customer&apos;s reward.
+              Spend dishes that match the customer wants icons. Put those dishes
+              back in the dish supply, then take the printed coins.
             </p>
-          </article>
-          <article>
-            <h3>Exchange coins for resources</h3>
+            <ActionExample
+              label="Example"
+              from={
+                <>
+                  <DishPill dish={sushi} />
+                  <span className="rules-example-word">or</span>
+                  <DishPill dish={sashimi} />
+                </>
+              }
+              to={
+                <>
+                  <ComponentPill
+                    iconLabel="Customer card"
+                    iconSrc={cardIcons.customer}
+                    tone="customer"
+                  >
+                    Seafood Lover
+                  </ComponentPill>
+                  <CoinPill>7 coins per served dish</CoinPill>
+                </>
+              }
+            />
+          </ActionCard>
+
+          <ActionCard
+            iconLabel="Coins"
+            iconSrc={coinIconSrc}
+            title="Buy a resource"
+          >
             <p>
-              You may buy resources from the supply at 1 coin for 1 resource if
-              you need to keep moving.
+              You can spend 1 coin to take 1 resource from the supply. Use this
+              when a trade is not available and you need one more token.
             </p>
-          </article>
-          <article>
-            <h3>Trade with other players</h3>
+          </ActionCard>
+
+          <ActionCard
+            iconLabel="Resources"
+            iconSrc={resourceIcons.meat}
+            title="Trade with players"
+          >
             <p>
-              Trade resources, coins, and dishes in any way you want. Do not
-              trade customers.
+              You can trade resources, coins, and dishes in any deal both
+              players accept. Customers are claimed points, so customers are not
+              traded.
             </p>
-          </article>
-          <article>
-            <h3>Complete bonus tasks</h3>
+          </ActionCard>
+
+          <ActionCard
+            iconLabel="Bonus task"
+            iconSrc={dishTypeIcons.premium}
+            title="Complete a bonus task"
+          >
             <p>
-              Cross off a task by getting a signature from the person you
-              completed it with, then take 3 resources of your choice from the
-              supply. Each task can only be completed once.
+              When you complete a task with another player, get their
+              signature, cross off the task, and take 3 resources of your
+              choice from the supply. Each task can only be completed once.
             </p>
-          </article>
+          </ActionCard>
+        </div>
+      </RulesSection>
+
+      <RulesSection eyebrow="Customer wants" heading="How to read wants icons">
+        <div className="rules-symbol-guide">
+          <div>
+            <TypeIconPill tag="rice" label="Rice" />
+            <p>One icon means spend one dish with that type.</p>
+          </div>
+          <div>
+            <TypeIconPill tag="sweet" label="Sweet" />
+            <strong>+</strong>
+            <TypeIconPill tag="drink" label="Drink" />
+            <p>A plus means the customer needs every listed type.</p>
+          </div>
+          <div>
+            <span className="rules-range-chip">2-5</span>
+            <TypeIconPill tag="meat" label="Meat" />
+            <strong>/</strong>
+            <TypeIconPill tag="rice" label="Rice" />
+            <p>A range means you may serve that many matching dishes.</p>
+          </div>
+          <div>
+            <RulesIcon src={cardIcons.dish} label="Dish type" />
+            <strong>≠</strong>
+            <RulesIcon src={cardIcons.dish} label="Dish type" />
+            <strong>≠</strong>
+            <RulesIcon src={cardIcons.dish} label="Dish type" />
+            <p>
+              Different dish types means you need three separate dishes, and
+              each dish can only count once even if it matches more than one
+              required type.
+            </p>
+          </div>
+        </div>
+
+        <div className="rules-wants-grid">
+          <WantsExampleCard
+            customer={salaryman}
+            dishes={content.dishes}
+            wantsText="Any Rice"
+            description="Serve one dish with the Rice type, such as Rice Plate or Sushi Platter."
+          />
+          <WantsExampleCard
+            customer={maidCafeMaid}
+            dishes={content.dishes}
+            wantsText="Sweet + Drink"
+            description="Serve one Sweet dish and one Drink dish. A dish can only be spent once."
+          />
+          <WantsExampleCard
+            customer={sumoWrestler}
+            dishes={content.dishes}
+            wantsText="2-5 Meat / Rice"
+            description="Serve between 2 and 5 dishes. Each served dish must be Meat or Rice."
+          />
+          <WantsExampleCard
+            customer={foodBlogger}
+            dishes={content.dishes}
+            wantsText="3 different dish types"
+            description="Serve 3 separate dishes. Even if one dish shows more than one matching type, it still only counts once."
+          />
+          <WantsExampleCard
+            customer={businessExecutive}
+            dishes={content.dishes}
+            wantsText="Premium + Noodles + Vegetarian"
+            description="Serve dishes that cover all three listed types before taking the payout."
+          />
         </div>
       </RulesSection>
 
@@ -189,8 +558,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
           <ol className="rules-steps rules-steps--tight">
             <li>Coins earned during play are 1 point each.</li>
             <li>
-              Each unspent dish is worth points equal to its printed resource
-              cost.
+              Each unspent dish is worth points equal to its printed coin value.
             </li>
             <li>Every 2 leftover resources score 1 point, rounded down.</li>
             <li>
@@ -198,50 +566,57 @@ export function RulesRoute({ content }: RulesRouteProps) {
             </li>
           </ol>
           <p>
-            The game ends at 60 minutes or when 3 of the 4 customer stacks are
-            gone. Tiebreakers, in order: most served customers, then most
-            leftover dishes, then most leftover resources.
+            Tiebreakers, in order: most served customers, then most leftover
+            dishes, then most leftover resources. If there is still a tie, share
+            the win.
           </p>
         </div>
       </RulesSection>
 
       <RulesSection
-        eyebrow="Card anatomy"
+        eyebrow="Card legend"
         heading="What the sample cards are showing"
         testId="rules-anatomy"
       >
+        <p className="print-section__copy">
+          The numbered markers on the sample cards match the descriptions
+          below.
+        </p>
         <div className="rules-anatomy-grid">
-          <SampleCardAnatomy
+          <CardLegend
             kind="dish"
             title="Sample dish card"
-            card={
-              <CardPreview kind="dish" item={featuredDish} cornerRadius={0} />
-            }
+            card={<CardPreview kind="dish" item={ramen} cornerRadius={0} />}
+            markers={[
+              { label: 'Dish title', style: { top: '13%', left: '34%' } },
+              {
+                label: 'Printed coin value',
+                style: { top: '10%', right: '7%' },
+              },
+              { label: 'Type icons', style: { top: '39%', right: '8%' } },
+              { label: 'Resource cost', style: { bottom: '9%', left: '50%' } },
+            ]}
             items={[
               {
-                title: 'Title',
-                text: 'This is the dish name you are buying or trading for.',
+                title: 'Dish title',
+                text: ' is the name players use when trading or serving.',
               },
               {
-                title: 'Artwork',
-                text: 'The picture helps you spot the dish quickly in the market.',
+                title: 'Printed coin value',
+                text: ' is the endgame value if this dish is still unspent.',
               },
               {
                 title: 'Type icons',
-                text: 'These show what kind of customer can be served by this dish.',
+                text: ' show which customer wants this dish can satisfy.',
               },
               {
-                title: 'Cost',
-                text: 'These are the resources you spend to get the dish.',
-              },
-              {
-                title: 'Card text',
-                text: 'This is the short reminder text for the dish.',
+                title: 'Resource cost',
+                text: ' is what you spend from your hand to cook this dish.',
               },
             ]}
           />
 
-          <SampleCardAnatomy
+          <CardLegend
             kind="customer"
             title="Sample customer card"
             card={
@@ -252,30 +627,34 @@ export function RulesRoute({ content }: RulesRouteProps) {
                 cornerRadius={0}
               />
             }
+            markers={[
+              { label: 'Tier stars', style: { top: '11%', left: '17%' } },
+              {
+                label: 'Customer wants',
+                style: { bottom: '12%', left: '48%' },
+              },
+              { label: 'Payout', style: { top: '10%', right: '8%' } },
+              {
+                label: 'Endgame bonus area',
+                style: { bottom: '26%', left: '50%' },
+              },
+            ]}
             items={[
               {
-                title: 'Title and tier',
-                text: 'The name tells you who wants the food. The stars show how demanding they are.',
+                title: 'Tier stars',
+                text: ' show how demanding the customer is.',
               },
               {
-                title: 'Artwork',
-                text: 'The portrait helps you read the customer at a glance.',
-              },
-              {
-                title: 'Requirement row',
-                text: 'This row shows what you must spend. For example: type + type, type / type, 1-2 type, or dish =/= dish means the customer wants different kinds of dishes or specific dish matches, not a customer trade.',
+                title: 'Customer wants',
+                text: ' show the dishes you must spend to claim this customer.',
               },
               {
                 title: 'Payout',
-                text: 'This shows the coins you take from the supply when you serve the customer.',
+                text: ' is the coins you take immediately after serving.',
               },
               {
-                title: 'Endgame bonus',
-                text: 'If a bonus is printed here, score it at the end after the customer has been served.',
-              },
-              {
-                title: 'Card text',
-                text: 'This is the plain-language reminder of what the customer wants.',
+                title: 'Endgame bonus area',
+                text: ' scores only if you served that customer.',
               },
             ]}
           />
