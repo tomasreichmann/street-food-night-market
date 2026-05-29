@@ -1,4 +1,3 @@
-import type { CSSProperties, ReactNode } from 'react';
 import {
   cardIcons,
   coinIconSrc,
@@ -6,255 +5,31 @@ import {
   resourceIcons,
 } from './assets/icon-map';
 import { CardPreview } from './components/CardPreview';
-import type {
-  CustomerCard,
-  DishCard,
-  GameContent,
-  ResourceDefinition,
-} from './content/schema';
+import type { GameContent } from './content/schema';
+import {
+  ActionCard,
+  ActionExample,
+  CardLegend,
+  ComponentPill,
+  CoinPill,
+  DishPill,
+  ResourcePill,
+  RulesSection,
+  RulesIcon,
+  TypeIconPill,
+  WantsExampleCard,
+} from './components/RulesShared';
+import { findById } from './components/rulesUtils';
+import layoutStyles from './App.module.css';
+import styles from './Rules.module.css';
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
 
 type RulesRouteProps = {
   content: GameContent;
 };
-
-type ComponentPillTone = 'coin' | 'customer' | 'dish' | 'resource' | 'task';
-
-function RulesSection({
-  eyebrow,
-  heading,
-  children,
-  testId,
-}: {
-  eyebrow: string;
-  heading: string;
-  children: ReactNode;
-  testId?: string;
-}) {
-  return (
-    <section className="rules-section" data-testid={testId}>
-      <div className="section-heading section-heading--rules">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2>{heading}</h2>
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function findById<T extends { id: string }>(
-  items: T[],
-  id: string,
-  fallbackIndex = 0,
-) {
-  return items.find((item) => item.id === id) ?? items[fallbackIndex];
-}
-
-function RulesIcon({ label, src }: { label: string; src: string }) {
-  return <img className="rules-icon" src={src} alt={label} />;
-}
-
-function ComponentPill({
-  children,
-  iconLabel,
-  iconSrc,
-  tone,
-}: {
-  children: ReactNode;
-  iconLabel: string;
-  iconSrc: string;
-  tone: ComponentPillTone;
-}) {
-  return (
-    <span className={`rules-pill rules-pill--${tone}`}>
-      <RulesIcon src={iconSrc} label={iconLabel} />
-      <span>{children}</span>
-    </span>
-  );
-}
-
-function ResourcePill({ resource }: { resource: ResourceDefinition }) {
-  return (
-    <ComponentPill
-      iconLabel={`${resource.label} resource`}
-      iconSrc={resourceIcons[resource.id as keyof typeof resourceIcons]}
-      tone="resource"
-    >
-      {resource.label}
-    </ComponentPill>
-  );
-}
-
-function DishPill({ dish }: { dish: DishCard }) {
-  return (
-    <ComponentPill iconLabel="Dish card" iconSrc={cardIcons.dish} tone="dish">
-      {dish.title}
-    </ComponentPill>
-  );
-}
-
-function CoinPill({ children }: { children: ReactNode }) {
-  return (
-    <ComponentPill iconLabel="Coins" iconSrc={coinIconSrc} tone="coin">
-      {children}
-    </ComponentPill>
-  );
-}
-
-function ActionCard({
-  children,
-  iconLabel,
-  iconSrc,
-  title,
-}: {
-  children: ReactNode;
-  iconLabel: string;
-  iconSrc: string;
-  title: string;
-}) {
-  return (
-    <article className="rules-action-card">
-      <div className="rules-action-card__header">
-        <RulesIcon src={iconSrc} label={iconLabel} />
-        <h3>{title}</h3>
-      </div>
-      {children}
-    </article>
-  );
-}
-
-function ActionExample({
-  from,
-  label,
-  to,
-}: {
-  from: ReactNode;
-  label: string;
-  to: ReactNode;
-}) {
-  return (
-    <div className="rules-example-strip">
-      <span className="rules-example-strip__label">{label}</span>
-      <div className="rules-example-strip__flow">
-        <div>{from}</div>
-        <strong aria-hidden="true">-&gt;</strong>
-        <div>{to}</div>
-      </div>
-    </div>
-  );
-}
-
-function TypeIconPill({ label, tag }: { label: string; tag: string }) {
-  return (
-    <ComponentPill
-      iconLabel={`${label} type`}
-      iconSrc={dishTypeIcons[tag as keyof typeof dishTypeIcons]}
-      tone="dish"
-    >
-      {label}
-    </ComponentPill>
-  );
-}
-
-function WantsExampleCard({
-  customer,
-  description,
-  dishes,
-  wantsText,
-}: {
-  customer: CustomerCard;
-  description: string;
-  dishes: DishCard[];
-  wantsText: string;
-}) {
-  return (
-    <article className="rules-wants-card">
-      <div className="rules-wants-card__preview">
-        <CardPreview
-          kind="customer"
-          item={customer}
-          dishes={dishes}
-          cornerRadius={0}
-        />
-      </div>
-      <div className="rules-wants-card__copy">
-        <p className="eyebrow">{customer.title}</p>
-        <h3>{wantsText}</h3>
-        <p>{description}</p>
-      </div>
-    </article>
-  );
-}
-
-function LegendItem({
-  index,
-  text,
-  title,
-}: {
-  index: number;
-  text: string;
-  title: string;
-}) {
-  return (
-    <li className="rules-legend-item">
-      <strong>{index}</strong>
-      <span>
-        <b>{title}</b>
-        {text}
-      </span>
-    </li>
-  );
-}
-
-type CardLegendMarker = {
-  label: string;
-  style: CSSProperties;
-};
-
-function CardLegend({
-  card,
-  items,
-  kind,
-  markers,
-  title,
-}: {
-  card: ReactNode;
-  items: Array<{ title: string; text: string }>;
-  kind: 'customer' | 'dish';
-  markers: CardLegendMarker[];
-  title: string;
-}) {
-  return (
-    <article className={`rules-card-legend rules-card-legend--${kind}`}>
-      <div className="rules-card-legend__preview">
-        <p className="eyebrow">{title}</p>
-        <div className="rules-card-legend__stage">
-          {card}
-          {markers.map((marker, index) => (
-            <span
-              key={marker.label}
-              aria-hidden="true"
-              className="rules-card-legend__marker"
-              data-testid={`rules-card-legend-marker-${kind}-${index + 1}`}
-              style={marker.style}
-            >
-              {index + 1}
-            </span>
-          ))}
-        </div>
-      </div>
-      <ol className="rules-legend-list">
-        {items.map((item, index) => (
-          <LegendItem
-            key={item.title}
-            index={index + 1}
-            title={item.title}
-            text={item.text}
-          />
-        ))}
-      </ol>
-    </article>
-  );
-}
 
 export function RulesRoute({ content }: RulesRouteProps) {
   const resourcesById = new Map(
@@ -295,27 +70,27 @@ export function RulesRoute({ content }: RulesRouteProps) {
   }
 
   return (
-    <div className="rules-route">
-      <section className="hero rules-hero rules-hero--web">
-        <div className="hero__intro">
-          <p className="eyebrow">Birthday night market rules</p>
+    <div className={styles.route}>
+      <section className={cx(layoutStyles.hero, styles.hero)}>
+        <div className={layoutStyles.heroIntro}>
+          <p className={layoutStyles.eyebrow}>Birthday night market rules</p>
           <h1>Street Food Night Market</h1>
-          <p className="hero-copy">
+          <p className={layoutStyles.heroCopy}>
             Move around the room, trade with other players, cook dishes, and
             serve visible customers before the market closes.
           </p>
         </div>
 
-        <div className="rules-hero__aside" aria-label="Game stats">
-          <div className="rules-hero__stat">
+        <div className={styles.heroAside} aria-label="Game stats">
+          <div className={styles.heroStat}>
             <span>Players</span>
             <strong>15-20</strong>
           </div>
-          <div className="rules-hero__stat">
+          <div className={styles.heroStat}>
             <span>Time</span>
             <strong>60 min</strong>
           </div>
-          <div className="rules-hero__stat">
+          <div className={styles.heroStat}>
             <span>Win</span>
             <strong>Most points</strong>
           </div>
@@ -323,7 +98,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
       </section>
 
       <RulesSection eyebrow="Goal" heading="What you are trying to do">
-        <div className="rules-lead-grid">
+        <div className={styles.leadGrid}>
           <p>
             You run a food stall. Your job is to turn resources into dishes,
             spend those dishes to claim customers, and finish with the most
@@ -342,13 +117,13 @@ export function RulesRoute({ content }: RulesRouteProps) {
         heading="At the start of the game, you will get"
         testId="rules-setup"
       >
-        <div className="rules-setup-grid">
-          <div className="rules-setup-panel">
+        <div className={styles.setupGrid}>
+          <div className={styles.setupPanel}>
             <h3>Your starting pieces</h3>
-            <ul className="rules-icon-list">
+            <ul className={styles.iconList}>
               <li>
                 <span>5 random resources:</span>
-                <div className="rules-pill-row">
+                <div className={styles.pillRow}>
                   {content.resources.map((resource) => (
                     <ResourcePill key={resource.id} resource={resource} />
                   ))}
@@ -380,26 +155,11 @@ export function RulesRoute({ content }: RulesRouteProps) {
               </li>
             </ul>
           </div>
-
-          {/* <div className="rules-setup-panel">
-            <h3>The shared market</h3>
-            <ul className="rules-icon-list">
-              <li>Put all remaining resources, dishes, and coins nearby.</li>
-              <li>
-                Shuffle customers and reveal 4 visible customer stacks where
-                everyone can reach them.
-              </li>
-              <li>
-                Start the timer. The market closes after 60 minutes, or when 3
-                of the 4 customer stacks are gone.
-              </li>
-            </ul>
-          </div> */}
         </div>
       </RulesSection>
 
       <RulesSection eyebrow="Actions" heading="What you can do">
-        <div className="rules-action-grid">
+        <div className={styles.actionGrid}>
           <ActionCard
             iconLabel="Dish card"
             iconSrc={cardIcons.dish}
@@ -436,7 +196,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
               from={
                 <>
                   <DishPill dish={sushi} />
-                  <span className="rules-example-word">or</span>
+                  <span className={styles.exampleWord}>or</span>
                   <DishPill dish={sashimi} />
                 </>
               }
@@ -499,7 +259,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
       </RulesSection>
 
       <RulesSection eyebrow="Customer wants" heading="How to read wants icons">
-        <div className="rules-symbol-guide">
+        <div className={styles.symbolGuide}>
           <div>
             <TypeIconPill tag="rice" label="Rice" />
             <p>One icon means spend one dish with that type.</p>
@@ -511,7 +271,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
             <p>A plus means the customer needs every listed type.</p>
           </div>
           <div>
-            <span className="rules-range-chip">2-5</span>
+            <span className={styles.rangeChip}>2-5</span>
             <TypeIconPill tag="meat" label="Meat" />
             <strong>/</strong>
             <TypeIconPill tag="rice" label="Rice" />
@@ -531,7 +291,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
           </div>
         </div>
 
-        <div className="rules-wants-grid">
+        <div className={styles.wantsGrid}>
           <WantsExampleCard
             customer={salaryman}
             dishes={content.dishes}
@@ -570,13 +330,13 @@ export function RulesRoute({ content }: RulesRouteProps) {
         heading="How the game ends and how points are counted"
         testId="rules-scoring"
       >
-        <div className="rules-scorebox">
+        <div className={styles.scorebox}>
           <p>The game ends when:</p>
-          <ul className="rules-steps rules-steps--tight">
+          <ul className={cx(styles.steps, styles.stepsTight)}>
             <li>When all customers are claimed.</li>
             <li>After 60 minutes.</li>
           </ul>
-          <ol className="rules-steps rules-steps--tight">
+          <ol className={cx(styles.steps, styles.stepsTight)}>
             <li>Coins earned during play are 1 point each.</li>
             <li>
               Each unspent dish is worth points equal to its printed coin value.
@@ -600,7 +360,7 @@ export function RulesRoute({ content }: RulesRouteProps) {
         heading="What the sample cards are showing"
         testId="rules-anatomy"
       >
-        <div className="rules-anatomy-grid">
+        <div className={styles.anatomyGrid}>
           <CardLegend
             kind="dish"
             title="Sample dish card"

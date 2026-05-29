@@ -1,0 +1,168 @@
+.section {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--card-radius) + 0.25rem);
+  background: rgba(255, 249, 241, 0.74);
+  box-shadow: 0 10px 28px rgba(80, 50, 22, 0.08);
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-bottom: 0.75rem;
+}
+
+.totals div {
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(48, 48, 46, 0.12);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--paper) 84%, var(--color-gold-100) 16%);
+}
+
+.totals span,
+.meta,
+.kind {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.3;
+}
+
+.totals strong {
+  display: block;
+  margin-top: 0.18rem;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  list-style: none;
+}
+
+.chips li {
+  padding: 0.32rem 0.55rem;
+  border: 1px solid rgba(48, 48, 46, 0.14);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.combos {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(48, 48, 46, 0.14);
+  border-radius: 0.8rem;
+  background: var(--paper);
+}
+
+.table {
+  width: 100%;
+  min-width: 68rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(48, 48, 46, 0.1);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--paper) 82%, var(--color-cream-100) 18%);
+  color: var(--color-brown-900);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.table tbody th {
+  width: 12rem;
+  font-weight: 800;
+}
+
+.table td:nth-child(6),
+.table td:nth-child(7) {
+  max-width: 18rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0.12rem 0.48rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.badgeOk {
+  background: color-mix(in srgb, var(--color-green-100) 48%, white 52%);
+  color: var(--color-green-900);
+}
+
+.badgeReview {
+  background: color-mix(in srgb, var(--color-gold-100) 52%, white 48%);
+  color: var(--color-brown-900);
+}
+
+.badgeNoMatch {
+  background: color-mix(in srgb, var(--color-red-100) 42%, white 58%);
+  color: var(--color-red-900);
+}
+
+@media (max-width: 640px) {
+  .totals {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .section,
+  .wrap,
+  .totals div {
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .wrap {
+    overflow: visible;
+  }
+
+  .table {
+    min-width: 0;
+    font-size: 8pt;
+  }
+
+  .table thead th {
+    position: static;
+    background: #fff;
+  }
+}

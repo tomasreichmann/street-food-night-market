@@ -9,6 +9,13 @@ import {
   type RoundLogRow,
   type SimulationState,
 } from './simulation/simulation';
+import layoutStyles from './App.module.css';
+import tableStyles from './components/CardPlanningTable.module.css';
+import styles from './SimulationRoute.module.css';
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
 
 type SimulationRouteProps = {
   content: GameContent;
@@ -55,7 +62,7 @@ function ConfigInput({
   onChange: (value: number) => void;
 }) {
   return (
-    <label className="simulation-field">
+    <label className={styles.field}>
       <span>{label}</span>
       <input
         min="1"
@@ -133,7 +140,11 @@ function buildSimulationExportPayload({
     players: state.players.map((player) => ({
       id: player.id,
       coins: player.coins,
-      resources: serializeCountMap(player.resources, resourceIds, resourceLabels),
+      resources: serializeCountMap(
+        player.resources,
+        resourceIds,
+        resourceLabels,
+      ),
       meals: serializeCountMap(player.meals, dishIds, dishLabels),
       claimedCustomers: player.claimedCustomers.map((customerId) => ({
         id: customerId,
@@ -230,13 +241,13 @@ function renderRoundRows(
   return (
     <Fragment key={`${row.round}-${row.playerId}-${index}`}>
       {shouldRenderDivider ? (
-        <tr className="simulation-round-divider">
+        <tr className={styles.roundDivider}>
           <th colSpan={9}>Round {row.round}</th>
         </tr>
       ) : null}
       {row.roundStartSupplyLabel ? (
         <tr
-          className="simulation-round-start"
+          className={styles.roundStart}
           data-testid="simulation-round-start-row"
         >
           <th scope="row" colSpan={2}>
@@ -385,16 +396,16 @@ export function SimulationRoute({
 
   return (
     <>
-      <section className="hero simulation-hero">
-        <div className="hero__intro">
-          <p className="eyebrow">Playtest model</p>
+      <section className={cx(layoutStyles.hero, styles.hero)}>
+        <div className={layoutStyles.heroIntro}>
+          <p className={layoutStyles.eyebrow}>Playtest model</p>
           <h1>Simulation</h1>
-          <p className="hero-copy">
+          <p className={layoutStyles.heroCopy}>
             One player action per row, finite ingredient supply, visible
             customer decks.
           </p>
         </div>
-        <dl className="stats">
+        <dl className={layoutStyles.stats}>
           <div>
             <dt>Round</dt>
             <dd>{simulationState.round}</dd>
@@ -410,13 +421,13 @@ export function SimulationRoute({
         </dl>
       </section>
 
-      <section className="simulation-layout" aria-label="Simulation controls">
-        <form className="simulation-config">
-          <div className="section-heading">
-            <p className="eyebrow">Config</p>
+      <section className={styles.layout} aria-label="Simulation controls">
+        <form className={styles.config}>
+          <div className={layoutStyles.sectionHeading}>
+            <p className={layoutStyles.eyebrow}>Config</p>
             <h2>Game variables</h2>
           </div>
-          <div className="simulation-field-grid">
+          <div className={styles.fieldGrid}>
             <ConfigInput
               label="Players"
               value={formConfig.playerCount}
@@ -450,7 +461,7 @@ export function SimulationRoute({
             />
           </div>
 
-          <div className="simulation-resource-config">
+          <div className={styles.resourceConfig}>
             {content.resources.map((resource) => (
               <ConfigInput
                 key={resource.id}
@@ -461,13 +472,13 @@ export function SimulationRoute({
             ))}
           </div>
 
-          <div className="simulation-actions">
+          <div className={styles.actions}>
             <button type="button" onClick={restart}>
               Restart
             </button>
             <button
               type="button"
-              className="button-primary"
+              className={styles.primaryButton}
               onClick={nextRound}
             >
               Next Round
@@ -475,7 +486,7 @@ export function SimulationRoute({
           </div>
         </form>
 
-        <aside className="simulation-state-panel" aria-label="Market state">
+        <aside className={styles.statePanel} aria-label="Market state">
           <div>
             <span>Current round {simulationState.round}</span>
             <strong>
@@ -494,13 +505,13 @@ export function SimulationRoute({
         </aside>
       </section>
 
-      <section className="content-section simulation-table-section">
-        <div className="section-heading">
-          <p className="eyebrow">Round log</p>
+      <section className={cx(layoutStyles.contentSection, styles.tableSection)}>
+        <div className={layoutStyles.sectionHeading}>
+          <p className={layoutStyles.eyebrow}>Round log</p>
           <h2>Player actions</h2>
         </div>
-        <div className="planning-table-wrap">
-          <table className="planning-table simulation-table">
+        <div className={tableStyles.wrap}>
+          <table className={cx(tableStyles.table, styles.table)}>
             <caption>Simulation round results</caption>
             <thead>
               <tr>
@@ -526,15 +537,19 @@ export function SimulationRoute({
             </tbody>
           </table>
         </div>
-        <div className="simulation-actions">
-          <button type="button" className="button-primary" onClick={nextRound}>
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.primaryButton}
+            onClick={nextRound}
+          >
             Next Round
           </button>
           <button type="button" onClick={copySimulationData}>
             Copy data
           </button>
         </div>
-        <p className="simulation-copy-status" aria-live="polite">
+        <p className={styles.copyStatus} aria-live="polite">
           {copyStatus === 'copied'
             ? 'Copied JSON to clipboard.'
             : copyStatus === 'error'
@@ -543,13 +558,13 @@ export function SimulationRoute({
         </p>
       </section>
 
-      <section className="content-section simulation-score-section">
-        <div className="section-heading">
-          <p className="eyebrow">Score</p>
+      <section className={cx(layoutStyles.contentSection, styles.scoreSection)}>
+        <div className={layoutStyles.sectionHeading}>
+          <p className={layoutStyles.eyebrow}>Score</p>
           <h2>Claimed customers and final score</h2>
         </div>
         <div
-          className="simulation-score-grid"
+          className={styles.scoreGrid}
           data-testid="simulation-score-summary"
         >
           {scoreRows.map(
@@ -560,7 +575,7 @@ export function SimulationRoute({
               mealsLabel,
               score,
             }) => (
-              <article key={player.id} className="simulation-score-card">
+              <article key={player.id} className={styles.scoreCard}>
                 <div>
                   <span>{player.id}</span>
                   <strong>{score.total} points</strong>
@@ -570,7 +585,7 @@ export function SimulationRoute({
                     ? claimedCustomers.join(', ')
                     : 'No customers claimed'}
                 </p>
-                <div className="simulation-score-details">
+                <div className={styles.scoreDetails}>
                   <p>Coins: {score.coins}</p>
                   <p>Unspent meals: {mealsLabel}</p>
                   <p>Dish bonus: {score.dishBonus}</p>
@@ -578,7 +593,7 @@ export function SimulationRoute({
                   <p>Resource bonus: {score.resourceBonus}</p>
                   <p>End game bonuses: {score.endgameBonus}</p>
                   {score.endgameBonusBreakdown.length > 0 ? (
-                    <ul className="simulation-score-bonus-list">
+                    <ul className={styles.bonusList}>
                       {score.endgameBonusBreakdown.map((bonus) => (
                         <li key={`${player.id}-${bonus.customerId}`}>
                           {bonus.label}: +{bonus.points}

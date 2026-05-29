@@ -1,0 +1,86 @@
+.route {
+  display: grid;
+  gap: 2rem;
+  overflow-x: hidden;
+}
+
+.sheet {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #fff;
+  box-shadow: var(--shadow);
+  break-after: page;
+  page-break-after: always;
+}
+
+.sheet:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+.grid {
+  position: absolute;
+  display: grid;
+  z-index: 1;
+  gap: 0;
+}
+
+.slot {
+  width: 100%;
+  height: 100%;
+}
+
+.slot > * {
+  width: 100%;
+  height: 100%;
+}
+
+.stallSlot,
+.backfaceSlot {
+  background: #fff;
+}
+
+.stallCard {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.backfaceCard {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.route [data-card-part='cutline'] {
+  display: none;
+}
+
+@media print {
+  .route {
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+  }
+
+  .sheet {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    overflow: hidden;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .sheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+}

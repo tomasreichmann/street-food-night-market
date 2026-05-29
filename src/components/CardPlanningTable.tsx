@@ -1,5 +1,11 @@
 import { summarizeCardContent } from '../content/contentSummary';
 import type { GameContent } from '../content/schema';
+import layoutStyles from '../App.module.css';
+import styles from './CardPlanningTable.module.css';
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
 
 type CardPlanningTableProps = {
   content: GameContent;
@@ -7,7 +13,7 @@ type CardPlanningTableProps = {
 
 function DishTypeTotals({ totals }: { totals: Array<[string, number]> }) {
   return (
-    <ul className="planning-table__chips" aria-label="Dish type totals">
+    <ul className={styles.chips} aria-label="Dish type totals">
       {totals.map(([dishType, count]) => (
         <li key={dishType}>{`${dishType}: ${count}`}</li>
       ))}
@@ -17,7 +23,7 @@ function DishTypeTotals({ totals }: { totals: Array<[string, number]> }) {
 
 function ResourceUsageTotals({ totals }: { totals: Array<[string, number]> }) {
   return (
-    <ul className="planning-table__chips" aria-label="Resource usage totals">
+    <ul className={styles.chips} aria-label="Resource usage totals">
       {totals.map(([resourceId, count]) => (
         <li key={resourceId}>{`${resourceId}: ${count}`}</li>
       ))}
@@ -30,15 +36,15 @@ export function CardPlanningTable({ content }: CardPlanningTableProps) {
 
   return (
     <section
-      className="content-section planning-table-section"
+      className={cx(layoutStyles.contentSection, styles.section)}
       aria-labelledby="planning-table-heading"
     >
-      <div className="section-heading">
-        <p className="eyebrow">Planning ledger</p>
+      <div className={layoutStyles.sectionHeading}>
+        <p className={layoutStyles.eyebrow}>Planning ledger</p>
         <h2 id="planning-table-heading">Card planning table</h2>
       </div>
 
-      <div className="planning-totals" aria-label="Card totals">
+      <div className={styles.totals} aria-label="Card totals">
         <div>
           <span>Dish cards</span>
           <strong>{summary.totals.dishCopies}</strong>
@@ -56,8 +62,8 @@ export function CardPlanningTable({ content }: CardPlanningTableProps) {
       <DishTypeTotals totals={summary.totals.dishTypeTotals} />
       <ResourceUsageTotals totals={summary.totals.resourceUsageTotals} />
 
-      <div className="planning-table-wrap">
-        <table className="planning-table">
+      <div className={styles.wrap}>
+        <table className={styles.table}>
           <caption>
             Dishes, customers, counts, combinations, and economy notes
           </caption>
@@ -76,16 +82,14 @@ export function CardPlanningTable({ content }: CardPlanningTableProps) {
             {summary.dishRows.map((dish) => (
               <tr key={dish.id}>
                 <th scope="row">
-                  <span className="planning-table__kind">Dish</span>
+                  <span className={styles.kind}>Dish</span>
                   {dish.title}
                 </th>
                 <td>{dish.tier}</td>
                 <td>{dish.copies}</td>
                 <td>
                   {dish.cost}
-                  <span className="planning-table__meta">
-                    total {dish.costTotal}
-                  </span>
+                  <span className={styles.meta}>total {dish.costTotal}</span>
                 </td>
                 <td>{dish.dishTypes}</td>
                 <td>{dish.customerCoverageLabel}</td>
@@ -96,14 +100,14 @@ export function CardPlanningTable({ content }: CardPlanningTableProps) {
             {summary.customerRows.map((customer) => (
               <tr key={customer.id}>
                 <th scope="row">
-                  <span className="planning-table__kind">Customer</span>
+                  <span className={styles.kind}>Customer</span>
                   {customer.title}
                 </th>
                 <td>{customer.tier}</td>
                 <td>{customer.copies}</td>
                 <td>
                   {customer.want}
-                  <span className="planning-table__meta">
+                  <span className={styles.meta}>
                     baseline {customer.matchedDishTitle}
                     {customer.matchedCostBasis === null
                       ? ''
@@ -113,7 +117,7 @@ export function CardPlanningTable({ content }: CardPlanningTableProps) {
                 <td>{customer.reward}</td>
                 <td>
                   {customer.dishCombinations.length > 0 ? (
-                    <ul className="planning-table__combos">
+                    <ul className={styles.combos}>
                       {customer.dishCombinations.map((combination) => (
                         <li key={combination}>{combination}</li>
                       ))}
@@ -121,19 +125,23 @@ export function CardPlanningTable({ content }: CardPlanningTableProps) {
                   ) : (
                     'No matching combinations'
                   )}
-                  <span className="planning-table__meta">
+                  <span className={styles.meta}>
                     {customer.dishCombinationSummary}
                   </span>
                 </td>
                 <td>
                   <span
-                    className={`economy-badge economy-badge--${customer.economyStatus.toLowerCase().replace(' ', '-')}`}
+                    className={cx(
+                      styles.badge,
+                      customer.economyStatus === 'OK' && styles.badgeOk,
+                      customer.economyStatus === 'Review' && styles.badgeReview,
+                      customer.economyStatus === 'No match' &&
+                        styles.badgeNoMatch,
+                    )}
                   >
                     {customer.economyStatus}
                   </span>
-                  <span className="planning-table__meta">
-                    {customer.economyNote}
-                  </span>
+                  <span className={styles.meta}>{customer.economyNote}</span>
                 </td>
               </tr>
             ))}

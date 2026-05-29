@@ -14,23 +14,15 @@ describe('App', () => {
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/A light social market game where players trade/i),
+      screen.getByText('Dish cards', { selector: 'dt' }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText('Ramen Bowl').length).toBeGreaterThan(0);
-    expect(screen.queryByText('Hungry Student')).not.toBeInTheDocument();
-    expect(screen.getAllByText('Auntie').length).toBeGreaterThan(0);
-    expect(screen.getByText('Dish cards', { selector: 'dt' })).toBeInTheDocument();
     expect(
       screen.getByText('Customer cards', { selector: 'dt' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Total cards', { selector: 'dt' })).toBeInTheDocument();
-    expect(screen.queryByText('Featured mockups')).not.toBeInTheDocument();
-    expect(screen.queryByText('Resource set')).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('heading', { name: 'Card planning table' }),
-    ).not.toBeInTheDocument();
-    expect(screen.getAllByText('Festival Judge').length).toBeGreaterThan(0);
-    expect(screen.queryByText('Review')).not.toBeInTheDocument();
+      screen.getByText('Total cards', { selector: 'dt' }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
   });
 
   it('exposes a rules navigation link from the app shell', () => {

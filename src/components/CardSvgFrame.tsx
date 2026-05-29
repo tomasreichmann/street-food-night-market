@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { coinIconSrc, resourceIcons } from '../assets/icon-map';
 import type { DishCard } from '../content/schema';
+import styles from './CardSvgFrame.module.css';
 
 const CARD_OUTER_WIDTH = 60;
 const CARD_OUTER_HEIGHT = 92;
@@ -582,7 +583,8 @@ export function CardSvgFrame({
 
   return (
     <svg
-      className="card-svg"
+      className={styles.svg}
+      data-card-part="card-svg"
       viewBox={`0 0 ${CARD_OUTER_WIDTH} ${CARD_OUTER_HEIGHT}`}
       role="img"
       aria-label={
@@ -814,7 +816,8 @@ export function CardSvgFrame({
           strokeWidth={0.28}
           strokeDasharray="1.25 1.25"
           vectorEffect="non-scaling-stroke"
-          className="card-svg__cutline"
+          className={styles.cutline}
+          data-card-part="cutline"
         />
       </g>
     </svg>

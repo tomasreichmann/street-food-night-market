@@ -1,0 +1,117 @@
+.route {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 12mm 14mm;
+  border: 1px solid rgba(48, 48, 46, 0.12);
+  border-radius: 0.85rem;
+  background: transparent;
+  break-after: page;
+  page-break-after: always;
+  box-shadow: 0 12px 32px rgba(80, 50, 22, 0.1);
+}
+
+.page:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+.content {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero {
+  margin-bottom: 1.25rem;
+}
+
+.heroAside {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  justify-items: end;
+  align-self: flex-start;
+}
+
+.qr {
+  width: min(56mm, 100%);
+  aspect-ratio: 1;
+  padding: 0.35rem;
+  border: 1px solid rgba(48, 48, 46, 0.14);
+  border-radius: 0.8rem;
+  background: #fff;
+  object-fit: contain;
+}
+
+.symbolGuide {
+}
+
+.wantsGrid {
+}
+
+.cardLegend {
+}
+
+.actionCard {
+}
+
+.wantsCard {
+}
+
+.example {
+}
+
+@media print {
+  .route {
+    gap: 0.9rem;
+  }
+
+  .page {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .symbolGuide {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .wantsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cardLegend {
+    grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .actionCard {
+    gap: 0.55rem;
+    padding: 0.8rem;
+  }
+
+  .wantsCard h3 {
+    font-size: 0.86rem;
+    line-height: 1.08;
+  }
+
+  .actionHeader img {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .example {
+    gap: 0.32rem;
+    padding-top: 0.45rem;
+  }
+}

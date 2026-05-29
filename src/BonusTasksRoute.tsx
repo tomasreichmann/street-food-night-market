@@ -1,6 +1,13 @@
 import type { GameConfig } from './content/loadGameConfig';
 import { bonusTaskCells, bonusTaskSheetCellCount } from './bonusTasks';
 import { PrintCropMarks } from './components/PrintCropMarks';
+import layoutStyles from './App.module.css';
+import printStyles from './PrintRoute.module.css';
+import styles from './BonusTasksRoute.module.css';
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
 
 const A4_PAGE_WIDTH_MM = 210;
 const A4_PAGE_HEIGHT_MM = 297;
@@ -51,9 +58,9 @@ function getCellText(row: number, column: number) {
 
 function BonusTaskSheet({ index }: { index: number }) {
   return (
-    <section className="bonus-task-sheet" data-testid="bonus-task-sheet">
+    <section className={styles.sheet} data-testid="bonus-task-sheet">
       <table
-        className="bonus-task-sheet__table"
+        className={styles.table}
         aria-label={`Bonus task sheet ${index + 1}`}
       >
         <tbody>
@@ -79,7 +86,7 @@ function BonusTasksPage({
 }) {
   return (
     <article
-      className="print-sheet bonus-task-page"
+      className={cx(printStyles.sheet, styles.page)}
       data-testid="bonus-task-page"
     >
       <PrintCropMarks
@@ -87,7 +94,7 @@ function BonusTasksPage({
         pageWidthMm={A4_PAGE_WIDTH_MM}
         rects={buildPageCropRects(pageIndex)}
       />
-      <div className="bonus-task-page__stack">
+      <div className={styles.stack}>
         {sheetIndexes.map((sheetIndex) => (
           <BonusTaskSheet key={sheetIndex} index={sheetIndex} />
         ))}
@@ -104,23 +111,23 @@ export function BonusTasksRoute({ config }: BonusTasksRouteProps) {
   const pages = chunkItems(sheetIndexes, SHEETS_PER_PAGE);
 
   return (
-    <div className="bonus-tasks-route">
-      <section className="bonus-tasks-route__intro">
-        <div className="section-heading">
-          <p className="eyebrow">Printable bonus task sheets</p>
+    <div className={styles.route}>
+      <section className={styles.intro}>
+        <div className={layoutStyles.sectionHeading}>
+          <p className={layoutStyles.eyebrow}>Printable bonus task sheets</p>
           <h1>Bonus task sheets</h1>
         </div>
-        <p className="print-route__intro">
+        <p className={styles.copy}>
           Print one sheet per player. Each sheet has 9 centered prompts in a 3x3
           grid. The default game config prints one page for every 3 players.
         </p>
-        <p className="print-route__intro">
+        <p className={styles.copy}>
           Tasks per sheet: {bonusTaskSheetCellCount}
         </p>
       </section>
 
-      <section className="print-section">
-        <div className="print-section__pages">
+      <section className={styles.section}>
+        <div className={styles.pages}>
           {pages.map((pageSheetIndexes, pageIndex) => (
             <BonusTasksPage
               key={pageIndex}

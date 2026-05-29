@@ -1,4 +1,3 @@
-import type { CSSProperties, ReactNode } from 'react';
 import {
   cardIcons,
   coinIconSrc,
@@ -7,247 +6,37 @@ import {
 } from './assets/icon-map';
 import qrCodeRulesSrc from './assets/qr-code-rules.png';
 import { CardPreview } from './components/CardPreview';
-import type {
-  CustomerCard,
-  DishCard,
-  GameContent,
-  ResourceDefinition,
-} from './content/schema';
+import type { ReactNode } from 'react';
+import type { GameContent } from './content/schema';
+import layoutStyles from './App.module.css';
+import rulesStyles from './Rules.module.css';
+import styles from './RulesPrintRoute.module.css';
+import {
+  ActionCard,
+  ActionExample,
+  CardLegend,
+  CoinPill,
+  ComponentPill,
+  DishPill,
+  ResourcePill,
+  RulesIcon,
+  RulesSection,
+  TypeIconPill,
+  WantsExampleCard,
+} from './components/RulesShared';
+import { findById } from './components/rulesUtils';
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
 
 type RulesPrintRouteProps = {
   content: GameContent;
 };
 
-type ComponentPillTone = 'coin' | 'customer' | 'dish' | 'resource' | 'task';
-
-function findById<T extends { id: string }>(
-  items: T[],
-  id: string,
-  fallbackIndex = 0,
-) {
-  return items.find((item) => item.id === id) ?? items[fallbackIndex];
-}
-
-function RulesIcon({ label, src }: { label: string; src: string }) {
-  return <img className="rules-icon" src={src} alt={label} />;
-}
-
-function ComponentPill({
-  children,
-  iconLabel,
-  iconSrc,
-  tone,
-}: {
-  children: ReactNode;
-  iconLabel: string;
-  iconSrc: string;
-  tone: ComponentPillTone;
-}) {
+function PrintPage({ children }: { children: ReactNode }) {
   return (
-    <span className={`rules-pill rules-pill--${tone}`}>
-      <RulesIcon src={iconSrc} label={iconLabel} />
-      <span>{children}</span>
-    </span>
-  );
-}
-
-function ResourcePill({ resource }: { resource: ResourceDefinition }) {
-  return (
-    <ComponentPill
-      iconLabel={`${resource.label} resource`}
-      iconSrc={resourceIcons[resource.id as keyof typeof resourceIcons]}
-      tone="resource"
-    >
-      {resource.label}
-    </ComponentPill>
-  );
-}
-
-function DishPill({ dish }: { dish: DishCard }) {
-  return (
-    <ComponentPill iconLabel="Dish card" iconSrc={cardIcons.dish} tone="dish">
-      {dish.title}
-    </ComponentPill>
-  );
-}
-
-function CoinPill({ children }: { children: ReactNode }) {
-  return (
-    <ComponentPill iconLabel="Coins" iconSrc={coinIconSrc} tone="coin">
-      {children}
-    </ComponentPill>
-  );
-}
-
-function ActionCard({
-  children,
-  iconLabel,
-  iconSrc,
-  title,
-}: {
-  children: ReactNode;
-  iconLabel: string;
-  iconSrc: string;
-  title: string;
-}) {
-  return (
-    <article className="rules-action-card">
-      <div className="rules-action-card__header">
-        <RulesIcon src={iconSrc} label={iconLabel} />
-        <h3>{title}</h3>
-      </div>
-      {children}
-    </article>
-  );
-}
-
-function ActionExample({
-  from,
-  label,
-  to,
-}: {
-  from: ReactNode;
-  label: string;
-  to: ReactNode;
-}) {
-  return (
-    <div className="rules-example-strip">
-      <span className="rules-example-strip__label">{label}</span>
-      <div className="rules-example-strip__flow">
-        <div>{from}</div>
-        <strong aria-hidden="true">-&gt;</strong>
-        <div>{to}</div>
-      </div>
-    </div>
-  );
-}
-
-function TypeIconPill({ label, tag }: { label: string; tag: string }) {
-  return (
-    <ComponentPill
-      iconLabel={`${label} type`}
-      iconSrc={dishTypeIcons[tag as keyof typeof dishTypeIcons]}
-      tone="dish"
-    >
-      {label}
-    </ComponentPill>
-  );
-}
-
-function WantsExampleCard({
-  customer,
-  description,
-  dishes,
-  wantsText,
-}: {
-  customer: CustomerCard;
-  description: string;
-  dishes: DishCard[];
-  wantsText: string;
-}) {
-  return (
-    <article className="rules-wants-card">
-      <div className="rules-wants-card__preview">
-        <CardPreview
-          kind="customer"
-          item={customer}
-          dishes={dishes}
-          cornerRadius={0}
-        />
-      </div>
-      <div className="rules-wants-card__copy">
-        <p className="eyebrow">{customer.title}</p>
-        <h3>{wantsText}</h3>
-        <p>{description}</p>
-      </div>
-    </article>
-  );
-}
-
-function LegendItem({
-  index,
-  text,
-  title,
-}: {
-  index: number;
-  text: string;
-  title: string;
-}) {
-  return (
-    <li className="rules-legend-item">
-      <strong>{index}</strong>
-      <span>
-        <b>{title}</b>
-        {text}
-      </span>
-    </li>
-  );
-}
-
-type CardLegendMarker = {
-  label: string;
-  style: CSSProperties;
-};
-
-function CardLegend({
-  card,
-  items,
-  kind,
-  markers,
-  title,
-}: {
-  card: ReactNode;
-  items: Array<{ title: string; text: string }>;
-  kind: 'customer' | 'dish';
-  markers: CardLegendMarker[];
-  title: string;
-}) {
-  return (
-    <article className={`rules-card-legend rules-card-legend--${kind}`}>
-      <div className="rules-card-legend__preview">
-        <p className="eyebrow">{title}</p>
-        <div className="rules-card-legend__stage">
-          {card}
-          {markers.map((marker, index) => (
-            <span
-              key={marker.label}
-              aria-hidden="true"
-              className="rules-card-legend__marker"
-              data-testid={`rules-card-legend-marker-${kind}-${index + 1}`}
-              style={marker.style}
-            >
-              {index + 1}
-            </span>
-          ))}
-        </div>
-      </div>
-      <ol className="rules-legend-list">
-        {items.map((item, index) => (
-          <LegendItem
-            key={item.title}
-            index={index + 1}
-            title={item.title}
-            text={item.text}
-          />
-        ))}
-      </ol>
-    </article>
-  );
-}
-
-function PrintPage({
-  children,
-  testId,
-}: {
-  children: ReactNode;
-  testId: string;
-}) {
-  return (
-    <article
-      className="rules-print-page"
-      data-page={testId}
-      data-testid="rules-print-page"
-    >
+    <article className={styles.page} data-testid="rules-print-page">
       {children}
     </article>
   );
@@ -288,48 +77,44 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
   }
 
   return (
-    <div className="rules-print-route">
-      <PrintPage testId="rules-print-page-goal">
-        <section className="hero rules-hero rules-hero--web rules-print-hero">
-          <div className="hero__intro">
-            <p className="eyebrow">Birthday night market rules</p>
+    <div className={styles.route}>
+      <PrintPage>
+        <section
+          className={cx(layoutStyles.hero, rulesStyles.hero, styles.hero)}
+        >
+          <div className={layoutStyles.heroIntro}>
+            <p className={layoutStyles.eyebrow}>Birthday night market rules</p>
             <h1>Street Food Night Market</h1>
-            <p className="hero-copy">
+            <p className={layoutStyles.heroCopy}>
               Move around the room, trade with other players, cook dishes, and
               serve visible customers before the market closes.
             </p>
           </div>
-          <div
-            className="rules-print-hero__aside"
-            aria-label="Print hero extras"
-          >
-            <div className="rules-hero__aside" aria-label="Game stats">
-              <div className="rules-hero__stat">
+          <div className={styles.heroAside} aria-label="Print hero extras">
+            <div className={rulesStyles.heroAside} aria-label="Game stats">
+              <div className={rulesStyles.heroStat}>
                 <span>Players</span>
                 <strong>15-20</strong>
               </div>
-              <div className="rules-hero__stat">
+              <div className={rulesStyles.heroStat}>
                 <span>Time</span>
                 <strong>60 min</strong>
               </div>
-              <div className="rules-hero__stat">
+              <div className={rulesStyles.heroStat}>
                 <span>Win</span>
                 <strong>Most points</strong>
               </div>
             </div>
             <img
-              className="rules-print-hero__qr"
+              className={styles.qr}
               src={qrCodeRulesSrc}
               alt="Rules QR code"
             />
           </div>
         </section>
-        <section className="rules-print-page__content">
-          <div className="section-heading section-heading--rules">
-            <p className="eyebrow">Goal</p>
-            <h2>What you are trying to do</h2>
-          </div>
-          <div className="rules-lead-grid">
+
+        <RulesSection eyebrow="Goal" heading="What you are trying to do">
+          <div className={rulesStyles.leadGrid}>
             <p>
               You run a food stall. Your job is to turn resources into dishes,
               spend those dishes to claim customers, and finish with the most
@@ -341,25 +126,25 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               market; you never trade customers.
             </p>
           </div>
-        </section>
-        <section className="rules-print-page__content">
-          <div className="section-heading section-heading--rules">
-            <p className="eyebrow">Setup</p>
-            <h2>At the start of the game, you will get</h2>
-          </div>
-          <div className="rules-setup-panel">
+        </RulesSection>
+
+        <RulesSection
+          eyebrow="Setup"
+          heading="At the start of the game, you will get"
+        >
+          <div className={rulesStyles.setupPanel}>
             <h3>Your starting pieces</h3>
-            <ul className="rules-icon-list">
+            <ul className={rulesStyles.iconList}>
               <li>
                 <span>5 random resources:</span>
-                <div className="rules-pill-row">
+                <div className={rulesStyles.pillRow}>
                   {content.resources.map((resource) => (
                     <ResourcePill key={resource.id} resource={resource} />
                   ))}
                 </div>
               </li>
               <li>
-                <div className="rules-pill-row">
+                <div className={rulesStyles.pillRow}>
                   <ComponentPill
                     iconLabel="Bonus task sheet"
                     iconSrc={cardIcons.customer}
@@ -384,36 +169,17 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               </li>
             </ul>
           </div>
-          <div className="rules-setup-grid">
-            {/* {<div className="rules-setup-panel">
-              <h3>The shared market</h3>
-              <ul className="rules-icon-list">
-                <li>Put all remaining resources, dishes, and coins nearby.</li>
-                <li>
-                  Shuffle customers and reveal 4 visible customer stacks where
-                  everyone can reach them.
-                </li>
-                <li>
-                  Start the timer. The market closes after 60 minutes, or when 3
-                  of the 4 customer stacks are gone.
-                </li>
-              </ul>
-            </div>} */}
-          </div>
-        </section>
+        </RulesSection>
       </PrintPage>
 
-      <PrintPage testId="rules-print-page-actions">
-        <section className="rules-print-page__content">
-          <div className="section-heading section-heading--rules">
-            <p className="eyebrow">Actions</p>
-            <h2>What you can do</h2>
-          </div>
-          <div className="rules-action-grid">
+      <PrintPage>
+        <RulesSection eyebrow="Actions" heading="What you can do">
+          <div className={rulesStyles.actionGrid}>
             <ActionCard
               iconLabel="Dish card"
               iconSrc={cardIcons.dish}
               title="Cook a dish"
+              className={styles.actionCard}
             >
               <p>
                 Spend the resource icons printed at the bottom of a dish card.
@@ -421,11 +187,30 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               </p>
               <ActionExample
                 label="Example"
+                className={styles.example}
                 from={
                   <>
-                    <ResourcePill resource={greens} />
-                    <ResourcePill resource={umami} />
-                    <ResourcePill resource={fuel} />
+                    <ComponentPill
+                      iconLabel="Greens resource"
+                      iconSrc="/src/assets/icons/weed.png"
+                      tone="resource"
+                    >
+                      Greens
+                    </ComponentPill>
+                    <ComponentPill
+                      iconLabel="Umami resource"
+                      iconSrc="/src/assets/icons/mushroom.png"
+                      tone="resource"
+                    >
+                      Fungi
+                    </ComponentPill>
+                    <ComponentPill
+                      iconLabel="Fuel resource"
+                      iconSrc="/src/assets/icons/wood.png"
+                      tone="resource"
+                    >
+                      Fuel
+                    </ComponentPill>
                   </>
                 }
                 to={<DishPill dish={ramen} />}
@@ -436,6 +221,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               iconLabel="Customer card"
               iconSrc={cardIcons.customer}
               title="Serve a customer"
+              className={styles.actionCard}
             >
               <p>
                 Spend dishes that match the customer wants icons. Put those
@@ -443,10 +229,11 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               </p>
               <ActionExample
                 label="Example"
+                className={styles.example}
                 from={
                   <>
                     <DishPill dish={sushi} />
-                    <span className="rules-example-word">or</span>
+                    <span className={rulesStyles.exampleWord}>or</span>
                     <DishPill dish={sashimi} />
                   </>
                 }
@@ -469,6 +256,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               iconLabel="Coins"
               iconSrc={coinIconSrc}
               title="Buy a resource"
+              className={styles.actionCard}
             >
               <p>
                 You can spend 1 coin to take 1 resource from the supply. Use
@@ -486,6 +274,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               iconLabel="Resources"
               iconSrc={resourceIcons.meat}
               title="Trade with players"
+              className={styles.actionCard}
             >
               <p>
                 You can trade resources, coins, and dishes in any deal both
@@ -498,6 +287,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               iconLabel="Bonus task"
               iconSrc={dishTypeIcons.premium}
               title="Complete a bonus task"
+              className={styles.actionCard}
             >
               <p>
                 When you complete a task with another player, get their
@@ -506,16 +296,15 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               </p>
             </ActionCard>
           </div>
-        </section>
+        </RulesSection>
       </PrintPage>
 
-      <PrintPage testId="rules-print-page-wants">
-        <section className="rules-print-page__content">
-          <div className="section-heading section-heading--rules">
-            <p className="eyebrow">Customer wants</p>
-            <h2>How to read wants icons</h2>
-          </div>
-          <div className="rules-symbol-guide">
+      <PrintPage>
+        <RulesSection
+          eyebrow="Customer wants"
+          heading="How to read wants icons"
+        >
+          <div className={cx(rulesStyles.symbolGuide, styles.symbolGuide)}>
             <div>
               <TypeIconPill tag="rice" label="Rice" />
               <p>One icon means spend one dish with that type.</p>
@@ -527,7 +316,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               <p>A plus means the customer needs every listed type.</p>
             </div>
             <div>
-              <span className="rules-range-chip">2-5</span>
+              <span className={rulesStyles.rangeChip}>2-5</span>
               <TypeIconPill tag="meat" label="Meat" />
               <strong>/</strong>
               <TypeIconPill tag="rice" label="Rice" />
@@ -547,54 +336,58 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
             </div>
           </div>
 
-          <div className="rules-wants-grid">
+          <div className={cx(rulesStyles.wantsGrid, styles.wantsGrid)}>
             <WantsExampleCard
+              className={styles.wantsCard}
               customer={salaryman}
               dishes={content.dishes}
               wantsText="Any Rice"
               description="Serve one dish with the Rice type, such as Rice Plate or Sushi Platter."
             />
             <WantsExampleCard
+              className={styles.wantsCard}
               customer={maidCafeMaid}
               dishes={content.dishes}
               wantsText="Sweet + Drink"
               description="Serve one Sweet dish and one Drink dish. A dish can only be spent once."
             />
             <WantsExampleCard
+              className={styles.wantsCard}
               customer={sumoWrestler}
               dishes={content.dishes}
               wantsText="2-5 Meat / Rice"
               description="Serve between 2 and 5 dishes. Each served dish must be Meat or Rice."
             />
             <WantsExampleCard
+              className={styles.wantsCard}
               customer={foodBlogger}
               dishes={content.dishes}
               wantsText="3 different dish types"
               description="Serve 3 separate dishes. Even if one dish shows more than one matching type, it still only counts once."
             />
             <WantsExampleCard
+              className={styles.wantsCard}
               customer={businessExecutive}
               dishes={content.dishes}
               wantsText="Premium + Noodles + Vegetarian"
               description="Serve dishes that cover all three listed types before taking the payout."
             />
           </div>
-        </section>
+        </RulesSection>
       </PrintPage>
 
-      <PrintPage testId="rules-print-page-scoring">
-        <section className="rules-print-page__content">
-          <div className="section-heading section-heading--rules">
-            <p className="eyebrow">Scoring</p>
-            <h2>How the game ends and how points are counted</h2>
-          </div>
-          <div className="rules-scorebox">
+      <PrintPage>
+        <RulesSection
+          eyebrow="Scoring"
+          heading="How the game ends and how points are counted"
+        >
+          <div className={rulesStyles.scorebox}>
             <p>The game ends when:</p>
-            <ul className="rules-steps rules-steps--tight">
+            <ul className={cx(rulesStyles.steps, rulesStyles.stepsTight)}>
               <li>When all customers are claimed.</li>
               <li>After 60 minutes.</li>
             </ul>
-            <ol className="rules-steps rules-steps--tight">
+            <ol className={cx(rulesStyles.steps, rulesStyles.stepsTight)}>
               <li>Coins earned during play are 1 point each.</li>
               <li>
                 Each unspent dish is worth points equal to its printed coin
@@ -612,19 +405,19 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               share the win.
             </p>
           </div>
-        </section>
+        </RulesSection>
       </PrintPage>
 
-      <PrintPage testId="rules-print-page-legend">
-        <section className="rules-print-page__content">
-          <div className="section-heading section-heading--rules">
-            <p className="eyebrow">Card legend</p>
-            <h2>What the sample cards are showing</h2>
-          </div>
-          <div className="rules-anatomy-grid">
+      <PrintPage>
+        <RulesSection
+          eyebrow="Card legend"
+          heading="What the sample cards are showing"
+        >
+          <div className={rulesStyles.anatomyGrid}>
             <CardLegend
               kind="dish"
               title="Sample dish card"
+              className={styles.cardLegend}
               card={<CardPreview kind="dish" item={ramen} cornerRadius={0} />}
               markers={[
                 { label: 'Dish title', style: { top: '13%', left: '34%' } },
@@ -660,6 +453,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
 
             <CardLegend
               kind="customer"
+              className={styles.cardLegend}
               title="Sample customer card"
               card={
                 <CardPreview
@@ -701,7 +495,7 @@ export function RulesPrintRoute({ content }: RulesPrintRouteProps) {
               ]}
             />
           </div>
-        </section>
+        </RulesSection>
       </PrintPage>
     </div>
   );

@@ -11,28 +11,36 @@ import {
 import { CardSvgFrame } from './CardSvgFrame';
 import { getCustomerRequirementVisuals } from './customerRequirementVisuals';
 import { getDishEndgameCoinValue } from '../content/dishValue';
+import styles from './CardPreview.module.css';
 import type {
   CustomerCard,
   DishCard,
   ResourceDefinition,
 } from '../content/schema';
 
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
+
 type CardPreviewProps =
   | {
       kind: 'resource';
       item: ResourceDefinition;
       cornerRadius?: number;
+      className?: string;
     }
   | {
       kind: 'dish';
       item: DishCard;
       cornerRadius?: number;
+      className?: string;
     }
   | {
       kind: 'customer';
       item: CustomerCard;
       dishes: DishCard[];
       cornerRadius?: number;
+      className?: string;
     };
 
 function getResourceStyle(resourceId: string) {
@@ -82,19 +90,18 @@ function getCustomerPayoutDisplay(customer: CustomerCard) {
 }
 
 function ResourceCardPreview({
+  className,
   cornerRadius,
   item,
 }: {
+  className?: string;
   cornerRadius?: number;
   item: ResourceDefinition;
 }) {
   const { accentSoft } = getResourceStyle(item.id);
 
   return (
-    <article
-      className="preview-card preview-card--resource"
-      data-kind="resource"
-    >
+    <article className={cx(styles.card, className)} data-kind="resource">
       <CardSvgFrame
         accentSoft={accentSoft}
         artIconSrc={getResourceIcon(item.id)}
@@ -109,14 +116,16 @@ function ResourceCardPreview({
 }
 
 function DishCardPreview({
+  className,
   cornerRadius,
   item,
 }: {
+  className?: string;
   cornerRadius?: number;
   item: DishCard;
 }) {
   return (
-    <article className="preview-card preview-card--dish" data-kind="dish">
+    <article className={cx(styles.card, className)} data-kind="dish">
       <CardSvgFrame
         accentSoft="var(--color-cream-100)"
         artIconSrc={cardIcons.dish}
@@ -137,10 +146,12 @@ function DishCardPreview({
 }
 
 function CustomerCardPreview({
+  className,
   dishes,
   cornerRadius,
   item,
 }: {
+  className?: string;
   dishes: DishCard[];
   cornerRadius?: number;
   item: CustomerCard;
@@ -148,10 +159,7 @@ function CustomerCardPreview({
   const requirementVisuals = getCustomerRequirementVisuals(item, dishes);
 
   return (
-    <article
-      className="preview-card preview-card--customer"
-      data-kind="customer"
-    >
+    <article className={cx(styles.card, className)} data-kind="customer">
       <CardSvgFrame
         accentSoft="var(--color-red-100)"
         artIconSrc={cardIcons.customer}
@@ -180,6 +188,7 @@ export function CardPreview(props: CardPreviewProps) {
   if (props.kind === 'resource') {
     return (
       <ResourceCardPreview
+        className={props.className}
         cornerRadius={props.cornerRadius}
         item={props.item}
       />
@@ -188,13 +197,18 @@ export function CardPreview(props: CardPreviewProps) {
 
   if (props.kind === 'dish') {
     return (
-      <DishCardPreview cornerRadius={props.cornerRadius} item={props.item} />
+      <DishCardPreview
+        className={props.className}
+        cornerRadius={props.cornerRadius}
+        item={props.item}
+      />
     );
   }
 
   return (
     <CustomerCardPreview
       cornerRadius={props.cornerRadius}
+      className={props.className}
       dishes={props.dishes}
       item={props.item}
     />

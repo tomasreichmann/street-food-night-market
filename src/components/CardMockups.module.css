@@ -1,0 +1,46 @@
+.section {
+  margin-top: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--card-radius) + 0.25rem);
+  background: rgba(255, 251, 244, 0.68);
+  box-shadow: 0 10px 28px rgba(80, 50, 22, 0.08);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.card {
+  width: min(100%, 14.5rem);
+  aspect-ratio: 60 / 92;
+  overflow: visible;
+}
+
+.card svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    width: 100%;
+  }
+}
+
+@media print {
+  .card {
+    box-shadow: none;
+    background: #fff;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

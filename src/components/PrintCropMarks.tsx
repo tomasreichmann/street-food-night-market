@@ -1,3 +1,5 @@
+import styles from './PrintCropMarks.module.css';
+
 const DEFAULT_CROP_MARK_LENGTH_MM = 4;
 
 export type PrintCropMarkRect = {
@@ -44,14 +46,15 @@ export function PrintCropMarks({
 }: PrintCropMarksProps) {
   return (
     <svg
-      className="print-sheet__marks"
+      className={styles.marks}
+      data-testid="print-crop-marks"
       viewBox={`0 0 ${pageWidthMm} ${pageHeightMm}`}
       preserveAspectRatio="none"
       style={{ zIndex }}
       aria-hidden="true"
     >
       <g
-        className="print-sheet__crop-marks"
+        data-testid="print-crop-mark-lines"
         fill="none"
         stroke="#1f1d1b"
         strokeWidth="0.4"

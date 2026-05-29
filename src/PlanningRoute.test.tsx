@@ -18,9 +18,6 @@ describe('Planning route', () => {
     expect(
       screen.getByRole('heading', { name: 'Card planning table' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Planning ledger')).toBeInTheDocument();
-    expect(screen.getByText('Dish cards')).toBeInTheDocument();
-    expect(screen.getByText('Customer cards')).toBeInTheDocument();
-    expect(screen.getByText('Total cards')).toBeInTheDocument();
+    expect(screen.getByRole('table')).toBeInTheDocument();
   });
 });

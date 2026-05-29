@@ -1,0 +1,13 @@
+.svg {
+  display: block;
+}
+
+.cutline {
+  opacity: 1;
+}
+
+@media print {
+  .cutline {
+    display: none;
+  }
+}

@@ -2,6 +2,7 @@ import { CardPreview } from './components/CardPreview';
 import { PrintCropMarks } from './components/PrintCropMarks';
 import backfaceTemplate from './assets/backface.png';
 import stallTemplate from './assets/stall.png';
+import styles from './PrintRoute.module.css';
 import type { CustomerCard, DishCard, GameContent } from './content/schema';
 
 const CARDS_PER_PAGE = 9;
@@ -24,6 +25,10 @@ const PRINT_CARD_TRIM_HEIGHT_MM =
   PRINT_CARD_HEIGHT_MM - PRINT_CARD_TRIM_INSET_MM * 2;
 const PRINT_CARD_CORNER_RADIUS_MM = 0;
 const STALL_SHEET_COUNT = 2;
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
 
 type PrintableCard =
   | {
@@ -136,10 +141,10 @@ function PrintSheet({
   dishes: DishCard[];
 }) {
   return (
-    <article className="print-sheet" data-testid="print-sheet">
+    <article className={styles.sheet} data-testid="print-sheet">
       <PrintSheetMarks />
       <div
-        className="print-sheet__grid"
+        className={styles.grid}
         style={{
           left: `${PRINT_GRID_LEFT_MM}mm`,
           top: `${PRINT_GRID_TOP_MM}mm`,
@@ -153,13 +158,13 @@ function PrintSheet({
           const card = cards[index];
 
           if (!card) {
-            return <div key={index} className="print-sheet__slot" />;
+            return <div key={index} className={styles.slot} />;
           }
 
           return (
             <div
               key={`${card.kind}-${card.item.id}-${card.instanceIndex}`}
-              className="print-sheet__slot"
+              className={styles.slot}
             >
               {card.kind === 'dish' ? (
                 <CardPreview
@@ -185,13 +190,10 @@ function PrintSheet({
 
 function StallSheet({ index }: { index: number }) {
   return (
-    <article
-      className="print-sheet print-sheet--stall"
-      data-testid="stall-sheet"
-    >
+    <article className={styles.sheet} data-testid="stall-sheet">
       <PrintSheetMarks />
       <div
-        className="print-sheet__grid"
+        className={styles.grid}
         style={{
           left: `${PRINT_GRID_LEFT_MM}mm`,
           top: `${PRINT_GRID_TOP_MM}mm`,
@@ -204,10 +206,10 @@ function StallSheet({ index }: { index: number }) {
         {Array.from({ length: CARDS_PER_PAGE }, (_, cardIndex) => (
           <div
             key={`${index}-${cardIndex}`}
-            className="print-sheet__slot print-sheet__slot--stall"
+            className={cx(styles.slot, styles.stallSlot)}
           >
             <img
-              className="stall-card"
+              className={styles.stallCard}
               src={stallTemplate}
               alt="Stall card template"
             />
@@ -220,13 +222,10 @@ function StallSheet({ index }: { index: number }) {
 
 function BackfaceSheet({ index }: { index: number }) {
   return (
-    <article
-      className="print-sheet print-sheet--backface"
-      data-testid="backface-sheet"
-    >
+    <article className={styles.sheet} data-testid="backface-sheet">
       <PrintSheetMarksInner zIndex={0} />
       <div
-        className="print-sheet__grid print-sheet__grid--backface"
+        className={styles.grid}
         style={{
           left: `${PRINT_GRID_LEFT_MM}mm`,
           top: `${PRINT_GRID_TOP_MM}mm`,
@@ -239,10 +238,11 @@ function BackfaceSheet({ index }: { index: number }) {
         {Array.from({ length: CARDS_PER_PAGE }, (_, cardIndex) => (
           <div
             key={`${index}-${cardIndex}`}
-            className="print-sheet__slot print-sheet__slot--backface"
+            className={cx(styles.slot, styles.backfaceSlot)}
           >
             <img
-              className="backface-card"
+              className={styles.backfaceCard}
+              data-testid="backface-card"
               src={backfaceTemplate}
               alt=""
               aria-hidden="true"
@@ -259,7 +259,7 @@ export function PrintRoute({ content }: PrintRouteProps) {
   const pages = chunkCards(cards, CARDS_PER_PAGE);
 
   return (
-    <div className="print-route">
+    <div className={styles.route}>
       {pages.flatMap((pageCards, index) => [
         <PrintSheet
           key={`page-${index}`}

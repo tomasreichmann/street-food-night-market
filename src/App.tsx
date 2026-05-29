@@ -8,6 +8,11 @@ import { RulesPrintRoute } from './RulesPrintRoute';
 import { RulesRoute } from './RulesRoute';
 import { PrintRoute } from './PrintRoute';
 import { SimulationRoute } from './SimulationRoute';
+import styles from './App.module.css';
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
 
 function getContentState() {
   try {
@@ -33,7 +38,7 @@ const contentState = getContentState();
 
 function AppNav() {
   return (
-    <nav className="app-nav" aria-label="Primary navigation">
+    <nav className={styles.nav} aria-label="Primary navigation">
       <a href="/">Home</a>
       <a href="/rules">Rules</a>
       <a href="/simulation">Simulation</a>
@@ -55,17 +60,17 @@ function HomeRoute({
 
   return (
     <>
-      <section className="hero">
-        <div className="hero__intro">
-          <p className="eyebrow">Printable party game</p>
+      <section className={styles.hero}>
+        <div className={styles.heroIntro}>
+          <p className={styles.eyebrow}>Printable party game</p>
           <h1>Street Food Night Market</h1>
-          <p className="hero-copy">
+          <p className={styles.heroCopy}>
             A social night market game about trading ingredients, cooking
             dishes, and racing to serve the most tempting customers.
           </p>
         </div>
 
-        <dl className="stats">
+        <dl className={styles.stats}>
           <div>
             <dt>Dish cards</dt>
             <dd>{summary?.totals.dishCopies ?? 0}</dd>
@@ -81,24 +86,30 @@ function HomeRoute({
         </dl>
       </section>
 
-      <section className="content-section" aria-labelledby="dishes-heading">
-        <div className="section-heading">
-          <p className="eyebrow">Dish cards</p>
+      <section
+        className={styles.contentSection}
+        aria-labelledby="dishes-heading"
+      >
+        <div className={styles.sectionHeading}>
+          <p className={styles.eyebrow}>Dish cards</p>
           <h2 id="dishes-heading">Cooked offerings</h2>
         </div>
-        <div className="card-grid">
+        <div className={styles.cardGrid}>
           {dishes.map((dish) => (
             <CardPreview key={dish.id} kind="dish" item={dish} />
           ))}
         </div>
       </section>
 
-      <section className="content-section" aria-labelledby="customers-heading">
-        <div className="section-heading">
-          <p className="eyebrow">Customer cards</p>
+      <section
+        className={styles.contentSection}
+        aria-labelledby="customers-heading"
+      >
+        <div className={styles.sectionHeading}>
+          <p className={styles.eyebrow}>Customer cards</p>
           <h2 id="customers-heading">Visible demand on the market floor</h2>
         </div>
-        <div className="card-grid card-grid--customer">
+        <div className={cx(styles.cardGrid, styles.customerCardGrid)}>
           {customers.map((customer) => (
             <CardPreview
               key={customer.id}
@@ -116,15 +127,15 @@ function HomeRoute({
 export default function App() {
   if (contentState.error || !contentState.content || !contentState.config) {
     return (
-      <main className="app-shell">
-        <section className="hero hero--error">
-          <p className="eyebrow">Content load error</p>
+      <main className={styles.shell}>
+        <section className={cx(styles.hero, styles.heroError)}>
+          <p className={styles.eyebrow}>Content load error</p>
           <h1>Street Food Night Market</h1>
-          <p className="hero-copy">
+          <p className={styles.heroCopy}>
             The card content could not be parsed. Fix the YAML and reload the
             app.
           </p>
-          <pre className="error-block">
+          <pre className={styles.errorBlock}>
             {contentState.error?.message ?? 'Unknown error'}
           </pre>
         </section>
@@ -140,7 +151,7 @@ export default function App() {
   const isPlanningRoute = window.location.pathname === '/planning';
 
   return (
-    <main className="app-shell">
+    <main className={styles.shell}>
       <AppNav />
       {isRulesPrintRoute ? (
         <RulesPrintRoute content={contentState.content} />

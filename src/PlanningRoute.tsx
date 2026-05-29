@@ -7,7 +7,7 @@ type PlanningRouteProps = {
 
 export function PlanningRoute({ content }: PlanningRouteProps) {
   return (
-    <div className="planning-route">
+    <div>
       <CardPlanningTable content={content} />
     </div>
   );

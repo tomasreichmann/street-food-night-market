@@ -6,6 +6,8 @@ import {
 import { CardSvgFrame } from './CardSvgFrame';
 import { getCustomerRequirementVisuals } from './customerRequirementVisuals';
 import type { CustomerCard, DishCard } from '../content/schema';
+import layoutStyles from '../App.module.css';
+import styles from './CardMockups.module.css';
 
 function getDishTagIcons(tags: string[]) {
   return tags
@@ -49,14 +51,14 @@ export function CardMockups({
   const requirementVisuals = getCustomerRequirementVisuals(customer, dishes);
 
   return (
-    <section className="mockup-section" aria-labelledby="mockups-heading">
-      <div className="section-heading">
-        <p className="eyebrow">Featured mockups</p>
+    <section className={styles.section} aria-labelledby="mockups-heading">
+      <div className={layoutStyles.sectionHeading}>
+        <p className={layoutStyles.eyebrow}>Featured mockups</p>
         <h2 id="mockups-heading">Dish and customer card direction</h2>
       </div>
 
-      <div className="mockup-grid">
-        <article className="mockup-card mockup-card--dish">
+      <div className={styles.grid}>
+        <article className={styles.card}>
           <CardSvgFrame
             accentSoft="var(--color-cream-100)"
             artSrc={getDishIllustration(dish.id)}
@@ -69,7 +71,7 @@ export function CardMockups({
           />
         </article>
 
-        <article className="mockup-card mockup-card--customer">
+        <article className={styles.card}>
           <CardSvgFrame
             accentSoft="var(--color-red-100)"
             artSrc={getCustomerIllustration(customer.id)}

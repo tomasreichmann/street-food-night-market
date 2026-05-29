@@ -1,0 +1,233 @@
+.hero {
+  grid-template-columns: minmax(0, 1.2fr) minmax(19rem, 0.85fr);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+  gap: 1rem;
+  align-items: start;
+  margin-top: 1.5rem;
+}
+
+.config,
+.statePanel,
+.tableSection,
+.scoreSection {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--card-radius) + 0.25rem);
+  background: rgba(255, 249, 241, 0.74);
+  box-shadow: 0 10px 28px rgba(80, 50, 22, 0.08);
+}
+
+.fieldGrid,
+.resourceConfig {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.75rem;
+}
+
+.resourceConfig {
+  margin-top: 0.75rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--color-brown-900);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.field input {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.45rem 0.58rem;
+  border: 1px solid rgba(48, 48, 46, 0.18);
+  border-radius: 0.55rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+
+.field input:focus {
+  border-color: var(--color-blue-500);
+  outline: 3px solid rgba(67, 145, 219, 0.18);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.actions button {
+  min-height: 2.45rem;
+  padding: 0.48rem 0.85rem;
+  border: 1px solid rgba(48, 48, 46, 0.18);
+  border-radius: 0.58rem;
+  background: color-mix(in srgb, var(--paper) 72%, var(--color-cream-100) 28%);
+  color: var(--color-brown-900);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.actions button:hover,
+.actions button:focus-visible {
+  border-color: var(--color-brown-500);
+  outline: none;
+}
+
+.actions .primaryButton {
+  border-color: var(--color-red-900);
+  background: var(--color-red-500);
+  color: #fff8ef;
+}
+
+.copyStatus {
+  margin: 0.55rem 0 0;
+  min-height: 1.2em;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.statePanel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.statePanel span,
+.statePanel small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.3;
+}
+
+.statePanel strong {
+  display: block;
+  margin-top: 0.12rem;
+}
+
+.statePanel ul {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.statePanel li {
+  padding: 0.6rem 0;
+  border-top: 1px solid rgba(48, 48, 46, 0.12);
+}
+
+.table {
+  min-width: 78rem;
+}
+
+.table td[data-format='counts'] {
+  min-width: 11rem;
+  max-width: 16rem;
+}
+
+.roundDivider th {
+  padding: 0.55rem 0.75rem;
+  background: color-mix(in srgb, var(--color-gold-100) 32%, var(--paper) 68%);
+  color: var(--color-brown-900);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.roundStart th,
+.roundStart td {
+  background: color-mix(in srgb, var(--paper) 82%, var(--color-blue-100) 18%);
+  color: var(--color-blue-900);
+  font-weight: 800;
+}
+
+.scoreGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 0.75rem;
+}
+
+.scoreCard {
+  padding: 0.85rem;
+  border: 1px solid rgba(48, 48, 46, 0.12);
+  border-radius: 0.65rem;
+  background: var(--paper);
+}
+
+.scoreCard > div:first-child {
+  display: grid;
+  gap: 0.25rem;
+  align-content: start;
+}
+
+.scoreCard span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scoreCard strong {
+  color: var(--color-brown-900);
+}
+
+.scoreCard > p {
+  align-self: start;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.scoreDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.3rem 0.8rem;
+  padding-top: 0.1rem;
+  border-top: 0;
+}
+
+.scoreDetails p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.scoreDetails p:first-child {
+  margin-top: 0;
+}
+
+.scoreDetails ul {
+  grid-column: 1 / -1;
+}
+
+.bonusList {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.bonusList li::marker {
+  color: var(--color-red-500);
+}
+
+@media print {
+  .config,
+  .statePanel,
+  .tableSection,
+  .scoreSection {
+    box-shadow: none;
+    background: #fff;
+  }
+}
