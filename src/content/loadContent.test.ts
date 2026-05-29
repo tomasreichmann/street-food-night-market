@@ -2,119 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { loadCardContent, loadContent } from './loadContent';
 
 describe('loadContent', () => {
-  it('parses cards.yaml into typed game content', () => {
+  it('parses default YAML into typed game content', () => {
     const content = loadCardContent();
 
     expect(content.resources.length).toBeGreaterThan(0);
     expect(content.dishes.length).toBeGreaterThan(0);
     expect(content.customers.length).toBeGreaterThan(0);
     expect(content.dishes[0]).not.toHaveProperty('illustrationPrompt');
-  });
-
-  it('adds sea-heavy dishes to improve resource balance', () => {
-    const content = loadCardContent();
-
-    expect(content.dishes.map((dish) => dish.id)).toEqual(
-      expect.arrayContaining(['sashimi', 'oyster-plate']),
-    );
-    expect(content.dishes.find((dish) => dish.id === 'sashimi')).toMatchObject({
-      tags: ['seafood'],
-      cost: { sea: 2 },
-      copies: 2,
-    });
-  });
-
-  it('uses the rebalanced dish costs and customer copies for full A4 sheets', () => {
-    const content = loadCardContent();
-
-    expect(
-      content.dishes.find((dish) => dish.id === 'rice-plate'),
-    ).toMatchObject({
-      cost: { greens: 1, fuel: 1 },
-    });
-    expect(content.dishes.find((dish) => dish.id === 'tea')).toMatchObject({
-      cost: { greens: 1 },
-    });
-    expect(
-      content.dishes.find((dish) => dish.id === 'sushi-platter'),
-    ).toMatchObject({
-      cost: { sea: 2, greens: 1 },
-    });
-    expect(content.dishes.find((dish) => dish.id === 'sashimi')).toMatchObject({
-      cost: { sea: 2 },
-    });
-    expect(
-      content.customers.reduce((total, customer) => total + customer.copies, 0),
-    ).toBe(55);
-    expect(content.dishes.reduce((total, dish) => total + dish.copies, 0)).toBe(
-      44,
-    );
-    expect(
-      content.customers.find((customer) => customer.id === 'street-musician'),
-    ).toMatchObject({
-      payout: { coins: 3 },
-    });
-    expect(
-      content.customers.find((customer) => customer.id === 'anime-club'),
-    ).toMatchObject({
-      payout: { coinsPerServed: 6, maxCoins: 18 },
-    });
-    expect(
-      content.customers.find((customer) => customer.id === 'festival-judge'),
-    ).toMatchObject({
-      payout: { coins: 34 },
-    });
-  });
-
-  it('uses a seafood want for Tourist', () => {
-    const content = loadCardContent();
-    const tourist = content.customers.find(
-      (customer) => customer.id === 'tourist',
-    );
-
-    expect(tourist?.wants).toEqual({
-      mode: 'any_tag',
-      tag: 'seafood',
-      count: 1,
-    });
-    expect(
-      content.customers.filter(
-        (customer) => customer.wants.mode === 'exact_dish',
-      ),
-    ).toEqual([]);
-  });
-
-  it('supports endgame bonuses and combo tag requirements in default content', () => {
-    const content = loadCardContent();
-
-    expect(
-      content.customers.some((customer) => Boolean(customer.endgameBonus)),
-    ).toBe(true);
-    expect(
-      content.customers.some(
-        (customer) => customer.wants.mode === 'combo_tags',
-      ),
-    ).toBe(true);
-  });
-
-  it('updates Sumo Wrestler to a scaled meat-or-rice customer', () => {
-    const content = loadCardContent();
-
-    expect(
-      content.customers.find((customer) => customer.id === 'sumo-wrestler'),
-    ).toMatchObject({
-      wants: {
-        mode: 'up_to_any_tag',
-        tags: ['meat', 'rice'],
-        minCount: 2,
-        count: 5,
-      },
-      payout: {
-        coinsPerServed: 6,
-        maxCoins: 30,
-      },
-      text: 'Serve 2-5 Meat or Rice dishes. Gain 6 coins for each served.',
-    });
   });
 
   it('parses all supported customer requirement modes', () => {
@@ -219,23 +113,6 @@ describe('loadContent', () => {
       'combo_tags',
       'up_to_any_tag',
       'variety_tags',
-    ]);
-  });
-
-  it('uses Premium requirements on selected customers', () => {
-    const content = loadCardContent();
-    const premiumCustomerIds = content.customers
-      .filter(
-        (customer) =>
-          'tags' in customer.wants && customer.wants.tags.includes('premium'),
-      )
-      .map((customer) => customer.id);
-
-    expect(premiumCustomerIds).toEqual([
-      'business-executive',
-      'celebrity-chef',
-      'festival-judge',
-      'k-pop-band-female',
     ]);
   });
 

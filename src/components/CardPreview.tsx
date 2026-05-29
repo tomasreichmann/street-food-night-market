@@ -12,15 +12,12 @@ import { CardSvgFrame } from './CardSvgFrame';
 import { getCustomerRequirementVisuals } from './customerRequirementVisuals';
 import { getDishEndgameCoinValue } from '../content/dishValue';
 import styles from './CardPreview.module.css';
+import { cx } from '../utils/cx';
 import type {
   CustomerCard,
   DishCard,
   ResourceDefinition,
 } from '../content/schema';
-
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ');
-}
 
 type CardPreviewProps =
   | {

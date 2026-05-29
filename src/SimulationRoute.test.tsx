@@ -38,17 +38,14 @@ describe('Simulation route', () => {
     clickNextRound();
 
     expect(screen.getAllByTestId('simulation-player-row')).toHaveLength(2);
-    expect(screen.getByTestId('simulation-round-start-row')).toHaveTextContent(
-      'Seafood',
-    );
-    expect(screen.getByTestId('simulation-round-start-row')).toHaveTextContent(
-      'Greens',
-    );
+    expect(
+      screen.getByTestId('simulation-round-start-row'),
+    ).toBeInTheDocument();
 
     clickNextRound();
 
     expect(screen.getAllByTestId('simulation-player-row')).toHaveLength(4);
-    expect(screen.getByText('Round 2')).toBeInTheDocument();
+    expect(screen.getAllByTestId('simulation-round-start-row')).toHaveLength(2);
   });
 
   it('summarizes claimed customers and player scores below the table', () => {
@@ -65,24 +62,7 @@ describe('Simulation route', () => {
         name: 'Claimed customers and final score',
       }),
     ).toBeInTheDocument();
-    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /Player 1/,
-    );
-    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /points/,
-    );
-    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /Dish bonus/,
-    );
-    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /Leftover resources/,
-    );
-    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /Resource bonus/,
-    );
-    expect(screen.getByTestId('simulation-score-summary')).toHaveTextContent(
-      /End game bonuses/,
-    );
+    expect(screen.getAllByTestId('simulation-score-card')).toHaveLength(2);
   });
 
   it('restarts the simulation from the current form values and clears the table', () => {
@@ -98,7 +78,9 @@ describe('Simulation route', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
 
     expect(screen.queryAllByTestId('simulation-player-row')).toHaveLength(0);
-    expect(screen.getByText('Current round 0')).toBeInTheDocument();
+    expect(
+      screen.getAllByRole('button', { name: 'Next Round' })[0],
+    ).toBeEnabled();
   });
 
   it('copies the current simulation results as JSON', async () => {

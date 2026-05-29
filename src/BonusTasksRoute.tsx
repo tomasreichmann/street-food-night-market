@@ -4,10 +4,7 @@ import { PrintCropMarks } from './components/PrintCropMarks';
 import layoutStyles from './App.module.css';
 import printStyles from './PrintRoute.module.css';
 import styles from './BonusTasksRoute.module.css';
-
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ');
-}
+import { cx } from './utils/cx';
 
 const A4_PAGE_WIDTH_MM = 210;
 const A4_PAGE_HEIGHT_MM = 297;

@@ -9,10 +9,7 @@ import { RulesRoute } from './RulesRoute';
 import { PrintRoute } from './PrintRoute';
 import { SimulationRoute } from './SimulationRoute';
 import styles from './App.module.css';
-
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ');
-}
+import { cx } from './utils/cx';
 
 function getContentState() {
   try {
@@ -70,7 +67,7 @@ function HomeRoute({
           </p>
         </div>
 
-        <dl className={styles.stats}>
+        <dl className={styles.stats} data-testid="home-card-summary">
           <div>
             <dt>Dish cards</dt>
             <dd>{summary?.totals.dishCopies ?? 0}</dd>

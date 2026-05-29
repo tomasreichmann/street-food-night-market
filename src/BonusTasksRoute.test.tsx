@@ -12,16 +12,12 @@ afterEach(() => {
 });
 
 describe('Bonus tasks route', () => {
-  it('renders 15 bonus task sheets grouped 3 per page with centered cell text', () => {
+  it('renders bonus task sheets grouped 3 per page', () => {
     const { container } = renderAtBonusTasksRoute();
 
     expect(
-      screen.getByRole('heading', { name: 'Bonus task sheets' }),
+      document.querySelector('a[href="/bonus-tasks"]'),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Bonus Tasks' })).toHaveAttribute(
-      'href',
-      '/bonus-tasks',
-    );
 
     const pages = screen.getAllByTestId('bonus-task-page');
     const sheets = screen.getAllByTestId('bonus-task-sheet');

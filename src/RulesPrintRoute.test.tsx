@@ -19,10 +19,9 @@ describe('Rules print route', () => {
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
     expect(screen.getByAltText('Rules QR code')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Rules Print' })).toHaveAttribute(
-      'href',
-      '/rules-print',
-    );
+    expect(
+      document.querySelector('a[href="/rules-print"]'),
+    ).toBeInTheDocument();
 
     const pages = screen.getAllByTestId('rules-print-page');
     expect(pages).toHaveLength(5);

@@ -12,11 +12,8 @@ import type {
   ResourceDefinition,
 } from '../content/schema';
 import layoutStyles from '../App.module.css';
-import styles from '../Rules.module.css';
-
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ');
-}
+import styles from './RulesShared.module.css';
+import { cx } from '../utils/cx';
 
 export type ComponentPillTone =
   | 'coin'
@@ -63,17 +60,19 @@ const pillToneClass: Record<ComponentPillTone, string> = {
 
 export function ComponentPill({
   children,
+  className,
   iconLabel,
   iconSrc,
   tone,
 }: {
   children: ReactNode;
+  className?: string;
   iconLabel: string;
   iconSrc: string;
   tone: ComponentPillTone;
 }) {
   return (
-    <span className={cx(styles.pill, pillToneClass[tone])}>
+    <span className={cx(styles.pill, pillToneClass[tone], className)}>
       <RulesIcon src={iconSrc} label={iconLabel} />
       <span>{children}</span>
     </span>

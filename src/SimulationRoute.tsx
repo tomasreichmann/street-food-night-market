@@ -12,10 +12,7 @@ import {
 import layoutStyles from './App.module.css';
 import tableStyles from './components/CardPlanningTable.module.css';
 import styles from './SimulationRoute.module.css';
-
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ');
-}
+import { cx } from './utils/cx';
 
 type SimulationRouteProps = {
   content: GameContent;
@@ -575,7 +572,11 @@ export function SimulationRoute({
               mealsLabel,
               score,
             }) => (
-              <article key={player.id} className={styles.scoreCard}>
+              <article
+                key={player.id}
+                className={styles.scoreCard}
+                data-testid="simulation-score-card"
+              >
                 <div>
                   <span>{player.id}</span>
                   <strong>{score.total} points</strong>

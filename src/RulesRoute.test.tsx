@@ -12,18 +12,17 @@ afterEach(() => {
 });
 
 describe('Rules route', () => {
-  it('renders the printable rules handout and sample card anatomy', () => {
+  it('renders the rules handout and sample card anatomy', () => {
     renderAtRulesRoute();
 
     expect(
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
+    expect(screen.getByTestId('rules-actions')).toBeInTheDocument();
+    expect(screen.getByTestId('rules-wants')).toBeInTheDocument();
     expect(screen.getByTestId('rules-scoring')).toBeInTheDocument();
     expect(screen.getByTestId('rules-setup')).toBeInTheDocument();
     expect(screen.queryByAltText('Rules QR code')).toBeNull();
-    expect(
-      screen.getByRole('heading', { name: 'What you can do' }),
-    ).toBeInTheDocument();
     expect(screen.getByTestId('rules-anatomy')).toBeInTheDocument();
     expect(
       screen.getByTestId('rules-card-legend-marker-dish-1'),

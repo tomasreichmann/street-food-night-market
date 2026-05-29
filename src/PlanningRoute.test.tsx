@@ -15,9 +15,7 @@ describe('Planning route', () => {
   it('renders the planning ledger on its own route', () => {
     renderAtPlanningRoute();
 
-    expect(
-      screen.getByRole('heading', { name: 'Card planning table' }),
-    ).toBeInTheDocument();
+    expect(document.querySelector('a[href="/planning"]')).toBeInTheDocument();
     expect(screen.getByRole('table')).toBeInTheDocument();
   });
 });

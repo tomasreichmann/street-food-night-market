@@ -2,10 +2,7 @@ import { summarizeCardContent } from '../content/contentSummary';
 import type { GameContent } from '../content/schema';
 import layoutStyles from '../App.module.css';
 import styles from './CardPlanningTable.module.css';
-
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ');
-}
+import { cx } from '../utils/cx';
 
 type CardPlanningTableProps = {
   content: GameContent;

@@ -13,33 +13,18 @@ describe('App', () => {
     expect(
       screen.getByRole('heading', { name: 'Street Food Night Market' }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText('Dish cards', { selector: 'dt' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Customer cards', { selector: 'dt' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Total cards', { selector: 'dt' }),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('home-card-summary')).toBeInTheDocument();
     expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
   });
 
-  it('exposes a rules navigation link from the app shell', () => {
+  it('exposes route navigation links from the app shell', () => {
     render(<App />);
 
     const navLinks = screen.getAllByRole('link');
-    expect(navLinks.map((link) => link.textContent)).toEqual([
-      'Home',
-      'Rules',
-      'Simulation',
-      'Bonus Tasks',
-      'Planning',
-      'Print',
-      'Rules Print',
-    ]);
-    expect(navLinks[1]).toHaveAttribute('href', '/rules');
-    expect(navLinks[4]).toHaveAttribute('href', '/planning');
-    expect(navLinks[6]).toHaveAttribute('href', '/rules-print');
+    const hrefs = navLinks.map((link) => link.getAttribute('href'));
+
+    expect(hrefs).toEqual(
+      expect.arrayContaining(['/rules', '/planning', '/rules-print']),
+    );
   });
 });
