@@ -1,13 +1,14 @@
 import { CardPreview } from './components/CardPreview';
 import { PrintCropMarks } from './components/PrintCropMarks';
+import backfaceTemplate from './assets/backface.png';
 import stallTemplate from './assets/stall.png';
 import type { CustomerCard, DishCard, GameContent } from './content/schema';
 
 const CARDS_PER_PAGE = 9;
 const PRINT_PAGE_WIDTH_MM = 210;
 const PRINT_PAGE_HEIGHT_MM = 297;
-const PRINT_CARD_WIDTH_MM = 69;
-const PRINT_CARD_HEIGHT_MM = 94;
+const PRINT_CARD_WIDTH_MM = 60;
+const PRINT_CARD_HEIGHT_MM = 92;
 const PRINT_GRID_COLUMNS = 3;
 const PRINT_GRID_ROWS = 3;
 const PRINT_GRID_LEFT_MM =
@@ -87,6 +88,10 @@ function expandPrintableCards(content: GameContent): PrintableCardInstance[] {
 }
 
 function PrintSheetMarks() {
+  return <PrintSheetMarksInner zIndex={0} />;
+}
+
+function PrintSheetMarksInner({ zIndex }: { zIndex: number }) {
   const cropMarks = Array.from(
     { length: PRINT_GRID_ROWS * PRINT_GRID_COLUMNS },
     (_, index) => {
@@ -118,6 +123,7 @@ function PrintSheetMarks() {
       pageHeightMm={PRINT_PAGE_HEIGHT_MM}
       pageWidthMm={PRINT_PAGE_WIDTH_MM}
       rects={cropMarks}
+      zIndex={zIndex}
     />
   );
 }
@@ -212,18 +218,63 @@ function StallSheet({ index }: { index: number }) {
   );
 }
 
+function BackfaceSheet({ index }: { index: number }) {
+  return (
+    <article
+      className="print-sheet print-sheet--backface"
+      data-testid="backface-sheet"
+    >
+      <PrintSheetMarksInner zIndex={0} />
+      <div
+        className="print-sheet__grid print-sheet__grid--backface"
+        style={{
+          left: `${PRINT_GRID_LEFT_MM}mm`,
+          top: `${PRINT_GRID_TOP_MM}mm`,
+          width: `${PRINT_GRID_WIDTH_MM}mm`,
+          height: `${PRINT_GRID_HEIGHT_MM}mm`,
+          gridTemplateColumns: `repeat(${PRINT_GRID_COLUMNS}, ${PRINT_CARD_WIDTH_MM}mm)`,
+          gridTemplateRows: `repeat(${PRINT_GRID_ROWS}, ${PRINT_CARD_HEIGHT_MM}mm)`,
+        }}
+      >
+        {Array.from({ length: CARDS_PER_PAGE }, (_, cardIndex) => (
+          <div
+            key={`${index}-${cardIndex}`}
+            className="print-sheet__slot print-sheet__slot--backface"
+          >
+            <img
+              className="backface-card"
+              src={backfaceTemplate}
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
 export function PrintRoute({ content }: PrintRouteProps) {
   const cards = expandPrintableCards(content);
   const pages = chunkCards(cards, CARDS_PER_PAGE);
 
   return (
     <div className="print-route">
-      {pages.map((pageCards, index) => (
-        <PrintSheet key={index} cards={pageCards} dishes={content.dishes} />
-      ))}
-      {Array.from({ length: STALL_SHEET_COUNT }, (_, index) => (
-        <StallSheet key={`stall-${index}`} index={index} />
-      ))}
+      {pages.flatMap((pageCards, index) => [
+        <PrintSheet
+          key={`page-${index}`}
+          cards={pageCards}
+          dishes={content.dishes}
+        />,
+        <BackfaceSheet key={`backface-${index}`} index={index} />,
+      ])}
+      {Array.from({ length: STALL_SHEET_COUNT }, (_, index) => [
+        <StallSheet key={`stall-${index}`} index={index} />,
+        <BackfaceSheet
+          key={`stall-backface-${index}`}
+          index={pages.length + index}
+        />,
+      ]).flat()}
     </div>
   );
 }

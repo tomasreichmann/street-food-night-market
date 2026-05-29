@@ -2,30 +2,36 @@ import { useId } from 'react';
 import { coinIconSrc, resourceIcons } from '../assets/icon-map';
 import type { DishCard } from '../content/schema';
 
-const CARD_OUTER_WIDTH = 69;
-const CARD_OUTER_HEIGHT = 94;
+const CARD_OUTER_WIDTH = 60;
+const CARD_OUTER_HEIGHT = 92;
+const DESIGN_OUTER_WIDTH = 69;
+const DESIGN_OUTER_HEIGHT = 94;
+const SCALE_X = CARD_OUTER_WIDTH / DESIGN_OUTER_WIDTH;
+const SCALE_Y = CARD_OUTER_HEIGHT / DESIGN_OUTER_HEIGHT;
 const CARD_CUT_X = 3;
 const CARD_CUT_Y = 3;
-const CARD_CUT_WIDTH = 63;
-const CARD_CUT_HEIGHT = 88;
+const CARD_CUT_WIDTH = CARD_OUTER_WIDTH - CARD_CUT_X * 2;
+const CARD_CUT_HEIGHT = CARD_OUTER_HEIGHT - CARD_CUT_Y * 2;
 const CARD_CUT_RADIUS = 3;
-const ART_HEIGHT = 69;
-const ICON_SIZE = 8.44;
-const ICON_MARGIN = 1.8;
-const RESOURCE_COST_ICON_SIZE = 9.84;
+const ART_HEIGHT = 69 * SCALE_Y;
+const ICON_SIZE = 8.44 * SCALE_X;
+const ICON_MARGIN = 1.8 * SCALE_X;
+const RESOURCE_COST_ICON_SIZE = 9.84 * SCALE_X;
 const COIN_ICON_SIZE = ICON_SIZE;
 const ICON_OUTLINE_COLOR = '#fff9df';
 const ICON_OUTLINE_RADIUS = 0.22;
-const TITLE_FONT_SIZE = 4.45;
-const TITLE_LINE_HEIGHT = 4.9;
+const TITLE_FONT_SIZE = 4.45 * SCALE_X;
+const TITLE_LINE_HEIGHT = 4.9 * SCALE_Y;
 const TITLE_MAX_CHARS_PER_LINE = 17;
-const BONUS_FONT_SIZE = 2.85;
-const BONUS_LINE_HEIGHT = 3.2;
+const BONUS_FONT_SIZE = 2.85 * SCALE_X;
+const BONUS_LINE_HEIGHT = 3.2 * SCALE_Y;
 const BONUS_MAX_CHARS_PER_LINE = 27;
 const CUSTOMER_BADGE_FONT_WEIGHT = 700;
-const TIER_STAR_SIZE = 2.33;
-const TIER_STAR_GAP = 0.35;
-const BOTTOM_REQUIREMENT_CENTER_Y = 81.5;
+const TIER_STAR_SIZE = 2.33 * SCALE_X;
+const TIER_STAR_GAP = 0.35 * SCALE_X;
+const BOTTOM_CONTENT_LIFT_Y = 0;
+const DISH_COST_ICON_Y = 73;
+const BOTTOM_REQUIREMENT_CENTER_Y = 81.5 * SCALE_Y - BOTTOM_CONTENT_LIFT_Y;
 const BOTTOM_REQUIREMENT_ART_HEIGHT = RESOURCE_COST_ICON_SIZE;
 const BOTTOM_REQUIREMENT_ART_WIDTH =
   (BOTTOM_REQUIREMENT_ART_HEIGHT * CARD_OUTER_WIDTH) / CARD_OUTER_HEIGHT;
@@ -198,7 +204,6 @@ function CostIconRow({
     RESOURCE_COST_ICON_SIZE,
     gap,
   );
-  const centerY = 81.5;
 
   return (
     <g aria-hidden="true">
@@ -211,7 +216,7 @@ function CostIconRow({
             data-card-part="cost-icon"
             href={resourceIcons[entry.resource as keyof typeof resourceIcons]}
             x={startX + index * (RESOURCE_COST_ICON_SIZE + gap)}
-            y={centerY - RESOURCE_COST_ICON_SIZE / 2}
+            y={DISH_COST_ICON_Y}
             width={RESOURCE_COST_ICON_SIZE}
             height={RESOURCE_COST_ICON_SIZE}
           />
@@ -237,12 +242,7 @@ function DishTypeColumn({
           <image
             href={src}
             x={CARD_CUT_X + CARD_CUT_WIDTH - ICON_MARGIN - ICON_SIZE}
-            y={
-              CARD_CUT_Y +
-              ICON_MARGIN +
-              topOffset +
-              index * (ICON_SIZE + 0.8)
-            }
+            y={CARD_CUT_Y + ICON_MARGIN + topOffset + index * (ICON_SIZE + 0.8)}
             width={ICON_SIZE}
             height={ICON_SIZE}
             filter="url(#card-icon-outline)"
@@ -329,6 +329,7 @@ function BottomRequirementIcons({
   const rowHeight = 17.8;
   const x = CARD_CUT_X;
   const y = BOTTOM_REQUIREMENT_CENTER_Y - rowHeight / 2;
+  const iconSize = visibleIcons.length >= 4 ? '1.45em' : '1.575em';
 
   return (
     <foreignObject
@@ -388,8 +389,8 @@ function BottomRequirementIcons({
               alt=""
               aria-hidden="true"
               style={{
-                width: '1.575em',
-                height: '1.575em',
+                width: iconSize,
+                height: iconSize,
                 display: 'block',
                 filter: 'url(#card-icon-outline)',
               }}
@@ -400,7 +401,7 @@ function BottomRequirementIcons({
                 aria-hidden="true"
                 style={{
                   display: 'inline-block',
-                  marginInline: separator === '+' ? '0.18em' : '0.1em',
+                  marginInline: separator === '+' ? 0 : '0.1em',
                 }}
               >
                 {separator}
@@ -471,14 +472,17 @@ function EndgameBonus({
   }
 
   const lines = wrapText(endgameBonus, BONUS_MAX_CHARS_PER_LINE).slice(0, 2);
-  const firstLineY = 62.4 - ((lines.length - 1) * BONUS_LINE_HEIGHT) / 2;
+  const firstLineY =
+    62.4 * SCALE_Y -
+    BOTTOM_CONTENT_LIFT_Y -
+    ((lines.length - 1) * BONUS_LINE_HEIGHT) / 2;
 
   return (
     <g>
       <rect
         data-card-part="endgame-bonus-bg"
         x={0}
-        y={54.5}
+        y={54.5 * SCALE_Y - BOTTOM_CONTENT_LIFT_Y}
         width={CARD_OUTER_WIDTH}
         height={14.5}
         fill={`url(#${bonusWashId})`}
@@ -571,7 +575,6 @@ export function CardSvgFrame({
   const topWashId = `card-top-wash-${uid}`;
   const leftWashId = `card-left-wash-${uid}`;
   const rightWashId = `card-right-wash-${uid}`;
-  const bottomWashId = `card-bottom-wash-${uid}`;
   const pictureBrightnessId = `card-picture-brightness-${uid}`;
   const requirementArtClipId = `card-requirement-art-clip-${uid}`;
   const bonusWashId = `card-bonus-wash-${uid}`;
@@ -623,11 +626,6 @@ export function CardSvgFrame({
           <stop offset="0%" stopColor="#1b120f" stopOpacity="0.56" />
           <stop offset="48%" stopColor="#1b120f" stopOpacity="0.18" />
           <stop offset="100%" stopColor="#1b120f" stopOpacity="0" />
-        </linearGradient>
-
-        <linearGradient id={bottomWashId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#fffaf4" stopOpacity="0.16" />
-          <stop offset="100%" stopColor="#fffaf4" stopOpacity="1" />
         </linearGradient>
 
         <linearGradient id={bonusWashId} x1="0" y1="0" x2="0" y2="1">
@@ -723,13 +721,6 @@ export function CardSvgFrame({
           width={16.5}
           height={ART_HEIGHT}
           fill={`url(#${rightWashId})`}
-        />
-        <rect
-          x={0}
-          y={69}
-          width={CARD_OUTER_WIDTH}
-          height={25}
-          fill={`url(#${bottomWashId})`}
         />
         {kind === 'customer' ? (
           <EndgameBonus bonusWashId={bonusWashId} endgameBonus={endgameBonus} />

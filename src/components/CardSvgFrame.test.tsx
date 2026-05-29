@@ -3,6 +3,28 @@ import { describe, expect, it } from 'vitest';
 import { CardSvgFrame } from './CardSvgFrame';
 
 describe('CardSvgFrame', () => {
+  it('uses a 60 by 92 bleed canvas with a 54 by 86 cutline', () => {
+    const { container } = render(
+      <CardSvgFrame
+        accentSoft="#fff"
+        artIconSrc="/dish.png"
+        footer={{ kind: 'none' }}
+        kind="dish"
+        title="Ramen Bowl"
+        typeIconSrc="/dish.png"
+      />,
+    );
+
+    const svg = container.querySelector('svg.card-svg');
+    const cutline = container.querySelector('.card-svg__cutline');
+
+    expect(svg).toHaveAttribute('viewBox', '0 0 60 92');
+    expect(cutline).toHaveAttribute('x', '3');
+    expect(cutline).toHaveAttribute('y', '3');
+    expect(cutline).toHaveAttribute('width', '54');
+    expect(cutline).toHaveAttribute('height', '86');
+  });
+
   it('wraps long titles onto multiple lines', () => {
     const { container } = render(
       <CardSvgFrame
@@ -36,8 +58,8 @@ describe('CardSvgFrame', () => {
 
     const costIcon = container.querySelector('[data-card-part="cost-icon"]');
 
-    expect(costIcon).toHaveAttribute('width', '9.84');
-    expect(costIcon).toHaveAttribute('height', '9.84');
+    expect(costIcon).toHaveAttribute('width', '8.556521739130435');
+    expect(costIcon).toHaveAttribute('height', '8.556521739130435');
   });
 
   it('renders multi-icon customer requirements as a row', () => {
@@ -89,12 +111,12 @@ describe('CardSvgFrame', () => {
     );
 
     expect(foreignObject).toBeInTheDocument();
-    expect(foreignObject).toHaveAttribute('width', '63');
+    expect(foreignObject).toHaveAttribute('width', '54');
     expect(icon).toHaveAttribute('style', expect.stringContaining('1.575em'));
     expect(prefix).toBeNull();
   });
 
-  it('nudges plus separators slightly closer to the following icon', () => {
+  it('keeps plus separators tight and slash separators slightly spaced', () => {
     const plus = render(
       <CardSvgFrame
         accentSoft="#fff"
@@ -120,7 +142,7 @@ describe('CardSvgFrame', () => {
       />,
     ).container.querySelector('[data-card-part="bottom-type-separator"]');
 
-    expect(plus).toHaveStyle({ marginInline: '0.18em' });
+    expect(plus).toHaveStyle({ marginInline: '0px' });
     expect(slash).toHaveStyle({ marginInline: '0.1em' });
   });
 
@@ -146,10 +168,10 @@ describe('CardSvgFrame', () => {
       'xMidYMid slice',
     );
     expect(parseFloat(requirementArt!.getAttribute('width')!)).toBeCloseTo(
-      7.22,
+      5.580340264650283,
     );
     expect(parseFloat(requirementArt!.getAttribute('height')!)).toBeCloseTo(
-      9.84,
+      8.556521739130435,
     );
   });
 

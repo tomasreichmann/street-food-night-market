@@ -12,6 +12,7 @@ type PrintCropMarksProps = {
   pageHeightMm: number;
   pageWidthMm: number;
   rects: PrintCropMarkRect[];
+  zIndex?: number;
 };
 
 function renderCropMarksForRect(
@@ -39,13 +40,14 @@ export function PrintCropMarks({
   pageHeightMm,
   pageWidthMm,
   rects,
+  zIndex = 0,
 }: PrintCropMarksProps) {
   return (
     <svg
       className="print-sheet__marks"
       viewBox={`0 0 ${pageWidthMm} ${pageHeightMm}`}
       preserveAspectRatio="none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex }}
       aria-hidden="true"
     >
       <g
